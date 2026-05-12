@@ -4,7 +4,6 @@ import { AdminDashboard } from "./pages/AdminDashboard";
 import { AppShell } from "./pages/AppShell";
 import { LandingPage } from "./pages/LandingPage";
 import { NurseAdoptionPage } from "./pages/NurseAdoptionPage";
-import { MoatDashboard } from "./pages/MoatDashboard";
 import { SpecialtyLibrary } from "./pages/SpecialtyLibrary";
 import { SettingsPage } from "./pages/SettingsPage";
 
@@ -15,7 +14,6 @@ const routes = [
   { path: "/app/new-session", label: "New", icon: ClipboardList },
   { path: "/app/library", label: "Library", icon: BookOpen },
   { path: "/app/admin", label: "Admin", icon: BarChart3 },
-  { path: "/app/admin/moat", label: "Moat", icon: BarChart3 },
   { path: "/app/adoption", label: "Adopt", icon: HeartHandshake },
   { path: "/app/settings", label: "Settings", icon: Settings }
 ];
@@ -39,7 +37,6 @@ export default function App() {
     if (activeRoute.path === "/") return <LandingPage onNavigate={navigate} />;
     if (activeRoute.path === "/app/library") return <SpecialtyLibrary />;
     if (activeRoute.path === "/app/admin") return <AdminDashboard />;
-    if (activeRoute.path === "/app/admin/moat") return <MoatDashboard />;
     if (activeRoute.path === "/app/adoption") return <NurseAdoptionPage />;
     if (activeRoute.path === "/app/settings") return <SettingsPage />;
     return <AppShell />;

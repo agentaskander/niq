@@ -127,7 +127,6 @@ Adoption funnel:
 - `/app/new-session` NarrativeIQ Studio
 - `/app/library` specialty library
 - `/app/admin` mock metrics dashboard
-- `/app/admin/moat` internal workflow intelligence dashboard
 - `/app/adoption` nurse adoption plan
 - `/app/settings` governance and integration settings
 
@@ -156,7 +155,6 @@ Do not enter names, DOB, MRN, address, phone, email, exact facility, room number
 
 ## Trade-Secret Architecture
 
-Internal confidential docs live under `docs/trade-secrets/`.
 
 Protected assets include the Clinical Story Engine, specialty ontology, Narrative Transformation Engine, Clinical Story Workflow Dataset, adoption dataset, and prompt/template library.
 
