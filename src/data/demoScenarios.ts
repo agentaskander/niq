@@ -76,9 +76,10 @@ export const demoScenarios: DemoScenario[] = [
   scenario("gi-abdominal-pain", "GI abdominal pain", "ED abdominal pain story with RUQ symptoms and reassessment.", "rn", "gi-liver", "abdominal-pain", {
     selectedSymptoms: ["ruq-pain", "nausea"],
     timelineEvents: [
-      event("gi1", "07:42", "patient-stated", "Initial statement", "Patient reports RUQ pain beginning after meals yesterday.", ["ruq-pain"]),
-      event("gi2", "07:55", "clinician-observed", "Assessment", "Mild guarding observed; skin warm and dry.", ["ruq-pain"], ["guarding", "warm-dry"]),
-      event("gi3", "08:10", "provider-notified", "Provider notified", "Provider notified per protocol.", ["ruq-pain"])
+      event("gi1", "07:42", "patient-stated", "RUQ pain began after meal", "Patient reports RUQ pain beginning after meal yesterday.", ["ruq-pain"]),
+      event("gi2", "07:50", "symptom-change", "Nausea worsened", "Patient reports nausea worsened this morning.", ["nausea"]),
+      event("gi3", "07:55", "clinician-observed", "Mild guarding observed", "Mild guarding observed; skin warm and dry.", ["ruq-pain"], ["guarding", "warm-dry"]),
+      event("gi4", "08:10", "provider-notified", "Provider notified", "Provider notified per protocol.", ["ruq-pain"])
     ]
   }),
   scenario("chest-pain", "Chest pain", "Urgent evaluation workflow with chest discomfort and negatives.", "urgent-care", "cardiac", "chest-pain", {

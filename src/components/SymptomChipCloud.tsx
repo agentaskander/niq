@@ -1,4 +1,5 @@
 import type { ClinicalSymptom } from "../lib/types";
+import { SelectableChip } from "./SelectableChip";
 
 type Props = {
   symptoms: ClinicalSymptom[];
@@ -12,19 +13,12 @@ export function SymptomChipCloud({ symptoms, selected, onToggle }: Props) {
       {symptoms.map((symptom, index) => {
         const active = selected.includes(symptom.id);
         return (
-          <button
+          <div
             key={symptom.id}
-            className={`chip-float rounded-full border px-4 py-2 text-sm transition ${
-              active
-                ? "border-blue bg-blue text-white shadow-lift"
-                : "border-line bg-white text-ink hover:border-blue/30 hover:bg-hover"
-            }`}
-            onClick={() => onToggle(symptom.id)}
             style={{ animationDelay: `${index * 55}ms` }}
-            type="button"
           >
-            {symptom.label}
-          </button>
+            <SelectableChip label={symptom.label} selected={active} onClick={() => onToggle(symptom.id)} />
+          </div>
         );
       })}
     </div>

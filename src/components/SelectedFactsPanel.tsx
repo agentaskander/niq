@@ -21,7 +21,7 @@ export function SelectedFactsPanel({ symptoms, negatives, observations, interven
             <p className="text-xs font-semibold text-muted">{label as string}</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {(items as string[]).length ? (items as string[]).map((item) => (
-                <span key={item} className="rounded-full border border-line bg-slate-50 px-2.5 py-1 text-xs text-slate-600">{item}</span>
+                <span key={item} className="rounded-full border border-blue/20 bg-soft-blue px-3 py-1.5 text-sm font-semibold text-blue">{item}</span>
               )) : <span className="text-xs text-muted">None selected</span>}
             </div>
           </div>

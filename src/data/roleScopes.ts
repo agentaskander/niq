@@ -43,7 +43,7 @@ export const roleScopes: RoleScope[] = [
     allowedModes: ["provider", "soap", "advanced", "triage", "sbar"],
     restrictedLanguage: ["automatic orders", "unsupported diagnosis"],
     defaultMode: "provider",
-    safetyDisclosure: "Fast HPI, ROS-like negatives, and plan placeholders for provider review.",
+    safetyDisclosure: "Fast HPI, ROS-like negatives, and review-required plan fields for provider review.",
     allowsAssessmentPlan: true
   },
   {
@@ -52,7 +52,7 @@ export const roleScopes: RoleScope[] = [
     allowedModes: ["telehealth", "advanced", "provider", "soap", "triage"],
     restrictedLanguage: ["unsupported exam claims", "automatic orders"],
     defaultMode: "telehealth",
-    safetyDisclosure: "Includes remote encounter limitations and review-required follow-up placeholders.",
+    safetyDisclosure: "Includes remote encounter limitations and review-required follow-up fields.",
     allowsAssessmentPlan: true
   },
   {

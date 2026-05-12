@@ -18,7 +18,7 @@ export function LandingPage({ onNavigate }: Props) {
       <section className="relative px-5 pb-16 pt-6 md:px-8">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_4%,rgba(59,130,246,0.12),transparent_32%),radial-gradient(circle_at_84%_12%,rgba(20,184,166,0.10),transparent_30%)]" />
         <div className="relative mx-auto max-w-6xl">
-          <nav className="flex items-center justify-between rounded-full border border-line bg-white/80 px-4 py-3 shadow-soft backdrop-blur">
+          <div className="inline-flex items-center gap-3 rounded-full border border-line bg-white/80 px-4 py-3 shadow-soft backdrop-blur">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-soft-blue text-blue">
                 <HeartPulse size={20} />
@@ -28,10 +28,7 @@ export function LandingPage({ onNavigate }: Props) {
                 <p className="text-xs text-muted">Structured clinical narratives</p>
               </div>
             </div>
-            <button className="rounded-full bg-blue px-4 py-2 text-sm font-semibold text-white shadow-lift transition hover:bg-blue/90" onClick={() => onNavigate("/app/new-session")} type="button">
-              Try Demo
-            </button>
-          </nav>
+          </div>
 
           <div className="grid min-h-[76vh] items-center gap-12 py-14 lg:grid-cols-[1.05fr_0.95fr]">
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="space-y-7">
@@ -47,11 +44,11 @@ export function LandingPage({ onNavigate }: Props) {
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <button className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue px-6 py-4 font-semibold text-white shadow-lift transition hover:bg-blue/90" onClick={() => onNavigate("/app/new-session")} type="button">
+                <button className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue px-6 py-4 font-semibold text-white shadow-lift transition hover:bg-blue/90" onClick={() => onNavigate("/demo")} type="button">
                   Try Interactive Demo <ArrowRight size={18} />
                 </button>
-                <button className="rounded-2xl border border-line bg-white px-6 py-4 font-semibold text-ink shadow-lift transition hover:bg-hover" type="button">
-                  Book Clinical Pilot
+                <button className="rounded-2xl border border-line bg-white px-6 py-4 font-semibold text-muted shadow-lift" disabled type="button" title="Coming soon">
+                  Book Clinical Pilot · Coming soon
                 </button>
               </div>
             </motion.div>
@@ -165,14 +162,20 @@ export function LandingPage({ onNavigate }: Props) {
       <section className="px-5 py-16 md:px-8">
         <div className="mx-auto max-w-6xl">
           <SectionHeader eyebrow="Nurse Adoption Strategy" title="Designed around shift reality, not AI hype." />
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-muted">
+            NarrativeIQ wins when it lowers the mental load of fragmented chart reconstruction, improves handoff confidence, and creates the “I need this on my next shift” moment for nurses.
+          </p>
           <div className="mt-8 grid gap-4 md:grid-cols-5">
-            {adoption.map((item) => (
+            {[...adoption, "60-second charting challenge", "Nurse champion program", "Workflow intelligence moat"].map((item) => (
               <div key={item} className="rounded-3xl border border-line bg-white p-5 shadow-lift">
                 <Timer className="text-blue" size={20} />
                 <p className="mt-4 text-sm font-semibold leading-6 text-ink">{item}</p>
               </div>
             ))}
           </div>
+          <button className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-line bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-lift hover:bg-hover" onClick={() => onNavigate("/app/adoption")} type="button">
+            View nurse adoption plan <ArrowRight size={16} />
+          </button>
         </div>
       </section>
 
@@ -198,9 +201,14 @@ export function LandingPage({ onNavigate }: Props) {
             <p className="section-kicker">Interactive Demo</p>
             <h2 className="mt-2 text-3xl font-semibold tracking-tight text-ink">See NarrativeIQ in a live workflow demo.</h2>
           </div>
-          <button className="inline-flex items-center gap-2 rounded-2xl bg-blue px-6 py-4 font-semibold text-white shadow-lift" onClick={() => onNavigate("/app/new-session")} type="button">
-            Open Studio <ArrowRight size={18} />
-          </button>
+          <div className="flex flex-wrap gap-3">
+            <button className="inline-flex items-center gap-2 rounded-2xl bg-blue px-6 py-4 font-semibold text-white shadow-lift" onClick={() => onNavigate("/demo")} type="button">
+              Open Studio <ArrowRight size={18} />
+            </button>
+            <button className="inline-flex items-center gap-2 rounded-2xl border border-blue/20 bg-white px-6 py-4 font-semibold text-blue shadow-lift" onClick={() => onNavigate("/lab/dark-mode")} type="button">
+              Compare Production vs Concept Lab
+            </button>
+          </div>
         </div>
       </section>
     </main>

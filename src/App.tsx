@@ -1,30 +1,36 @@
 import { useMemo, useState } from "react";
-import { Activity, BarChart3, BookOpen, ClipboardList, HeartHandshake, Home, Settings } from "lucide-react";
+import { Activity, BarChart3, BookOpen, ClipboardList, HeartHandshake, Home, Network, Settings } from "lucide-react";
+import { AdminGate } from "./components/AdminGate";
 import { AdminDashboard } from "./pages/AdminDashboard";
+import { AdoptionDashboard } from "./pages/AdoptionDashboard";
 import { AppShell } from "./pages/AppShell";
 import { LandingPage } from "./pages/LandingPage";
 import { NurseAdoptionPage } from "./pages/NurseAdoptionPage";
+import { MoatDashboard } from "./pages/MoatDashboard";
+import { DarkModeConceptLab } from "./pages/DarkModeConceptLab";
+import { OntologyStudio } from "./pages/OntologyStudio";
 import { SpecialtyLibrary } from "./pages/SpecialtyLibrary";
 import { SettingsPage } from "./pages/SettingsPage";
 
 const routes = [
-  { path: "/", label: "Home", icon: Home },
+  { path: "/", label: "Marketing", icon: Home },
   { path: "/demo", label: "Demo", icon: Activity },
-  { path: "/app", label: "App", icon: ClipboardList },
-  { path: "/app/new-session", label: "New", icon: ClipboardList },
+  { path: "/app/new-session", label: "New Story", icon: ClipboardList },
   { path: "/app/library", label: "Library", icon: BookOpen },
   { path: "/app/admin", label: "Admin", icon: BarChart3 },
-  { path: "/app/adoption", label: "Adopt", icon: HeartHandshake },
+  { path: "/app/admin/adoption", label: "Adoption", icon: HeartHandshake },
+  { path: "/app/admin/moat", label: "Workflow Intel", icon: BarChart3 },
+  { path: "/app/ontology", label: "Ontology", icon: Network },
   { path: "/app/settings", label: "Settings", icon: Settings }
 ];
 
 function currentPath() {
-  return window.location.pathname === "/demo" ? "/app/new-session" : window.location.pathname;
+  return window.location.pathname === "/app" ? "/app/new-session" : window.location.pathname;
 }
 
 export default function App() {
   const [path, setPath] = useState(currentPath());
-  const activeRoute = useMemo(() => routes.find((route) => route.path === path) ?? routes[0], [path]);
+  const activeRoute = useMemo(() => routes.find((route) => route.path === path), [path]);
 
   const navigate = (nextPath: string) => {
     window.history.pushState(null, "", nextPath);
@@ -34,29 +40,36 @@ export default function App() {
   window.onpopstate = () => setPath(currentPath());
 
   const renderPage = () => {
-    if (activeRoute.path === "/") return <LandingPage onNavigate={navigate} />;
-    if (activeRoute.path === "/app/library") return <SpecialtyLibrary />;
-    if (activeRoute.path === "/app/admin") return <AdminDashboard />;
-    if (activeRoute.path === "/app/adoption") return <NurseAdoptionPage />;
-    if (activeRoute.path === "/app/settings") return <SettingsPage />;
-    return <AppShell />;
+    if (path === "/lab/dark-mode") return <DarkModeConceptLab onNavigate={navigate} />;
+    if (path === "/app/adoption") return <NurseAdoptionPage />;
+    if (activeRoute?.path === "/") return <LandingPage onNavigate={navigate} />;
+    if (activeRoute?.path === "/app/library") return <SpecialtyLibrary />;
+    if (activeRoute?.path === "/app/admin") return <AdminGate><AdminDashboard /></AdminGate>;
+    if (activeRoute?.path === "/app/admin/adoption") return <AdminGate><AdoptionDashboard /></AdminGate>;
+    if (activeRoute?.path === "/app/admin/moat") return <AdminGate><MoatDashboard /></AdminGate>;
+    if (activeRoute?.path === "/app/ontology") return <OntologyStudio />;
+    if (activeRoute?.path === "/app/settings") return <SettingsPage />;
+    return <AppShell mode={activeRoute?.path === "/demo" ? "demo" : "blank"} />;
   };
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
       {renderPage()}
-      {activeRoute.path !== "/" && (
-        <nav className="fixed bottom-3 left-1/2 z-50 flex w-[calc(100%-24px)] max-w-md -translate-x-1/2 items-center justify-between rounded-3xl border border-line bg-white/90 px-2 py-2 shadow-soft backdrop-blur">
-          {routes.slice(1).map((route) => {
+      <nav className="fixed bottom-3 left-1/2 z-50 w-[calc(100%-28px)] max-w-3xl -translate-x-1/2 overflow-x-auto rounded-[1.35rem] border border-white/70 bg-white/[0.78] px-1.5 py-1.5 shadow-[0_14px_38px_rgba(15,23,42,0.14)] backdrop-blur-[18px]">
+        <div className="flex min-w-max items-center justify-between gap-0.5">
+          {routes.map((route) => {
             const Icon = route.icon;
-            const isActive = activeRoute.path === route.path;
+            const isActive = activeRoute?.path === route.path;
+            const href = ["/app/admin", "/app/admin/adoption", "/app/admin/moat"].includes(route.path)
+              ? `${route.path}?admin=demo`
+              : route.path;
             return (
               <button
                 key={route.path}
-                className={`flex min-h-12 flex-1 flex-col items-center justify-center rounded-xl text-[11px] transition ${
-                  isActive ? "bg-soft-blue text-blue" : "text-muted hover:bg-hover hover:text-ink"
+                className={`flex min-h-11 min-w-[66px] flex-col items-center justify-center rounded-2xl px-1.5 text-[10px] font-semibold transition duration-200 ${
+                  isActive ? "bg-white text-blue shadow-lift ring-1 ring-blue/10" : "text-muted hover:bg-white/70 hover:text-ink"
                 }`}
-                onClick={() => navigate(route.path)}
+                onClick={() => navigate(href)}
                 type="button"
                 title={route.label}
               >
@@ -65,8 +78,8 @@ export default function App() {
               </button>
             );
           })}
-        </nav>
-      )}
+        </div>
+      </nav>
     </div>
   );
 }

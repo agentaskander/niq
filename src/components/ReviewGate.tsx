@@ -8,7 +8,7 @@ type Props = {
 export function ReviewGate({ reviewed, onReviewedChange }: Props) {
   return (
     <button
-      className={`flex w-full items-center justify-between rounded-2xl border p-4 text-left transition ${
+      className={`flex w-full items-center justify-between rounded-2xl border p-3 text-left transition ${
         reviewed ? "border-green/50 bg-soft-green" : "border-amber/30 bg-soft-amber"
       }`}
       onClick={() => onReviewedChange(!reviewed)}
@@ -16,7 +16,7 @@ export function ReviewGate({ reviewed, onReviewedChange }: Props) {
     >
       <span>
         <span className="block font-semibold text-ink">{reviewed ? "Reviewed" : "Review Required"}</span>
-        <span className="text-xs leading-5 text-muted">
+        <span className="text-xs leading-4 text-muted">
           Clinician confirms narrative accuracy before copy/export.
         </span>
       </span>

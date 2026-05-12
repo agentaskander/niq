@@ -10,18 +10,73 @@ import type {
   WorkflowEventType,
   WorkflowStep
 } from "./types";
+import { isWorkflowCaptureEnabled } from "./settings";
 
 const SESSION_KEY = "niq.clinicalStorySessions.v1";
 const EVENT_KEY = "niq.workflowEvents.v1";
 const REVISION_KEY = "niq.narrativeRevisions.v1";
 const FEEDBACK_KEY = "niq.betaFeedback.v1";
 const CONTACT_KEY = "niq.betaContacts.v1";
+const MIGRATION_NOTICE_KEY = "niq.workflowMigrationNotice.v1";
+const WORKFLOW_EVENT_SCHEMA_VERSION = 2;
+const LEGACY_EVENT_THRESHOLD = 40;
+
+const countableWorkflowEvents = new Set<WorkflowEventType>([
+  "scenario_loaded",
+  "role_selected",
+  "specialty_selected",
+  "complaint_group_selected",
+  "symptom_selected",
+  "symptom_deselected",
+  "negative_selected",
+  "negative_deselected",
+  "observation_selected",
+  "observation_deselected",
+  "intervention_selected",
+  "intervention_deselected",
+  "workflow_mode_selected",
+  "clinical_event_added",
+  "clinical_event_edited",
+  "clinical_event_deleted",
+  "timeline_event_added",
+  "timeline_event_edited",
+  "timeline_event_deleted",
+  "timeline_event_reordered",
+  "clinical_story_built",
+  "narrative_generate_clicked",
+  "narrative_mode_changed",
+  "ehr_copy_clicked",
+  "review_gate_accepted",
+  "review_completed",
+  "copied_to_ehr",
+  "handoff_created",
+  "sbar_created",
+  "soap_created",
+  "triage_created",
+  "telehealth_summary_created",
+  "escalation_flagged",
+  "pending_action_added",
+  "beta_feedback_saved"
+]);
+
+const passiveWorkflowEvents = new Set<WorkflowEventType>([
+  "render",
+  "state_sync",
+  "derived_narrative_updated",
+  "auto_recalculated",
+  "mode_preview_updated",
+  "narrative_generated",
+  "narrative_edited",
+  "session_abandoned",
+  "demo_completed"
+]);
 
 const now = () => new Date().toISOString();
 const id = (prefix: string) => `${prefix}_${crypto.randomUUID()}`;
 
 function read<T>(key: string, fallback: T): T {
   if (typeof localStorage === "undefined") return fallback;
+  if (typeof localStorage.getItem !== "function") return fallback;
   const raw = localStorage.getItem(key);
   if (!raw) return fallback;
   try {
@@ -33,7 +88,20 @@ function read<T>(key: string, fallback: T): T {
 
 function write<T>(key: string, value: T) {
   if (typeof localStorage === "undefined") return;
+  if (typeof localStorage.setItem !== "function") return;
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function captureWrite<T>(key: string, value: T) {
+  if (!isWorkflowCaptureEnabled()) return;
+  write(key, value);
+}
+
+export function captureWorkflowEvent(event: WorkflowEvent) {
+  if (!isWorkflowCaptureEnabled()) return undefined;
+  const versioned = { ...event, schemaVersion: WORKFLOW_EVENT_SCHEMA_VERSION };
+  write(EVENT_KEY, [versioned, ...read<WorkflowEvent[]>(EVENT_KEY, [])].slice(0, 1000));
+  return versioned;
 }
 
 export function createSession(input: NarrativeInput, demoScenarioId?: string): ClinicalStorySession {
@@ -68,13 +136,15 @@ const sessionStartTimes = new Map<string, number>();
 const firstNarrativeTimes = new Set<string>();
 
 export function listSessions() {
+  if (!isWorkflowCaptureEnabled()) return [];
   return read<ClinicalStorySession[]>(SESSION_KEY, []);
 }
 
 export function saveSession(session: ClinicalStorySession) {
+  if (!isWorkflowCaptureEnabled()) return;
   const sessions = listSessions();
   const next = [{ ...session, updatedAt: now() }, ...sessions.filter((item) => item.sessionId !== session.sessionId)].slice(0, 100);
-  write(SESSION_KEY, next);
+  captureWrite(SESSION_KEY, next);
 }
 
 export function syncSessionFromInput(session: ClinicalStorySession, input: NarrativeInput, patch: Partial<ClinicalStorySession> = {}) {
@@ -89,12 +159,38 @@ export function syncSessionFromInput(session: ClinicalStorySession, input: Narra
     selectedInterventions: input.interventions,
     timelineEvents: input.timelineEvents,
     selectedNarrativeMode: input.selectedMode,
-    totalInteractions: session.totalInteractions + 1,
     ...patch,
     updatedAt: now()
   };
   saveSession(next);
   return next;
+}
+
+export function isCountableWorkflowEvent(eventType: WorkflowEventType) {
+  if (passiveWorkflowEvents.has(eventType)) return false;
+  return countableWorkflowEvents.has(eventType);
+}
+
+export function resetWorkflowDemoData() {
+  [SESSION_KEY, EVENT_KEY, REVISION_KEY, FEEDBACK_KEY, CONTACT_KEY].forEach((key) => {
+    if (typeof localStorage !== "undefined" && typeof localStorage.removeItem === "function") localStorage.removeItem(key);
+  });
+}
+
+export function migrateLegacyWorkflowData() {
+  if (typeof localStorage === "undefined" || typeof localStorage.getItem !== "function") return false;
+  const events = read<WorkflowEvent[]>(EVENT_KEY, []);
+  const sessions = read<ClinicalStorySession[]>(SESSION_KEY, []);
+  const noisyEvents = events.length > LEGACY_EVENT_THRESHOLD || events.some((event) => event.schemaVersion !== WORKFLOW_EVENT_SCHEMA_VERSION);
+  const noisySessions = sessions.some((session) => session.totalInteractions > LEGACY_EVENT_THRESHOLD);
+  if (!noisyEvents && !noisySessions) return localStorage.getItem(MIGRATION_NOTICE_KEY) === "1";
+  resetWorkflowDemoData();
+  if (typeof localStorage.setItem === "function") localStorage.setItem(MIGRATION_NOTICE_KEY, "1");
+  return true;
+}
+
+export function clearWorkflowMigrationNotice() {
+  if (typeof localStorage !== "undefined" && typeof localStorage.removeItem === "function") localStorage.removeItem(MIGRATION_NOTICE_KEY);
 }
 
 export function logWorkflowEvent(
@@ -106,6 +202,7 @@ export function logWorkflowEvent(
 ) {
   const event: WorkflowEvent = {
     eventId: id("event"),
+    schemaVersion: WORKFLOW_EVENT_SCHEMA_VERSION,
     sessionId: session.sessionId,
     timestamp: now(),
     eventType,
@@ -115,12 +212,12 @@ export function logWorkflowEvent(
     specialty: input.specialty.id,
     complaintGroup: input.complaintGroup.id
   };
-  write(EVENT_KEY, [event, ...read<WorkflowEvent[]>(EVENT_KEY, [])].slice(0, 1000));
-  return event;
+  return captureWorkflowEvent(event);
 }
 
 export function listWorkflowEvents() {
-  return read<WorkflowEvent[]>(EVENT_KEY, []);
+  if (!isWorkflowCaptureEnabled()) return [];
+  return read<WorkflowEvent[]>(EVENT_KEY, []).filter((event) => event.schemaVersion === WORKFLOW_EVENT_SCHEMA_VERSION);
 }
 
 export function markNarrativeGenerated(session: ClinicalStorySession, mode: NarrativeModeId, text: string) {
@@ -164,34 +261,50 @@ export function saveNarrativeRevision(
     copied,
     createdAt: now()
   };
-  write(REVISION_KEY, [revision, ...read<NarrativeRevision[]>(REVISION_KEY, [])].slice(0, 500));
+  captureWrite(REVISION_KEY, [revision, ...read<NarrativeRevision[]>(REVISION_KEY, [])].slice(0, 500));
   return revision;
 }
 
 export function listNarrativeRevisions() {
+  if (!isWorkflowCaptureEnabled()) return [];
   return read<NarrativeRevision[]>(REVISION_KEY, []);
 }
 
 export function saveBetaFeedback(feedback: Omit<BetaFeedback, "feedbackId">, contactEmail?: string) {
   const feedbackId = id("feedback");
   const record: BetaFeedback = { feedbackId, ...feedback };
+  if (!isWorkflowCaptureEnabled()) return record;
   write(FEEDBACK_KEY, [record, ...read<BetaFeedback[]>(FEEDBACK_KEY, [])].slice(0, 200));
   if (contactEmail) {
     const contact: BetaContact = { feedbackId, contactEmail, createdAt: now() };
     write(CONTACT_KEY, [contact, ...read<BetaContact[]>(CONTACT_KEY, [])].slice(0, 200));
   }
+  captureWorkflowEvent({
+    eventId: id("event"),
+    sessionId: feedback.sessionId,
+    timestamp: now(),
+    eventType: "beta_feedback_saved",
+    payload: { betaInterest: feedback.betaInterest, hasContact: Boolean(contactEmail) },
+    step: "feedback",
+    role: feedback.role,
+    specialty: feedback.setting,
+    complaintGroup: feedback.requestedSpecialty || "beta-feedback"
+  });
   return record;
 }
 
 export function listBetaFeedback() {
+  if (!isWorkflowCaptureEnabled()) return [];
   return read<BetaFeedback[]>(FEEDBACK_KEY, []);
 }
 
 export function listBetaContacts() {
+  if (!isWorkflowCaptureEnabled()) return [];
   return read<BetaContact[]>(CONTACT_KEY, []);
 }
 
 export function computeOntologyUsageStats(): OntologyUsageStats[] {
+  if (!isWorkflowCaptureEnabled()) return [];
   const sessions = listSessions();
   return sessions.flatMap((session) =>
     session.selectedSymptoms.map((symptomId) => {
@@ -221,6 +334,17 @@ export function computeOntologyUsageStats(): OntologyUsageStats[] {
 }
 
 export function moatMetrics() {
+  if (!isWorkflowCaptureEnabled()) {
+    return {
+      sessionsCompleted: 0,
+      averageTimeToNarrativeMs: 0,
+      copyRate: 0,
+      mostUsedNarrativeMode: "capture disabled",
+      averageEditsPerNarrative: 0,
+      narrativeAcceptanceRate: 0,
+      workflowAbandonmentStep: "capture disabled"
+    };
+  }
   const sessions = listSessions();
   const revisions = listNarrativeRevisions();
   const completed = sessions.filter((session) => session.copiedToEhr || session.reviewCompleted);

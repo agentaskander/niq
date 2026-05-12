@@ -1,238 +1,275 @@
-import { universalObservations, universalSymptoms } from "./clinicalOntology";
-import type { ClinicalObservation, ClinicalSymptom, ComplaintGroup, Specialty } from "../lib/types";
+import type { ClinicalObservation, ClinicalSymptom, ComplaintGroup, NarrativeClause, Specialty } from "../lib/types";
 
-const symptoms = (...ids: string[]): ClinicalSymptom[] =>
-  ids.map((id) => universalSymptoms.find((symptom) => symptom.id === id)).filter(Boolean) as ClinicalSymptom[];
+const now = "2026-05-11T00:00:00.000Z";
 
-const observations = (...ids: string[]): ClinicalObservation[] =>
-  ids.map((id) => universalObservations.find((observation) => observation.id === id)).filter(Boolean) as ClinicalObservation[];
+const symptom = (id: string, label: string, category: string, redFlag = false): ClinicalSymptom => ({
+  id,
+  label,
+  category,
+  synonyms: [label.toLowerCase()],
+  redFlag,
+  applicableRoles: ["rn", "np-pa", "physician", "urgent-care", "telehealth", "home-health"],
+  createdAt: now,
+  updatedAt: now
+});
 
-const abdominalPain: ComplaintGroup = {
-  id: "abdominal-pain",
-  name: "Abdominal Pain",
-  symptoms: symptoms("ruq-pain", "nausea", "vomiting"),
-  timingOptions: ["yesterday evening", "worsening today", "intermittent", "constant"],
-  severityOptions: ["3/10", "5/10", "7/10", "9/10"],
-  modifiers: ["worse after meals", "improves with rest", "worse with movement", "no clear trigger"],
-  pertinentNegatives: ["fever", "chills", "chest pain", "shortness of breath", "syncope"],
-  observations: observations("guarding", "warm-dry", "steady-gait"),
-  interventions: ["Comfort measures offered", "Provider notified per protocol", "Patient placed in position of comfort"],
-  reassessmentOptions: ["pain unchanged at reassessment", "patient resting", "symptoms documented for provider evaluation"],
-  redFlags: ["severe pain", "syncope", "rigidity", "persistent vomiting"]
-};
+const observation = (id: string, label: string, category: string): ClinicalObservation => ({
+  id,
+  label,
+  category
+});
 
-const nauseaVomiting: ComplaintGroup = {
-  ...abdominalPain,
-  id: "nausea-vomiting",
-  name: "Nausea / Vomiting",
-  symptoms: symptoms("nausea", "vomiting"),
-  pertinentNegatives: ["fever", "chest pain", "shortness of breath", "blood in emesis", "syncope"],
-  redFlags: ["persistent vomiting", "dehydration concern", "blood in emesis", "severe pain"]
-};
-
-const diarrhea: ComplaintGroup = {
-  ...abdominalPain,
-  id: "diarrhea",
-  name: "Diarrhea",
-  symptoms: symptoms("diarrhea", "nausea"),
-  modifiers: ["watery stools reported", "after meals", "recent travel denied", "tolerating fluids"],
-  pertinentNegatives: ["blood in stool", "fever", "severe abdominal pain", "syncope"],
-  redFlags: ["blood in stool", "dehydration concern", "severe abdominal pain"]
-};
-
-const constipation: ComplaintGroup = {
-  ...abdominalPain,
-  id: "constipation",
-  name: "Constipation",
-  symptoms: symptoms("constipation"),
-  modifiers: ["reduced bowel movement frequency", "bloating reported", "passing gas reported", "worse with meals"],
-  pertinentNegatives: ["vomiting", "severe abdominal pain", "fever", "blood in stool"],
-  redFlags: ["severe abdominal pain", "persistent vomiting", "rigidity"]
-};
-
-const giBleeding: ComplaintGroup = {
-  ...abdominalPain,
-  id: "gi-bleeding",
-  name: "GI Bleeding",
-  symptoms: symptoms("gi-bleeding", "dizziness"),
-  modifiers: ["blood noted by patient", "dark stool reported", "one episode reported", "recurrent episodes reported"],
-  pertinentNegatives: ["syncope", "chest pain", "shortness of breath", "severe abdominal pain"],
-  redFlags: ["syncope", "large volume bleeding", "chest pain", "shortness of breath"]
-};
-
-const jaundiceConcern: ComplaintGroup = {
-  ...abdominalPain,
-  id: "jaundice",
-  name: "Jaundice",
-  symptoms: symptoms("jaundice", "ruq-pain", "nausea"),
-  modifiers: ["yellowing reported", "dark urine reported", "after meals", "worsening today"],
-  pertinentNegatives: ["fever", "chills", "confusion", "severe abdominal pain"],
-  redFlags: ["confusion", "fever", "severe abdominal pain"]
-};
-
-const chestPain: ComplaintGroup = {
-  id: "chest-pain",
-  name: "Chest Pain",
-  symptoms: symptoms("chest-pain", "sob", "dizziness"),
-  timingOptions: ["started this morning", "began during activity", "intermittent", "constant"],
-  severityOptions: ["mild", "moderate", "7/10", "10/10"],
-  modifiers: ["worse with exertion", "improves with rest", "radiation denied", "associated nausea"],
-  pertinentNegatives: ["shortness of breath", "syncope", "diaphoresis", "new weakness"],
-  observations: observations("warm-dry", "oriented"),
-  interventions: ["Provider notified per protocol", "Patient placed in position of comfort", "Assessment findings communicated to provider"],
-  reassessmentOptions: ["symptoms unchanged", "awaiting provider direction", "patient resting"],
-  redFlags: ["syncope", "severe chest pain", "shortness of breath", "diaphoresis"]
-};
-
-const respiratoryConcern: ComplaintGroup = {
-  id: "respiratory-concern",
-  name: "Respiratory Concern",
-  symptoms: symptoms("sob", "cough"),
-  timingOptions: ["started this morning", "worsened over two days", "sudden onset", "after activity"],
-  severityOptions: ["mild", "moderate", "severe", "8/10 distress"],
-  modifiers: ["worse with exertion", "improves with rest", "productive sputum", "dry cough"],
-  pertinentNegatives: ["chest pain", "hemoptysis", "syncope", "fever", "known allergen exposure"],
-  observations: observations("labored", "wheezing", "warm-dry"),
-  interventions: ["Respiratory status reassessed", "Provider evaluation requested", "Position adjusted for comfort"],
-  reassessmentOptions: ["work of breathing unchanged", "patient speaking in full sentences", "awaiting provider direction"],
-  redFlags: ["cyanosis", "severe work of breathing", "syncope", "chest pain"]
-};
-
-const neuroChange: ComplaintGroup = {
-  id: "neuro-change",
-  name: "Neurologic Change",
-  symptoms: symptoms("headache", "dizziness"),
-  timingOptions: ["started today", "last known baseline documented", "intermittent episodes", "worsening"],
-  severityOptions: ["mild", "moderate", "severe", "10/10 headache"],
-  modifiers: ["worse standing", "improves lying down", "associated with nausea", "no reported trauma"],
-  pertinentNegatives: ["fall", "loss of consciousness", "chest pain", "shortness of breath", "seizure activity"],
-  observations: observations("oriented", "steady-gait"),
-  interventions: ["Safety precautions maintained", "Provider notified per protocol", "Baseline status documented"],
-  reassessmentOptions: ["no new changes reported", "requires continued observation", "awaiting provider direction"],
-  redFlags: ["new weakness", "speech change", "loss of consciousness", "seizure activity"]
-};
-
-const woundConcern: ComplaintGroup = {
-  id: "wound-concern",
-  name: "Wound Concern",
-  symptoms: symptoms("wound-pain"),
-  timingOptions: ["noted during dressing change", "worsened since prior shift", "present on arrival"],
-  severityOptions: ["mild", "moderate", "severe", "6/10"],
-  modifiers: ["localized discomfort", "increased drainage reported", "worse with movement", "stable from prior visit"],
-  pertinentNegatives: ["fever", "chills", "new numbness", "uncontrolled pain", "increased drainage"],
-  observations: observations("periwound-redness", "warm-dry"),
-  interventions: ["Dressing assessed", "Wound findings documented for provider review", "Patient tolerated care"],
-  reassessmentOptions: ["dressing intact", "no change in discomfort", "follow-up pending"],
-  redFlags: ["rapid spreading redness", "fever", "uncontrolled pain", "new numbness"]
-};
-
-const pediatricFever: ComplaintGroup = {
-  id: "pediatric-fever",
-  name: "Fever / Illness",
-  symptoms: symptoms("poor-intake", "cough"),
-  timingOptions: ["started overnight", "started today", "two days duration", "after school/daycare"],
-  severityOptions: ["mild", "moderate", "high fever reported", "parent concerned"],
-  modifiers: ["decreased intake", "more tired than usual", "consolable", "normal wet diapers reported"],
-  pertinentNegatives: ["difficulty breathing", "lethargy", "seizure activity", "poor urine output", "neck stiffness"],
-  observations: observations("consolable", "warm-dry"),
-  interventions: ["Caregiver statement documented", "Provider evaluation requested", "Intake/output concerns documented"],
-  reassessmentOptions: ["caregiver updated", "child remains consolable", "awaiting provider direction"],
-  redFlags: ["lethargy", "difficulty breathing", "seizure activity", "poor urine output"]
-};
-
-const behavioralSafety: ComplaintGroup = {
-  id: "behavioral-safety",
-  name: "Behavioral Health Safety Check",
-  symptoms: symptoms("safety-concern", "dizziness"),
-  timingOptions: ["reported today", "during shift assessment", "after change in behavior", "ongoing concern"],
-  severityOptions: ["low concern", "moderate concern", "high concern", "requires close observation"],
-  modifiers: ["patient cooperative", "patient withdrawn", "support person present", "environmental stressor reported"],
-  pertinentNegatives: ["acute medical complaint", "loss of consciousness", "injury reported", "substance use reported"],
-  observations: observations("oriented", "warm-dry"),
-  interventions: ["Safety precautions maintained", "Provider notified per protocol", "Assessment findings communicated to provider"],
-  reassessmentOptions: ["patient remains cooperative", "no new safety concerns observed", "awaiting provider direction"],
-  redFlags: ["active safety threat", "agitation escalation", "new confusion", "injury reported"]
-};
-
-export const specialties: Specialty[] = [
-  {
-    id: "ed",
-    name: "Emergency Department",
-    careSettings: ["ED", "triage", "rapid assessment"],
-    description: "Rapid symptom capture, triage-ready timelines, and review-gated EHR copy.",
-    complaintGroups: [abdominalPain, chestPain, respiratoryConcern, neuroChange]
-  },
-  {
-    id: "gi-liver",
-    name: "GI / Liver",
-    careSettings: ["specialty clinic", "inpatient consult"],
-    description: "Abdominal, nutrition, post-procedure, and hepatobiliary storytelling support.",
-    complaintGroups: [abdominalPain, nauseaVomiting, diarrhea, constipation, giBleeding, jaundiceConcern]
-  },
-  {
-    id: "med-surg",
-    name: "Med-Surg",
-    careSettings: ["inpatient", "shift handoff"],
-    description: "Shift narrative consistency for pain, wounds, mobility, and reassessment.",
-    complaintGroups: [abdominalPain, chestPain, woundConcern, respiratoryConcern]
-  },
-  {
-    id: "icu",
-    name: "ICU",
-    careSettings: ["critical care", "escalation"],
-    description: "Event-based narratives for status changes, interventions, and escalation.",
-    complaintGroups: [respiratoryConcern, neuroChange]
-  },
-  {
-    id: "pediatrics",
-    name: "Pediatrics",
-    careSettings: ["peds clinic", "ED", "urgent care"],
-    description: "Caregiver statements, age-aware observations, and triage summaries.",
-    complaintGroups: [pediatricFever, respiratoryConcern]
-  },
-  {
-    id: "home-health",
-    name: "Home Health",
-    careSettings: ["home visit", "remote follow-up"],
-    description: "Visit notes, safety observations, symptom changes, and follow-up context.",
-    complaintGroups: [woundConcern, respiratoryConcern]
-  },
-  {
-    id: "behavioral-health",
-    name: "Behavioral Health",
-    careSettings: ["inpatient", "urgent evaluation"],
-    description: "Objective patient statements, safety observations, and handoff structure.",
-    complaintGroups: [behavioralSafety, neuroChange]
-  },
-  {
-    id: "cardiac",
-    name: "Cardiac",
-    careSettings: ["clinic", "ED", "telehealth"],
-    description: "Symptom timelines and escalation documentation for cardiopulmonary concerns.",
-    complaintGroups: [chestPain, respiratoryConcern]
-  },
-  {
-    id: "respiratory",
-    name: "Respiratory",
-    careSettings: ["clinic", "inpatient", "telehealth"],
-    description: "Breathing concern capture with reassessment and provider notification support.",
-    complaintGroups: [respiratoryConcern]
-  },
-  {
-    id: "neuro",
-    name: "Neuro",
-    careSettings: ["clinic", "ED", "inpatient"],
-    description: "Baseline-aware neurologic symptom and observation narrative support.",
-    complaintGroups: [neuroChange]
-  },
-  {
-    id: "wound-care",
-    name: "Wound Care",
-    careSettings: ["clinic", "home health", "med-surg"],
-    description: "Wound observations, dressing events, response, and follow-up summaries.",
-    complaintGroups: [woundConcern]
-  }
+const baseModifiers = [
+  "worse with activity",
+  "improves with rest",
+  "intermittent",
+  "constant",
+  "worsening today",
+  "unchanged from baseline",
+  "after meals",
+  "no clear trigger"
 ];
 
-export const defaultSpecialty = specialties[0];
-export const defaultComplaintGroup = defaultSpecialty.complaintGroups[0];
+const baseNegatives = [
+  "fever",
+  "chills",
+  "chest pain",
+  "shortness of breath",
+  "syncope",
+  "new weakness",
+  "confusion",
+  "uncontrolled pain"
+];
+
+const baseObservations = [
+  observation("warm-dry", "skin warm and dry", "general"),
+  observation("oriented", "alert and oriented", "neuro"),
+  observation("steady-gait", "ambulates with steady gait", "mobility"),
+  observation("no-distress", "no acute distress observed", "general"),
+  observation("speaking-full", "speaking in full sentences", "respiratory"),
+  observation("needs-assist", "requires assistance with activity", "mobility")
+];
+
+const baseInterventions = [
+  "Comfort measures offered",
+  "Patient placed in position of comfort",
+  "Provider notified per protocol",
+  "Assessment findings communicated to provider",
+  "Safety precautions maintained",
+  "Response documented for reassessment"
+];
+
+const baseReassessment = [
+  "symptoms unchanged at reassessment",
+  "patient resting in position of comfort",
+  "response pending reassessment",
+  "provider direction pending",
+  "continued monitoring documented"
+];
+
+const baseRedFlags = [
+  "syncope",
+  "severe or worsening symptoms",
+  "new confusion",
+  "unstable appearance",
+  "provider escalation required"
+];
+
+const timingOptions = [
+  "started today",
+  "started yesterday",
+  "worsened over two days",
+  "sudden onset",
+  "gradual onset",
+  "recurrent episode",
+  "after activity",
+  "during reassessment"
+];
+
+const severityOptions = ["mild", "moderate", "severe", "3/10", "5/10", "7/10", "9/10", "10/10"];
+
+function narrativeClauses(specialtyId: string, groupId: string, name: string): NarrativeClause[] {
+  return (["nursing", "advanced", "soap", "sbar", "handoff"] as const).map((mode, index) => ({
+    id: `${groupId}-clause-${mode}`,
+    clauseId: `${groupId}-clause-${mode}`,
+    mode,
+    role: mode === "soap" ? "physician" : "all",
+    roleScope: mode === "soap" ? "physician" : "all",
+    specialtyId,
+    complaintGroupId: groupId,
+    triggerItemIds: [],
+    text: `${name} details documented from selected symptoms, observations, timeline events, interventions, and reassessment only.`,
+    safetyLevel: index === 2 ? "review" : "approved",
+    blockedForRoles: mode === "soap" ? ["rn"] : [],
+    version: "1.0.0"
+  } satisfies NarrativeClause));
+}
+
+function makeSymptoms(groupId: string, labels: string[], category: string): ClinicalSymptom[] {
+  return labels.slice(0, 10).map((label, index) => symptom(`${groupId}-${index + 1}`, label, category, index >= 8));
+}
+
+const requiredSymptoms: Record<string, ClinicalSymptom[]> = {
+  "abdominal-pain": [
+    symptom("ruq-pain", "RUQ pain", "pain"),
+    symptom("nausea", "nausea", "associated"),
+    symptom("vomiting", "vomiting", "associated")
+  ],
+  "nausea-vomiting": [symptom("nausea", "nausea", "associated"), symptom("vomiting", "vomiting", "associated")],
+  diarrhea: [symptom("diarrhea", "diarrhea", "gi")],
+  constipation: [symptom("constipation", "constipation", "gi")],
+  "gi-bleeding": [symptom("gi-bleeding", "GI bleeding concern", "gi", true), symptom("dizziness", "dizziness", "neuro")],
+  jaundice: [symptom("jaundice", "jaundice concern", "gi", true), symptom("ruq-pain", "RUQ pain", "pain")],
+  "chest-pain": [symptom("chest-pain", "chest pain", "cardiac", true), symptom("sob", "shortness of breath", "respiratory"), symptom("dizziness", "dizziness", "neuro")],
+  "shortness-of-breath": [symptom("sob", "shortness of breath", "respiratory"), symptom("cough", "cough", "respiratory")],
+  "respiratory-concern": [symptom("sob", "shortness of breath", "respiratory"), symptom("cough", "cough", "respiratory")],
+  "neuro-change": [symptom("headache", "headache", "neuro"), symptom("dizziness", "dizziness", "neuro")],
+  "wound-concern": [symptom("wound-pain", "localized wound pain", "wound")],
+  "pediatric-fever": [symptom("poor-intake", "decreased intake", "pediatrics"), symptom("cough", "cough", "respiratory")],
+  "behavioral-safety": [symptom("safety-concern", "safety concern", "behavioral")]
+};
+
+function group(id: string, specialtyId: string, name: string, category: string, labels: string[], related: string[] = []): ComplaintGroup {
+  const seeded = requiredSymptoms[id] ?? [];
+  const generated = makeSymptoms(id, labels, category).filter((item) => !seeded.some((existing) => existing.id === item.id || existing.label === item.label));
+  const symptoms = [...seeded, ...generated].slice(0, 10);
+  return {
+    id,
+    specialtyId,
+    name,
+    description: `${name} workflow pack for structured clinical story capture.`,
+    symptoms,
+    timingOptions,
+    severityOptions,
+    modifiers: baseModifiers,
+    pertinentNegatives: baseNegatives,
+    observations: [
+      ...baseObservations,
+      observation(`${id}-obs-1`, `${name.toLowerCase()} pattern observed`, category),
+      observation(`${id}-obs-2`, `${name.toLowerCase()} status documented`, category)
+    ].slice(0, 8),
+    interventions: baseInterventions,
+    reassessmentOptions: baseReassessment,
+    reassessmentPrompts: baseReassessment,
+    redFlags: baseRedFlags,
+    escalationPrompts: baseRedFlags,
+    narrativeClauses: narrativeClauses(specialtyId, id, name),
+    roleRestrictions: {
+      rn: ["diagnosed with", "order", "prescribe"],
+      physician: [],
+      "np-pa": ["final diagnosis without review"],
+      "urgent-care": [],
+      telehealth: ["complete physical exam language"],
+      "home-health": ["acute treatment orders"]
+    },
+    relatedComplaintGroups: related
+  };
+}
+
+const labelBank = {
+  gi: ["abdominal pain", "RUQ pain", "nausea", "vomiting", "bloating", "cramping", "poor appetite", "reflux symptoms", "dark stool", "yellowing concern", "diarrhea", "constipation"],
+  cardiac: ["chest pressure", "palpitations", "dizziness", "near syncope", "edema", "fatigue", "shortness of breath", "diaphoresis", "activity intolerance", "blood pressure concern", "radiating discomfort", "orthopnea"],
+  respiratory: ["shortness of breath", "cough", "wheezing", "chest tightness", "sputum change", "fatigue", "activity intolerance", "orthopnea", "nasal congestion", "pleuritic discomfort", "hypoxia concern", "feverish feeling"],
+  neuro: ["headache", "dizziness", "weakness", "numbness", "vision change", "speech concern", "balance change", "confusion", "tremor", "near fall", "memory concern", "seizure-like activity"],
+  wound: ["localized wound pain", "drainage", "odor concern", "periwound redness", "swelling", "bleeding", "dressing saturation", "delayed healing", "warmth", "new numbness", "mobility pain", "skin breakdown"],
+  peds: ["fever reported", "decreased intake", "cough", "vomiting", "diarrhea", "rash", "ear pain", "sore throat", "fatigue", "fewer wet diapers", "irritability", "sleep change"],
+  behavioral: ["safety concern", "anxiety", "withdrawn behavior", "agitation", "sleep disturbance", "poor intake", "medication concern", "support need", "tearfulness", "environmental stressor", "confusion", "substance concern"],
+  general: ["pain", "fatigue", "weakness", "mobility concern", "intake concern", "sleep change", "dizziness", "nausea", "skin concern", "safety concern", "medication concern", "functional decline"]
+};
+
+function specialty(id: string, name: string, description: string, careSettings: string[], groups: Array<[string, string, keyof typeof labelBank]>): Specialty {
+  return {
+    id,
+    name,
+    description,
+    careSettings,
+    version: "1.0.0",
+    updatedAt: now,
+    complaintGroups: groups.map(([groupId, groupName, category], index) => group(groupId, id, groupName, category, labelBank[category], groups.filter((_, i) => i !== index).map(([other]) => other)))
+  };
+}
+
+export const specialties: Specialty[] = [
+  specialty("gi-liver", "GI / Liver", "Abdominal, hepatobiliary, bowel-pattern, and GI symptom workflow packs.", ["specialty clinic", "inpatient consult", "ED"], [
+    ["abdominal-pain", "Abdominal Pain", "gi"],
+    ["nausea-vomiting", "Nausea / Vomiting", "gi"],
+    ["diarrhea", "Diarrhea", "gi"],
+    ["constipation", "Constipation", "gi"],
+    ["gi-bleeding", "GI Bleeding", "gi"],
+    ["jaundice", "Jaundice", "gi"]
+  ]),
+  specialty("cardiac", "Cardiac", "Cardiopulmonary symptom timelines, escalation cues, and handoff-ready narratives.", ["clinic", "ED", "telehealth"], [
+    ["chest-pain", "Chest Pain", "cardiac"],
+    ["palpitations", "Palpitations", "cardiac"],
+    ["syncope-near-syncope", "Syncope / Near Syncope", "cardiac"],
+    ["edema", "Edema", "cardiac"],
+    ["hypertension-concern", "Hypertension Concern", "cardiac"]
+  ]),
+  specialty("respiratory", "Respiratory", "Breathing concern capture with reassessment, interventions, and escalation prompts.", ["clinic", "inpatient", "telehealth"], [
+    ["shortness-of-breath", "Shortness of Breath", "respiratory"],
+    ["respiratory-concern", "Respiratory Concern", "respiratory"],
+    ["cough", "Cough", "respiratory"],
+    ["wheezing", "Wheezing", "respiratory"],
+    ["chest-tightness", "Chest Tightness", "respiratory"],
+    ["hypoxia", "Hypoxia", "respiratory"]
+  ]),
+  specialty("neuro", "Neuro", "Baseline-aware neurologic symptom and observation narrative support.", ["clinic", "ED", "inpatient"], [
+    ["neuro-change", "Neurologic Change", "neuro"],
+    ["headache-dizziness", "Headache / Dizziness", "neuro"],
+    ["weakness-numbness", "Weakness / Numbness", "neuro"],
+    ["vision-speech-change", "Vision / Speech Change", "neuro"],
+    ["fall-risk", "Fall Risk", "neuro"]
+  ]),
+  specialty("ed", "Emergency Department", "Rapid symptom capture, triage-ready timelines, and review-gated EHR copy.", ["ED", "triage", "rapid assessment"], [
+    ["ed-abdominal-pain", "ED Abdominal Pain", "gi"],
+    ["ed-chest-pain", "ED Chest Pain", "cardiac"],
+    ["ed-respiratory", "ED Respiratory Concern", "respiratory"],
+    ["ed-neuro", "ED Neurologic Change", "neuro"],
+    ["ed-trauma", "Trauma / Injury", "general"]
+  ]),
+  specialty("med-surg", "Med-Surg", "Shift narrative consistency for pain, wounds, mobility, and reassessment.", ["inpatient", "shift handoff"], [
+    ["medsurg-pain", "Pain Reassessment", "general"],
+    ["medsurg-mobility", "Mobility / Fall Risk", "general"],
+    ["medsurg-wound", "Wound / Skin Concern", "wound"],
+    ["medsurg-respiratory", "Respiratory Change", "respiratory"],
+    ["medsurg-intake", "Intake / Output Concern", "general"]
+  ]),
+  specialty("icu", "ICU", "Event-based narratives for status changes, interventions, and escalation.", ["critical care", "escalation"], [
+    ["icu-respiratory", "ICU Respiratory Change", "respiratory"],
+    ["icu-neuro", "ICU Neuro Change", "neuro"],
+    ["icu-hemodynamic", "Hemodynamic Concern", "cardiac"],
+    ["icu-sedation", "Sedation / Agitation", "behavioral"],
+    ["icu-skin", "ICU Skin / Device Concern", "wound"]
+  ]),
+  specialty("pediatrics", "Pediatrics", "Caregiver statements, age-aware observations, and triage summaries.", ["peds clinic", "ED", "urgent care"], [
+    ["pediatric-fever", "Fever / Illness", "peds"],
+    ["peds-respiratory", "Pediatric Respiratory", "respiratory"],
+    ["peds-gi", "Pediatric GI Symptoms", "gi"],
+    ["peds-rash", "Rash / Skin Concern", "peds"],
+    ["peds-intake", "Intake / Hydration", "peds"]
+  ]),
+  specialty("home-health", "Home Health", "Visit notes, safety observations, symptom changes, adherence, and follow-up context.", ["home visit", "remote follow-up"], [
+    ["home-health-wound", "Home Wound Follow-up", "wound"],
+    ["home-health-safety", "Home Safety Check", "general"],
+    ["home-health-mobility", "Mobility / Function", "general"],
+    ["home-health-medication", "Medication Adherence", "general"],
+    ["home-health-respiratory", "Home Respiratory Check", "respiratory"]
+  ]),
+  specialty("behavioral-health", "Behavioral Health", "Objective patient statements, safety observations, and handoff structure.", ["inpatient", "urgent evaluation", "telehealth"], [
+    ["behavioral-safety", "Behavioral Health Safety Check", "behavioral"],
+    ["anxiety-distress", "Anxiety / Distress", "behavioral"],
+    ["agitation", "Agitation / Escalation", "behavioral"],
+    ["sleep-intake", "Sleep / Intake Change", "behavioral"],
+    ["support-needs", "Support / Resource Need", "behavioral"]
+  ]),
+  specialty("wound-care", "Wound Care", "Wound observations, dressing events, response, and follow-up summaries.", ["clinic", "home health", "med-surg"], [
+    ["wound-concern", "Wound Concern", "wound"],
+    ["pressure-injury", "Pressure Injury", "wound"],
+    ["dressing-change", "Dressing Change", "wound"],
+    ["drainage-odor", "Drainage / Odor", "wound"],
+    ["skin-breakdown", "Skin Breakdown", "wound"]
+  ])
+];
+
+export const defaultSpecialty = specialties.find((item) => item.id === "gi-liver") ?? specialties[0];
+export const defaultComplaintGroup = defaultSpecialty.complaintGroups.find((item) => item.id === "abdominal-pain") ?? defaultSpecialty.complaintGroups[0];

@@ -57,7 +57,7 @@ The deterministic MVP generator is `generateNarrative(input): NarrativeOutput` i
 
 ### Workflow Capture Layer
 
-The demo stores de-identified workflow telemetry locally in `localStorage` through `src/lib/workflowCapture.ts`.
+The demo stores de-identified workflow telemetry locally in `localStorage` through `src/lib/workflowCapture.ts` only when **Local workflow capture enabled** is turned on in Settings.
 
 Captured objects:
 
@@ -69,7 +69,7 @@ Captured objects:
 
 Captured behavior includes role selection, specialty selection, symptom selection, timeline additions, narrative mode changes, narrative edits, review completion, copy-to-EHR events, time to first narrative, time to copy, and demo completion.
 
-No backend is required for the demo. Future backend persistence should mirror these objects in a governed database with tenant isolation, audit controls, and PHI-safe policies.
+No backend is required for the demo. If workflow capture is disabled, the app still functions, but workflow events, sessions, narrative revisions, preferred-mode usage, moat analytics, and beta feedback are not persisted or used for local analytics. Future backend persistence should mirror these objects in a governed database with tenant isolation, audit controls, and PHI-safe policies.
 
 ## Safety Rules
 
@@ -122,12 +122,13 @@ Adoption funnel:
 ## Routes
 
 - `/` marketing page
-- `/demo` opens the Studio demo
-- `/app` NarrativeIQ Studio
-- `/app/new-session` NarrativeIQ Studio
-- `/app/library` specialty library
-- `/app/admin` mock metrics dashboard
-- `/app/adoption` nurse adoption plan
+- `/demo` interactive demo with seeded scenarios
+- `/app/new-session` blank patient story builder
+- `/app/library` specialty/ontology browser
+- `/app/admin?admin=demo` admin dashboard
+- `/app/admin/adoption?admin=demo` nurse adoption metrics dashboard
+- `/app/admin/moat?admin=demo` internal workflow intelligence dashboard
+- `/app/admin/ontology?admin=demo` internal Ontology Studio
 - `/app/settings` governance and integration settings
 
 ## Running The Usable Demo
@@ -147,7 +148,7 @@ The demo includes seeded scenarios for GI abdominal pain, chest pain, shortness 
 
 ## Local-Only Storage Note
 
-Workflow data is stored in browser `localStorage` for MVP/demo purposes. It is not sent to a backend. Optional beta contact email is stored separately from workflow session records.
+Workflow data is stored in browser `localStorage` for MVP/demo purposes only when local workflow capture is enabled. It is not sent to a backend. Optional beta contact email is stored separately from workflow session records and is also disabled when workflow capture is off.
 
 ## No-PHI Demo Policy
 
@@ -159,6 +160,16 @@ Do not enter names, DOB, MRN, address, phone, email, exact facility, room number
 Protected assets include the Clinical Story Engine, specialty ontology, Narrative Transformation Engine, Clinical Story Workflow Dataset, adoption dataset, and prompt/template library.
 
 Do not publish these docs, expose them in marketing pages, or reveal ontology/scoring details beyond demo-safe subsets.
+
+## Admin / Moat Dashboard
+
+The internal dashboard is for workflow intelligence, beta adoption metrics, copy-to-EHR rates, narrative acceptance, edit rates, symptom co-selection patterns, and abandonment points. It is not part of public marketing.
+
+In production it must sit behind real authentication, authorization, tenant isolation, and audit logging. The current `?admin=demo` gate is only a local demo affordance, not security.
+
+## Ontology Studio
+
+`/app/admin/ontology?admin=demo` is the internal infrastructure workbench for ontology CRUD, symptom graphing, co-occurrence tracking, specialty packs, narrative clause editing, role restrictions, import/export, workflow analytics, and ontology versioning. It uses localStorage in the demo and should be backed by a governed database in production.
 
 ## Setup
 

@@ -4,22 +4,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        canvas: "#F7F9FC",
+        canvas: "#F6F8FB",
         card: "#FFFFFF",
-        ink: "#334155",
+        ink: "#0F172A",
         muted: "#64748B",
-        line: "#E2E8F0",
+        line: "#DDE5EF",
         hover: "#EEF2FF",
-        blue: "#3B82F6",
-        teal: "#14B8A6",
-        green: "#22C55E",
-        amber: "#F59E0B",
-        critical: "#EF4444",
-        "soft-blue": "#EFF6FF",
-        "soft-teal": "#F0FDFA",
-        "soft-green": "#F0FDF4",
-        "soft-amber": "#FFFBEB",
-        "soft-red": "#FEF2F2"
+        blue: "#2563EB",
+        teal: "#0D9488",
+        green: "#16A34A",
+        amber: "#D97706",
+        critical: "#DC2626",
+        "soft-blue": "#DBEAFE",
+        "soft-teal": "#CCFBF1",
+        "soft-green": "#DCFCE7",
+        "soft-amber": "#FEF3C7",
+        "soft-red": "#FEE2E2"
       },
       boxShadow: {
         soft: "0 18px 50px rgba(15, 23, 42, 0.08)",

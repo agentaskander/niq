@@ -22,12 +22,13 @@ export function CopyToEhrButton({ reviewed, narrative, onCopied }: Props) {
       className={`flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 font-semibold transition ${
         reviewed ? "bg-blue text-white shadow-lift hover:bg-blue/90" : "cursor-not-allowed bg-slate-100 text-slate-400"
       }`}
+      aria-label={reviewed ? "Copy to EHR" : "Copy to EHR - Review required"}
       disabled={!reviewed}
       onClick={copy}
       type="button"
     >
       <Copy size={18} />
-      {copied ? "Copied" : "Copy to EHR"}
+      {copied ? "Copied" : reviewed ? "Copy to EHR" : "Review required"}
     </button>
   );
 }

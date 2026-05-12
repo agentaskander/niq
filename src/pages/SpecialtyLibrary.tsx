@@ -1,6 +1,7 @@
-import { specialties } from "../data/specialties";
+import { loadOntologyState } from "../lib/ontologyStudio";
 
 export function SpecialtyLibrary() {
+  const { specialties } = loadOntologyState();
   return (
     <main className="mx-auto max-w-6xl px-4 pb-28 pt-6 md:px-8">
       <p className="text-xl font-bold text-ink">NarrativeIQ Library</p>
