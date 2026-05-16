@@ -50,4 +50,14 @@ describe("TimePicker", () => {
 
     expect(screen.getByDisplayValue("07:00 AM")).toBeInTheDocument();
   });
+
+  it("renders compact forward quick options", () => {
+    render(<Harness initial="08:00 AM" />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Time quick options/i }));
+
+    expect(screen.getByRole("button", { name: "Now" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "+15m" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "+30m" })).toBeInTheDocument();
+  });
 });

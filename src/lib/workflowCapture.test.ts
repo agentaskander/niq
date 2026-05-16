@@ -3,10 +3,12 @@ import { demoSession } from "../data/demoSession";
 import { defaultSettings, saveSettings } from "./settings";
 import {
   saveBetaFeedback,
+  saveBetaSignup,
   createSession,
   isCountableWorkflowEvent,
   listBetaContacts,
   listBetaFeedback,
+  listBetaSignups,
   listWorkflowEvents,
   logWorkflowEvent,
   migrateLegacyWorkflowData
@@ -93,6 +95,32 @@ describe("workflowCapture", () => {
 
     expect(listBetaContacts()).toHaveLength(1);
     expect(listBetaContacts()[0].contactEmail).toBe("nurse@example.com");
+  });
+
+  it("stores workflow-aware beta signups", () => {
+    saveBetaSignup({
+      selectedRole: "Nursing",
+      workflowInterest: "SBAR",
+      clinicalSetting: "ED",
+      scenarioInterest: "GI abdominal pain",
+      organization: "Demo Health",
+      email: "rn@example.com",
+      notes: "pilot floor",
+      requestEnterprisePilot: true,
+      source: "test",
+      scenarioViewed: "gi-abdominal-pain",
+      workflowModesUsed: ["sbar"]
+    });
+
+    expect(listBetaSignups()).toHaveLength(1);
+    expect(listBetaSignups()[0]).toMatchObject({
+      selectedRole: "Nursing",
+      workflowInterest: "SBAR",
+      clinicalSetting: "ED",
+      scenarioInterest: "GI abdominal pain",
+      requestEnterprisePilot: true
+    });
+    expect(listWorkflowEvents().some((event) => event.eventType === "beta_feedback_saved")).toBe(true);
   });
 
   it("does not persist beta_feedback_saved when workflow capture is disabled", () => {

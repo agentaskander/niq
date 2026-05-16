@@ -4,6 +4,7 @@ import { AdminGate } from "./components/AdminGate";
 import { AdminDashboard } from "./pages/AdminDashboard";
 import { AdoptionDashboard } from "./pages/AdoptionDashboard";
 import { AppShell } from "./pages/AppShell";
+import { BetaSignupPage } from "./pages/BetaSignupPage";
 import { LandingPage } from "./pages/LandingPage";
 import { NurseAdoptionPage } from "./pages/NurseAdoptionPage";
 import { MoatDashboard } from "./pages/MoatDashboard";
@@ -41,6 +42,7 @@ export default function App() {
 
   const renderPage = () => {
     if (path === "/lab/dark-mode") return <DarkModeConceptLab onNavigate={navigate} />;
+    if (path === "/beta" || path === "/waitlist") return <BetaSignupPage onNavigate={navigate} />;
     if (path === "/app/adoption") return <NurseAdoptionPage />;
     if (activeRoute?.path === "/") return <LandingPage onNavigate={navigate} />;
     if (activeRoute?.path === "/app/library") return <SpecialtyLibrary />;
@@ -49,7 +51,7 @@ export default function App() {
     if (activeRoute?.path === "/app/admin/moat") return <AdminGate><MoatDashboard /></AdminGate>;
     if (activeRoute?.path === "/app/ontology") return <OntologyStudio />;
     if (activeRoute?.path === "/app/settings") return <SettingsPage />;
-    return <AppShell mode={activeRoute?.path === "/demo" ? "demo" : "blank"} />;
+    return <AppShell mode={activeRoute?.path === "/demo" ? "demo" : "blank"} onNavigate={navigate} />;
   };
 
   return (
@@ -67,7 +69,7 @@ export default function App() {
               <button
                 key={route.path}
                 className={`flex min-h-11 min-w-[66px] flex-col items-center justify-center rounded-2xl px-1.5 text-[10px] font-semibold transition duration-200 ${
-                  isActive ? "bg-white text-blue shadow-lift ring-1 ring-blue/10" : "text-muted hover:bg-white/70 hover:text-ink"
+                  isActive ? "border border-blue-200 bg-blue-50 text-blue-800 shadow-lift ring-1 ring-blue-200" : "border border-transparent text-muted hover:bg-white/70 hover:text-ink"
                 }`}
                 onClick={() => navigate(href)}
                 type="button"

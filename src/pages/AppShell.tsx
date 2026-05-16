@@ -47,6 +47,7 @@ import type { ClinicalStory, ComplaintGroup, NarrativeInput, RoleScope, Specialt
 
 type Props = {
   mode: "demo" | "blank";
+  onNavigate?: (path: string) => void;
 };
 
 type WorkflowLogRequest = {
@@ -54,6 +55,10 @@ type WorkflowLogRequest = {
   step: Parameters<typeof logWorkflowEvent>[3];
   payload: Record<string, unknown>;
 };
+
+type ScenarioFilter = "All" | "Nursing" | "Provider" | "Triage" | "Telehealth" | "Handoff/SBAR" | "High-volume";
+
+const scenarioFilters: ScenarioFilter[] = ["All", "Nursing", "Provider", "Triage", "Telehealth", "Handoff/SBAR", "High-volume"];
 
 const blankSession: NarrativeInput = {
   ...demoSession,
@@ -82,7 +87,7 @@ function currentTimeLabel() {
   return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-export function AppShell({ mode }: Props) {
+export function AppShell({ mode, onNavigate }: Props) {
   const legacyEventsWereReset = useMemo(() => migrateLegacyWorkflowData(), []);
   const initialInput = mode === "demo" ? demoSession : applySettingsToBlank(blankSession);
   const activeSpecialties = useMemo(() => loadOntologyState().specialties, []);
@@ -98,10 +103,20 @@ export function AppShell({ mode }: Props) {
   const [roleExpanded, setRoleExpanded] = useState(false);
   const [contextExpanded, setContextExpanded] = useState(false);
   const [scenarioExpanded, setScenarioExpanded] = useState(mode === "demo");
+  const [scenarioFilter, setScenarioFilter] = useState<ScenarioFilter>("All");
   const [legacyEventsReset, setLegacyEventsReset] = useState(legacyEventsWereReset);
   const timelineRef = useRef<HTMLElement | null>(null);
   const output = useMemo(() => generateNarrative(input), [input]);
   const activeNarrative = editedNarrative || output.text;
+  const activeScenario = demoScenarios.find((scenario) => scenario.id === activeScenarioId);
+  const filteredScenarios = useMemo(() => {
+    return demoScenarios.filter((scenario) => {
+      if (scenarioFilter === "All") return true;
+      if (scenarioFilter === "High-volume") return scenario.frequency === "high";
+      if (scenarioFilter === "Handoff/SBAR") return scenario.roleCoverage.includes("Handoff") || scenario.roleCoverage.includes("SBAR");
+      return scenario.roleCoverage.includes(scenarioFilter);
+    });
+  }, [scenarioFilter]);
 
   useEffect(() => {
     setEditedNarrative(output.text);
@@ -149,6 +164,16 @@ export function AppShell({ mode }: Props) {
     if (typeof navigator !== "undefined" && "vibrate" in navigator) {
       navigator.vibrate?.(8);
     }
+  };
+
+  const goToBeta = (enterprise = false) => {
+    const params = new URLSearchParams();
+    if (activeScenarioId) params.set("scenario", activeScenarioId);
+    if (input.selectedMode) params.set("workflow", input.selectedMode);
+    if (enterprise) params.set("pilot", "enterprise");
+    const betaPath = `/beta${params.toString() ? `?${params.toString()}` : ""}`;
+    if (onNavigate) onNavigate(betaPath);
+    else window.history.pushState(null, "", betaPath);
   };
 
   const selectRole = (role: RoleScope) => {
@@ -235,7 +260,9 @@ export function AppShell({ mode }: Props) {
       title: sourceType.replace("-", " "),
       description: "Additional de-identified event added to the patient story timeline.",
       linkedSymptomIds: input.selectedSymptoms.slice(0, 2),
-      linkedObservationIds: input.observations.slice(0, 2)
+      linkedObservationIds: input.observations.slice(0, 2),
+      linkedInterventionIds: input.interventions.slice(0, 2),
+      linkedReassessmentIds: input.responseToIntervention ? [input.responseToIntervention] : []
     };
     pulse();
     update({ timelineEvents: [...input.timelineEvents, event] }, "clinical_event_added", "timeline", { sourceType });
@@ -291,7 +318,9 @@ export function AppShell({ mode }: Props) {
       title: "Initial patient story",
       description: `Patient reports ${input.complaintGroup.name.toLowerCase()} with ${symptomText}.${observationText}${negativeText}`,
       linkedSymptomIds: input.selectedSymptoms,
-      linkedObservationIds: input.observations
+      linkedObservationIds: input.observations,
+      linkedInterventionIds: input.interventions,
+      linkedReassessmentIds: input.responseToIntervention ? [input.responseToIntervention] : []
     };
     const nextInput = {
       ...input,
@@ -390,8 +419,8 @@ export function AppShell({ mode }: Props) {
   };
 
   return (
-    <main className="mx-auto max-w-7xl px-4 pb-32 pt-5 md:px-8">
-      <div className="mb-6 flex items-center justify-between rounded-[2rem] border border-line bg-white/80 p-4 shadow-soft backdrop-blur">
+    <main className="mx-auto max-w-7xl px-4 pb-40 pt-5 md:px-8">
+      <div className="mb-6 flex flex-col gap-4 rounded-[2rem] border border-line bg-white/80 p-4 shadow-soft backdrop-blur md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-xl font-bold tracking-tight text-ink">{mode === "demo" ? "Interactive Demo" : "New Patient Story"}</p>
           <p className="text-xs text-muted">
@@ -400,9 +429,22 @@ export function AppShell({ mode }: Props) {
               : "Start blank and build a patient story from scratch."}
           </p>
         </div>
-        <button className="rounded-full border border-line bg-white px-4 py-2 text-xs font-semibold text-muted shadow-lift hover:bg-hover" onClick={resetSession} type="button">
-          Reset session
-        </button>
+        <div className="flex flex-wrap gap-2">
+          {mode !== "demo" && (
+            <button className="rounded-full border border-blue-600 bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-lift hover:bg-blue-700" onClick={() => onNavigate?.("/demo")} type="button">
+              Try Demo
+            </button>
+          )}
+          <button className="rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-semibold text-blue-800 shadow-lift hover:bg-blue-100" onClick={() => goToBeta(false)} type="button">
+            Join Beta
+          </button>
+          <button className="rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-800 shadow-lift hover:bg-slate-50" onClick={() => goToBeta(true)} type="button">
+            Book Enterprise Pilot
+          </button>
+          <button className="rounded-full border border-line bg-white px-4 py-2 text-xs font-semibold text-muted shadow-lift hover:bg-hover" onClick={resetSession} type="button">
+            Reset session
+          </button>
+        </div>
       </div>
 
       <SafetyBanner />
@@ -414,26 +456,83 @@ export function AppShell({ mode }: Props) {
       </div>
       {toast && <div className="fixed right-4 top-24 z-50 rounded-2xl bg-green px-4 py-3 text-sm font-semibold text-white shadow-soft">{toast}</div>}
       {mode === "demo" && (
-      <div className="mt-4 clinical-card rounded-[2rem] p-3">
-        <div className="flex items-center justify-between gap-3">
-          <div>
+      <div className="mt-4 clinical-card rounded-[2rem] p-4" data-testid="demo-scenario-section">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
             <p className="section-kicker">Demo Scenario</p>
-            <p className="text-sm font-semibold text-ink">{activeScenarioId ? `Loaded: ${demoScenarios.find((scenario) => scenario.id === activeScenarioId)?.title ?? "Scenario"}` : "Choose a scenario"}</p>
+            <p className="mt-1 text-base font-bold text-ink">{activeScenario ? `Loaded: ${activeScenario.title}` : "Choose a scenario"}</p>
+            <p className="mt-1 max-w-2xl text-sm leading-5 text-slate-600">
+              Choose a realistic patient workflow to preload symptoms, observations, and timeline events.
+            </p>
+            {activeScenario && (
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-700">
+                <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-800">{activeScenario.clinicalSetting}</span>
+                <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-slate-700">{activeScenario.acuity} acuity</span>
+                <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-slate-700">{activeScenario.frequency} volume</span>
+              </div>
+            )}
           </div>
-          <button className="rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-muted hover:bg-hover" onClick={() => setScenarioExpanded(!scenarioExpanded)} type="button">
-                {scenarioExpanded ? "Done" : "Edit"}
+          <button className="shrink-0 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-800 hover:bg-blue-100" onClick={() => setScenarioExpanded(!scenarioExpanded)} type="button">
+                {scenarioExpanded ? "Done" : "Change scenario"}
           </button>
         </div>
         {scenarioExpanded && (
-          <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-            {demoScenarios.map((scenario) => {
+          <div className="mt-4">
+            <div className="flex flex-wrap gap-2" aria-label="Scenario filters" data-testid="scenario-filters">
+              {scenarioFilters.map((filter) => {
+                const active = scenarioFilter === filter;
+                return (
+                  <button
+                    key={filter}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                      active ? "border-blue-300 bg-blue-50 text-blue-900 ring-1 ring-blue-200" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    }`}
+                    onClick={() => setScenarioFilter(filter)}
+                    type="button"
+                  >
+                    {filter}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-4 grid max-w-full grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            {filteredScenarios.map((scenario) => {
               const active = activeScenarioId === scenario.id;
               return (
-              <button key={scenario.id} className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition ${active ? "border-blue bg-blue text-white shadow-lift" : "border-line bg-white text-slate-700 hover:bg-hover"}`} onClick={() => loadScenario(scenario.id)} type="button" title={scenario.description}>
-                {active ? "✓ " : ""}{scenario.title}
+              <button
+                key={scenario.id}
+                aria-current={active ? "true" : undefined}
+                className={`min-w-0 rounded-2xl border p-3 text-left shadow-lift transition ${
+                  active ? "border-blue-300 bg-blue-50 text-blue-900 ring-2 ring-blue-200" : "border-slate-200 bg-white text-slate-800 hover:border-blue-200 hover:bg-slate-50"
+                }`}
+                data-testid="demo-scenario-card"
+                onClick={() => loadScenario(scenario.id)}
+                type="button"
+              >
+                <div className="flex min-w-0 items-start justify-between gap-2">
+                  <span className="min-w-0 text-sm font-bold leading-5 text-slate-900">{scenario.title}</span>
+                  {active && <span className="shrink-0 rounded-full border border-blue-200 bg-white px-2 py-0.5 text-[11px] font-bold text-blue-800">Loaded</span>}
+                </div>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {scenario.roleCoverage.slice(0, 4).map((role) => (
+                    <span key={role} className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+                      {role}
+                    </span>
+                  ))}
+                  {scenario.roleCoverage.length > 4 && (
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-semibold text-slate-600">
+                      +{scenario.roleCoverage.length - 4}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-2 text-xs font-semibold capitalize text-slate-600">
+                  {scenario.clinicalSetting} · {scenario.acuity} acuity · {scenario.frequency} volume
+                </p>
+                <p className="mt-1 text-xs leading-5 text-slate-600">{scenario.description}</p>
               </button>
               );
             })}
+            </div>
           </div>
         )}
       </div>
@@ -486,6 +585,8 @@ export function AppShell({ mode }: Props) {
             events={input.timelineEvents}
             selectedSymptomIds={input.selectedSymptoms}
             selectedObservationIds={input.observations}
+            selectedInterventionIds={input.interventions}
+            selectedReassessmentIds={input.responseToIntervention ? [input.responseToIntervention] : input.complaintGroup.reassessmentOptions.slice(0, 2)}
             onMove={moveEvent}
             onAdd={() => addEvent("patient-stated")}
             onBuildClinicalStory={buildStory}
@@ -500,7 +601,7 @@ export function AppShell({ mode }: Props) {
                 <p className="section-kicker">Build Clinical Story</p>
                 <p className="mt-2 text-sm leading-6 text-slate-700">Validate selected facts, create the structured story, auto-start the timeline if needed, and refresh narrative modes.</p>
               </div>
-              <button className="shrink-0 rounded-2xl bg-blue px-4 py-3 text-sm font-semibold text-white shadow-lift hover:bg-blue/90" onClick={buildStory} type="button">
+              <button className="shrink-0 rounded-2xl border border-blue-600 bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-lift hover:bg-blue-700" onClick={buildStory} type="button">
                 Build Clinical Story
               </button>
             </div>
@@ -534,7 +635,7 @@ export function AppShell({ mode }: Props) {
           </div>
         </section>
 
-        <aside className="sticky bottom-24 space-y-4 self-start xl:top-5">
+        <aside className="space-y-4 self-start">
           <NarrativeStyleTabs allowedModes={input.role.allowedModes} selected={output.mode} onSelect={selectWorkflowMode} onGenerate={generateNarrativeClick} />
           <SelectedFactsPanel symptoms={symptomLabels} negatives={input.selectedNegatives} observations={observationLabels} interventions={input.interventions} />
           <NarrativePreview narrative={output.text} editedNarrative={editedNarrative} onEditedNarrativeChange={(value) => {
@@ -566,7 +667,7 @@ export function AppShell({ mode }: Props) {
               ))}
             </div>
           </div>
-          <div className="sticky bottom-24 z-30 rounded-3xl border border-line bg-white/95 p-3 shadow-soft backdrop-blur xl:bottom-4" data-testid="review-copy-action-bar">
+          <div className="rounded-3xl border border-line bg-white p-3 shadow-soft" data-testid="review-copy-action-bar">
             <div className="grid gap-2">
               <ReviewGate reviewed={reviewed} onReviewedChange={completeReview} />
               <CopyToEhrButton reviewed={reviewed} narrative={activeNarrative} onCopied={copyToEhr} />

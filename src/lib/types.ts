@@ -101,6 +101,8 @@ export type TimelineEvent = {
   description: string;
   linkedSymptomIds: string[];
   linkedObservationIds: string[];
+  linkedInterventionIds: string[];
+  linkedReassessmentIds: string[];
 };
 
 export type WorkflowEventType =
@@ -240,6 +242,22 @@ export type BetaContact = {
   feedbackId: string;
   contactEmail: string;
   createdAt: string;
+};
+
+export type BetaSignup = {
+  signupId: string;
+  createdAt: string;
+  selectedRole: string;
+  workflowInterest: string;
+  clinicalSetting: string;
+  scenarioInterest: string;
+  organization: string;
+  email: string;
+  notes: string;
+  requestEnterprisePilot: boolean;
+  source: string;
+  scenarioViewed?: string;
+  workflowModesUsed?: string[];
 };
 
 export type NarrativeInput = {

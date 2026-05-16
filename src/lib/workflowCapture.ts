@@ -1,6 +1,7 @@
 import type {
   BetaContact,
   BetaFeedback,
+  BetaSignup,
   ClinicalStorySession,
   NarrativeInput,
   NarrativeModeId,
@@ -17,6 +18,7 @@ const EVENT_KEY = "niq.workflowEvents.v1";
 const REVISION_KEY = "niq.narrativeRevisions.v1";
 const FEEDBACK_KEY = "niq.betaFeedback.v1";
 const CONTACT_KEY = "niq.betaContacts.v1";
+const SIGNUP_KEY = "niq.betaSignups.v1";
 const MIGRATION_NOTICE_KEY = "niq.workflowMigrationNotice.v1";
 const WORKFLOW_EVENT_SCHEMA_VERSION = 2;
 const LEGACY_EVENT_THRESHOLD = 40;
@@ -301,6 +303,37 @@ export function listBetaFeedback() {
 export function listBetaContacts() {
   if (!isWorkflowCaptureEnabled()) return [];
   return read<BetaContact[]>(CONTACT_KEY, []);
+}
+
+export function saveBetaSignup(signup: Omit<BetaSignup, "signupId" | "createdAt">) {
+  const record: BetaSignup = { signupId: id("signup"), createdAt: now(), ...signup };
+  if (!isWorkflowCaptureEnabled()) return record;
+  write(SIGNUP_KEY, [record, ...read<BetaSignup[]>(SIGNUP_KEY, [])].slice(0, 200));
+  captureWorkflowEvent({
+    eventId: id("event"),
+    sessionId: record.signupId,
+    timestamp: record.createdAt,
+    eventType: "beta_feedback_saved",
+    payload: {
+      signupType: "waitlist",
+      selectedRole: record.selectedRole,
+      workflowInterest: record.workflowInterest,
+      clinicalSetting: record.clinicalSetting,
+      scenarioInterest: record.scenarioInterest,
+      requestEnterprisePilot: record.requestEnterprisePilot,
+      source: record.source
+    },
+    step: "feedback",
+    role: record.selectedRole,
+    specialty: record.clinicalSetting,
+    complaintGroup: record.scenarioInterest || "beta-waitlist"
+  });
+  return record;
+}
+
+export function listBetaSignups() {
+  if (!isWorkflowCaptureEnabled()) return [];
+  return read<BetaSignup[]>(SIGNUP_KEY, []);
 }
 
 export function computeOntologyUsageStats(): OntologyUsageStats[] {

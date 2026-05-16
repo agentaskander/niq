@@ -11,6 +11,9 @@ describe("safety UI", () => {
 
   it("requires review before copy to EHR", () => {
     render(<CopyToEhrButton reviewed={false} narrative="demo narrative" />);
-    expect(screen.getByRole("button", { name: /copy to ehr/i })).toBeDisabled();
+    const button = screen.getByRole("button", { name: /review required before export/i });
+    expect(button).toBeDisabled();
+    expect(button).toHaveClass("bg-slate-100", "text-slate-700", "border-slate-200");
+    expect(button.className).not.toContain("text-white");
   });
 });

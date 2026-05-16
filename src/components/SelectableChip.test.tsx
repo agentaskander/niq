@@ -7,7 +7,7 @@ describe("SelectableChip", () => {
     render(<SelectableChip label="RUQ pain" selected onClick={() => undefined} />);
 
     const chip = screen.getByRole("button", { name: /RUQ pain/i });
-    expect(chip).toHaveClass("selectable-chip", "selectable-chip--selected", "bg-[#EAF1F8]");
+    expect(chip).toHaveClass("selectable-chip", "selectable-chip--selected", "bg-blue-50", "text-slate-900", "border-blue-300");
     expect(chip.textContent?.trim()).not.toBe("");
     expect(chip).toHaveTextContent("RUQ pain");
     expect(chip.querySelector(".selectable-chip__check")).toBeInTheDocument();
@@ -30,5 +30,14 @@ describe("SelectableChip", () => {
       expect(chip.querySelector(".selectable-chip__check")).toBeInTheDocument();
       expect(chip.className).not.toContain("text-white");
     }
+  });
+
+  it("keeps disabled chips readable", () => {
+    render(<SelectableChip label="Provider" selected={false} disabled onClick={() => undefined} />);
+
+    const chip = screen.getByRole("button", { name: /Provider/i });
+    expect(chip).toBeDisabled();
+    expect(chip).toHaveClass("bg-slate-50", "text-slate-400", "border-slate-200");
+    expect(chip.className).not.toContain("text-white");
   });
 });

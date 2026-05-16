@@ -45,10 +45,13 @@ export function LandingPage({ onNavigate }: Props) {
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <button className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue px-6 py-4 font-semibold text-white shadow-lift transition hover:bg-blue/90" onClick={() => onNavigate("/demo")} type="button">
-                  Try Interactive Demo <ArrowRight size={18} />
+                  Try Demo <ArrowRight size={18} />
                 </button>
-                <button className="rounded-2xl border border-line bg-white px-6 py-4 font-semibold text-muted shadow-lift" disabled type="button" title="Coming soon">
-                  Book Clinical Pilot · Coming soon
+                <button className="rounded-2xl border border-blue-200 bg-blue-50 px-6 py-4 font-semibold text-blue-800 shadow-lift hover:bg-blue-100" onClick={() => onNavigate("/beta")} type="button">
+                  Join Beta
+                </button>
+                <button className="rounded-2xl border border-slate-300 bg-white px-6 py-4 font-semibold text-slate-800 shadow-lift hover:bg-slate-50" onClick={() => onNavigate("/beta?pilot=enterprise")} type="button">
+                  Book Enterprise Pilot
                 </button>
               </div>
             </motion.div>
@@ -203,7 +206,13 @@ export function LandingPage({ onNavigate }: Props) {
           </div>
           <div className="flex flex-wrap gap-3">
             <button className="inline-flex items-center gap-2 rounded-2xl bg-blue px-6 py-4 font-semibold text-white shadow-lift" onClick={() => onNavigate("/demo")} type="button">
-              Open Studio <ArrowRight size={18} />
+              Try Demo <ArrowRight size={18} />
+            </button>
+            <button className="inline-flex items-center gap-2 rounded-2xl border border-blue/20 bg-white px-6 py-4 font-semibold text-blue shadow-lift" onClick={() => onNavigate("/beta")} type="button">
+              Join Beta
+            </button>
+            <button className="inline-flex items-center gap-2 rounded-2xl border border-slate-300 bg-white px-6 py-4 font-semibold text-slate-800 shadow-lift" onClick={() => onNavigate("/beta?pilot=enterprise")} type="button">
+              Book Enterprise Pilot
             </button>
             <button className="inline-flex items-center gap-2 rounded-2xl border border-blue/20 bg-white px-6 py-4 font-semibold text-blue shadow-lift" onClick={() => onNavigate("/lab/dark-mode")} type="button">
               Compare Production vs Concept Lab

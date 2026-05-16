@@ -57,8 +57,8 @@ export function TimePicker({ value, onChange, label = "Time" }: Props) {
     setDraft(normalized || nextValue);
   };
 
-  const quick = (minutesAgo: number) => {
-    const next = formatDate(new Date(Date.now() - minutesAgo * 60_000));
+  const quick = (minutesOffset: number) => {
+    const next = formatDate(new Date(Date.now() + minutesOffset * 60_000));
     onChange(next);
     setDraft(next);
     setOpen(false);
@@ -95,9 +95,8 @@ export function TimePicker({ value, onChange, label = "Time" }: Props) {
       {open && (
         <div className="absolute left-0 top-full z-30 mt-1 w-36 rounded-2xl border border-line bg-white p-1.5 shadow-soft">
           <QuickButton label="Now" onClick={() => quick(0)} />
-          <QuickButton label="15 min ago" onClick={() => quick(15)} />
-          <QuickButton label="30 min ago" onClick={() => quick(30)} />
-          <QuickButton label="1 hr ago" onClick={() => quick(60)} />
+          <QuickButton label="+15m" onClick={() => quick(15)} />
+          <QuickButton label="+30m" onClick={() => quick(30)} />
           <QuickButton label="Shift start" onClick={() => { onChange("07:00 AM"); setDraft("07:00 AM"); setOpen(false); }} />
         </div>
       )}

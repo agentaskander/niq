@@ -9,8 +9,9 @@ export function ReviewGate({ reviewed, onReviewedChange }: Props) {
   return (
     <button
       className={`flex w-full items-center justify-between rounded-2xl border p-3 text-left transition ${
-        reviewed ? "border-green/50 bg-soft-green" : "border-amber/30 bg-soft-amber"
+        reviewed ? "border-green/50 bg-soft-green text-slate-900" : "border-amber/30 bg-soft-amber text-slate-900"
       }`}
+      data-testid="review-required-card"
       onClick={() => onReviewedChange(!reviewed)}
       type="button"
     >

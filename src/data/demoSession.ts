@@ -28,7 +28,9 @@ export const demoSession: NarrativeInput = {
       title: "Symptom onset",
       description: "Patient reports RUQ abdominal pain beginning after dinner yesterday.",
       linkedSymptomIds: ["ruq-pain"],
-      linkedObservationIds: []
+      linkedObservationIds: [],
+      linkedInterventionIds: [],
+      linkedReassessmentIds: []
     },
     {
       id: "t2",
@@ -38,7 +40,9 @@ export const demoSession: NarrativeInput = {
       title: "Assessment",
       description: "Pain rated 7/10 with nausea. Mild guarding observed.",
       linkedSymptomIds: ["ruq-pain", "nausea"],
-      linkedObservationIds: ["guarding"]
+      linkedObservationIds: ["guarding"],
+      linkedInterventionIds: [],
+      linkedReassessmentIds: []
     },
     {
       id: "t3",
@@ -47,8 +51,10 @@ export const demoSession: NarrativeInput = {
       sourceType: "provider-notified",
       title: "Provider notification",
       description: "Provider notified per protocol. Symptoms documented for provider evaluation.",
-      linkedSymptomIds: ["ruq-pain"],
-      linkedObservationIds: []
+      linkedSymptomIds: ["ruq-pain", "nausea"],
+      linkedObservationIds: ["guarding"],
+      linkedInterventionIds: ["Provider notified per protocol"],
+      linkedReassessmentIds: []
     },
     {
       id: "t4",
@@ -58,7 +64,9 @@ export const demoSession: NarrativeInput = {
       title: "Reassessment",
       description: "Patient resting in position of comfort. Pain unchanged.",
       linkedSymptomIds: ["ruq-pain"],
-      linkedObservationIds: []
+      linkedObservationIds: [],
+      linkedInterventionIds: ["Comfort measures offered"],
+      linkedReassessmentIds: ["Patient resting in position of comfort; pain unchanged at reassessment."]
     }
   ]
 };

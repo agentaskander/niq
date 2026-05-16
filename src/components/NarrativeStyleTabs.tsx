@@ -8,19 +8,20 @@ type Props = {
   selected: NarrativeModeId;
   onSelect: (style: NarrativeModeId) => void;
   onGenerate?: () => void;
+  generateDisabled?: boolean;
 };
 
-export function NarrativeStyleTabs({ allowedModes, selected, onSelect, onGenerate }: Props) {
+export function NarrativeStyleTabs({ allowedModes, selected, onSelect, onGenerate, generateDisabled = false }: Props) {
   const selectedMode = getClinicalWorkflowMode(selected);
 
   return (
-    <div className="sticky top-3 z-20 rounded-2xl border border-line bg-white/95 p-2 shadow-lift backdrop-blur">
+    <div className="rounded-2xl border border-line bg-white p-2 shadow-lift" data-testid="workflow-logic-panel">
       <div className="flex gap-1.5 overflow-x-auto pb-1 xl:flex-wrap xl:overflow-visible">
       {clinicalWorkflowModes.map((style) => {
         const disabled = !allowedModes.includes(style.id);
         return (
-          <span key={style.id} className={`shrink-0 ${disabled ? "pointer-events-none opacity-35" : ""}`} title={disabled ? "Not available for this role scope in this demo." : style.clinicalIntent}>
-            <SelectableChip label={style.label} selected={selected === style.id} onClick={() => onSelect(style.id)} />
+          <span key={style.id} className="shrink-0" title={disabled ? "Not available for this role scope in this demo." : style.clinicalIntent}>
+            <SelectableChip label={style.label} selected={selected === style.id} disabled={disabled} onClick={() => onSelect(style.id)} />
           </span>
         );
       })}
@@ -33,7 +34,12 @@ export function NarrativeStyleTabs({ allowedModes, selected, onSelect, onGenerat
           </div>
           {onGenerate && (
             <button
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-blue bg-blue px-3 py-1.5 text-xs font-semibold text-white shadow-lift hover:bg-blue/90"
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold shadow-lift ${
+                generateDisabled
+                  ? "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-600"
+                  : "border-blue-600 bg-blue-600 text-white hover:bg-blue-700"
+              }`}
+              disabled={generateDisabled}
               onClick={onGenerate}
               type="button"
             >

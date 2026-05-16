@@ -1,5 +1,6 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
+import { demoScenarios } from "../data/demoScenarios";
 import { listWorkflowEvents } from "../lib/workflowCapture";
 import { AppShell } from "./AppShell";
 
@@ -34,10 +35,48 @@ describe("AppShell demo workflow", () => {
   it("scenario click loads scenario data", () => {
     render(<AppShell mode="demo" />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Chest pain" }));
+    const chestPainCard = screen.getAllByTestId("demo-scenario-card").find((card) => within(card).queryByText("Chest pain"));
+    expect(chestPainCard).toBeDefined();
+    fireEvent.click(chestPainCard!);
 
     expect(screen.getByText("Loaded: Chest pain")).toBeInTheDocument();
     expect(screen.getByDisplayValue(/chest pain/i)).toBeInTheDocument();
+  });
+
+  it("shows a prominent Demo Scenario selector with helper text and filters", () => {
+    render(<AppShell mode="demo" />);
+
+    expect(screen.getByTestId("demo-scenario-section")).toBeVisible();
+    expect(screen.getByText("Demo Scenario")).toBeVisible();
+    expect(screen.getByText("Loaded: GI abdominal pain")).toBeVisible();
+    expect(screen.getByText("Choose a realistic patient workflow to preload symptoms, observations, and timeline events.")).toBeVisible();
+    const filters = within(screen.getByTestId("scenario-filters"));
+    ["All", "Nursing", "Provider", "Triage", "Telehealth", "Handoff/SBAR", "High-volume"].forEach((filter) => {
+      expect(filters.getByRole("button", { name: filter })).toBeInTheDocument();
+    });
+  });
+
+  it("renders readable scenario cards without white text on light backgrounds", () => {
+    render(<AppShell mode="demo" />);
+
+    const cards = screen.getAllByTestId("demo-scenario-card");
+    expect(cards.length).toBeGreaterThanOrEqual(demoScenarios.length);
+    cards.forEach((card) => {
+      expect(card.className).not.toContain("text-white");
+      expect(card.className).not.toContain("overflow-x");
+    });
+    expect(screen.getByRole("button", { name: /GI abdominal pain/i })).toHaveClass("border-blue-300", "bg-blue-50", "text-blue-900");
+  });
+
+  it("scenario filters narrow the visible card set without clipping labels", () => {
+    render(<AppShell mode="demo" />);
+
+    fireEvent.click(within(screen.getByTestId("scenario-filters")).getByRole("button", { name: "Telehealth" }));
+
+    expect(screen.getByRole("button", { name: /Telehealth URI \/ medication question/i })).toBeVisible();
+    screen.getAllByTestId("demo-scenario-card").forEach((card) => {
+      expect(card.className).toContain("min-w-0");
+    });
   });
 
   it("role selection updates selected role", () => {
@@ -55,7 +94,7 @@ describe("AppShell demo workflow", () => {
 
     fireEvent.click(symptom);
 
-    expect(symptom).toHaveClass("selectable-chip--selected", "bg-[#EAF1F8]");
+    expect(symptom).toHaveClass("selectable-chip--selected", "bg-blue-50", "text-slate-900");
     expect(screen.getByRole("button", { name: /RUQ pain/ })).toBeVisible();
     expect(screen.getByRole("button", { name: /RUQ pain/ }).textContent?.trim()).not.toBe("");
   });
@@ -64,28 +103,43 @@ describe("AppShell demo workflow", () => {
     render(<AppShell mode="blank" />);
 
     fireEvent.click(screen.getAllByRole("button", { name: /Add event/i })[0]);
+    expect(screen.getByLabelText("Date")).toBeInTheDocument();
+    expect(screen.getByLabelText("Time")).toBeInTheDocument();
+    expect(screen.getByLabelText("Event type")).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Detail"), { target: { value: "Patient states pain improved after rest." } });
 
     expect(screen.getByDisplayValue("Patient states pain improved after rest.")).toBeInTheDocument();
   });
 
+  it("timeline event cards are compact by default", () => {
+    render(<AppShell mode="demo" />);
+
+    expect(screen.queryByLabelText("Date")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Time")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Event type")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Detail")).not.toBeInTheDocument();
+    expect(screen.getByTestId("timeline-event-list")).toHaveClass("overflow-hidden");
+  });
+
   it("Add Event buttons keep visible primary contrast", () => {
     render(<AppShell mode="blank" />);
 
-    for (const button of screen.getAllByRole("button", { name: /Add Event/i })) {
-      expect(button).toHaveStyle({ backgroundColor: "#2563EB", color: "#FFFFFF", borderColor: "#2563EB" });
-      expect(button.className).not.toContain("bg-white");
-    }
+    const buttons = screen.getAllByRole("button", { name: /Add Event/i });
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0]).toHaveClass("bg-blue-600", "text-white", "border-blue-600");
   });
 
-  it("quick time option 30 min ago changes event time", () => {
+  it("date/time selector renders quick options and +30m changes event time", () => {
     render(<AppShell mode="blank" />);
 
     fireEvent.click(screen.getAllByRole("button", { name: /Add event/i })[0]);
+    expect(screen.getByLabelText("Date")).toBeInTheDocument();
     const timeInput = screen.getByLabelText("Time");
     const before = timeInput.getAttribute("value");
     fireEvent.click(screen.getByRole("button", { name: /Time quick options/i }));
-    fireEvent.click(screen.getByRole("button", { name: "30 min ago" }));
+    expect(screen.getByRole("button", { name: "Now" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "+15m" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "+30m" }));
 
     expect(screen.getByLabelText("Time").getAttribute("value")).not.toBe(before);
   });
@@ -142,6 +196,7 @@ describe("AppShell demo workflow", () => {
   it("explicit generate increments interactions by exactly one", () => {
     render(<AppShell mode="blank" />);
 
+    expect(screen.getByRole("button", { name: /Generate/i })).toHaveClass("bg-blue-600", "text-white", "border-blue-600");
     expect(workflowInteractions()).toBe(0);
     fireEvent.click(screen.getByRole("button", { name: /Generate/i }));
 
@@ -184,7 +239,7 @@ describe("AppShell demo workflow", () => {
     fireEvent.click(screen.getByRole("button", { name: "RUQ pain" }));
     fireEvent.click(screen.getAllByRole("button", { name: "Build Clinical Story" })[0]);
 
-    expect(screen.getByDisplayValue("Initial patient story")).toBeInTheDocument();
+    expect(screen.getByText("Initial patient story")).toBeInTheDocument();
     expect(screen.getByDisplayValue(/Timeline:/i)).toBeInTheDocument();
     expect(screen.getByText(/Clinical story built from selected facts/i)).toBeInTheDocument();
     expect(listWorkflowEvents().some((event) => event.eventType === "clinical_story_built")).toBe(true);
@@ -218,9 +273,11 @@ describe("AppShell demo workflow", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /GI abdominal pain/i }));
 
-    expect(screen.getByDisplayValue("RUQ pain began after meal")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Nausea worsened")).toBeInTheDocument();
-    expect(screen.getAllByDisplayValue("Provider notified").length).toBeGreaterThan(0);
+    expect(screen.getByText("RUQ pain began after meal")).toBeInTheDocument();
+    expect(screen.getByText("Nausea worsened")).toBeInTheDocument();
+    expect(screen.getAllByText("Provider notified").length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Provider notified per protocol/i).length).toBeGreaterThan(0);
+    expect(screen.queryByLabelText("Event type")).not.toBeInTheDocument();
     expect(screen.queryByText("0%")).not.toBeInTheDocument();
   });
 
@@ -235,14 +292,17 @@ describe("AppShell demo workflow", () => {
   it("Copy to EHR is always visible and enabled only after review", () => {
     render(<AppShell mode="blank" />);
 
-    const disabledCopy = screen.getByRole("button", { name: /Copy to EHR - Review required/i });
+    const disabledCopy = screen.getByRole("button", { name: /Review required before export/i });
     expect(disabledCopy).toBeInTheDocument();
     expect(disabledCopy).toBeDisabled();
-    expect(screen.getByTestId("review-copy-action-bar")).toHaveClass("sticky", "bottom-24");
+    expect(disabledCopy).toHaveClass("bg-slate-100", "text-slate-700");
+    expect(screen.getByTestId("review-copy-action-bar")).not.toHaveClass("sticky", "fixed");
+    expect(screen.getByTestId("workflow-logic-panel")).not.toHaveClass("sticky", "fixed");
+    expect(screen.getByTestId("review-required-card")).not.toHaveClass("sticky", "fixed");
 
     fireEvent.click(screen.getAllByRole("button", { name: /Review Required/i })[0]);
 
-    const enabledCopy = screen.getByRole("button", { name: /Copy to EHR/i });
+    const enabledCopy = screen.getByRole("button", { name: /Export to EHR/i });
     expect(enabledCopy).toBeEnabled();
   });
 
@@ -253,7 +313,7 @@ describe("AppShell demo workflow", () => {
     fireEvent.click(screen.getAllByRole("button", { name: /Review Required/i })[0]);
     expect(workflowInteractions()).toBe(1);
 
-    fireEvent.click(screen.getByRole("button", { name: /Copy to EHR/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Export to EHR/i }));
     await waitFor(() => expect(workflowInteractions()).toBe(2));
     expect(listWorkflowEvents().some((event) => event.eventType === "review_gate_accepted")).toBe(true);
     expect(listWorkflowEvents().some((event) => event.eventType === "ehr_copy_clicked")).toBe(true);
