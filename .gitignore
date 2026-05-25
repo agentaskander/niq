@@ -10,3 +10,6 @@ coverage
 *.log
 .vercel
 tsconfig*.tsbuildinfo
+
+# Vite cache
+.vite/
