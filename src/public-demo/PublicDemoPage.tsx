@@ -14,7 +14,7 @@ type PublicDemoPageProps = {
 const cognitionModules = [
   {
     title: "Healthcare Cognition",
-    domain: "Synthetic healthcare workflow intelligence",
+    domain: "Healthcare workflow intelligence preview",
     layer: "Ontology, provenance, longitudinal workflow memory, and review gates",
     compound: "Shows how NarrativeIQ extends beyond notes into coordination, trust, and cross-system context.",
     path: "/demo/healthcare-cognition"
@@ -67,7 +67,7 @@ const appliedSystems = [
   {
     title: "Healthcare Cognition",
     body:
-      "Healthcare Cognition Lab uses synthetic care journeys to demonstrate how NarrativeIQ extends beyond notes into longitudinal workflow intelligence."
+      "Healthcare Cognition Lab uses demo care journeys to show how NarrativeIQ extends beyond notes into longitudinal workflow intelligence."
   },
   {
     title: "Organizational Memory",
@@ -361,13 +361,13 @@ function HealthcareCognitionPreview({ onNavigate }: Pick<PublicDemoPageProps, "o
         <div>
           <p className="niq-eyebrow">One vertical proof environment</p>
           <h2>Healthcare Cognition Lab</h2>
-          <p className="niq-healthcare-subtitle">A synthetic proof environment for longitudinal healthcare workflow intelligence.</p>
+          <p className="niq-healthcare-subtitle">A public proof environment for longitudinal healthcare workflow intelligence.</p>
           <p>
-            Healthcare Cognition Lab is a synthetic proof environment showing how NarrativeIQ extends beyond transcription
+            Healthcare Cognition Lab is a representative preview showing how NarrativeIQ extends beyond transcription
             into workflow intelligence, ontology, trust, and cross-system coordination. Healthcare is one proof domain for
             a broader module architecture.
           </p>
-          <p className="niq-safety-note">This demo uses synthetic data only and does not provide medical advice.</p>
+          <p className="niq-safety-note">This public preview uses demo data only and does not provide medical advice.</p>
           <button className="niq-button" onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">
             Explore Healthcare Cognition Lab <Icon name="arrow" />
           </button>
@@ -390,7 +390,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
 
   const publicPillars = [
     ["Workflow Intelligence", "Surfaces handoffs, coordination friction, and operational context without clinical claims."],
-    ["Ontology / Context Intelligence", "Uses representative synthetic ontology categories instead of exposing a full schema."],
+    ["Ontology / Context Intelligence", "Uses representative ontology categories instead of exposing a full schema."],
     ["Longitudinal Understanding", "Shows how meaning changes across time, roles, and workflows."],
     ["Interoperability Intelligence", "Frames how context can move between teams and tools without backend architecture details."],
     ["Operational Leverage", "Turns example workflow signals into investor-readable operational context."],
@@ -402,26 +402,26 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
   const publicCases = [
     {
       title: "Shift continuity preview",
-      setting: "Synthetic inpatient operations",
+      setting: "Inpatient operations sample",
       fragments: ["family update request", "transport timing changed", "ownership question pending"],
       outcome: "A reviewer sees what changed, what remains open, and which context should carry forward."
     },
     {
       title: "Ambulatory follow-up preview",
-      setting: "Synthetic outpatient workflow",
+      setting: "Outpatient workflow sample",
       fragments: ["forms readiness", "callback summary", "scheduling friction"],
       outcome: "A team can separate confirmed context from unresolved administrative questions."
     },
     {
       title: "Specialty packet preview",
-      setting: "Synthetic specialty coordination",
+      setting: "Specialty coordination sample",
       fragments: ["packet readiness", "prior context", "source trace"],
       outcome: "A reviewer sees source-supported narrative continuity before downstream coordination."
     }
   ];
 
   const timelinePreview = [
-    ["08:10", "Synthetic intake question captured", 35],
+    ["08:10", "Intake question captured", 35],
     ["11:25", "Coordination blocker added", 58],
     ["15:40", "Continuity summary requested", 82],
     ["17:05", "Source visibility reviewed", 74]
@@ -442,10 +442,10 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
   ];
 
   const provenancePreview = [
-    ["Synthetic nurse note", "source visible"],
-    ["Synthetic coordinator update", "needs review"],
-    ["Synthetic operations note", "review ready"],
-    ["Synthetic team handoff", "human gate"]
+    ["Nurse note sample", "source visible"],
+    ["Coordinator update", "needs review"],
+    ["Operations note", "review ready"],
+    ["Team handoff", "human gate"]
   ];
 
   const publicRoadmap = [
@@ -469,27 +469,29 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
         {["Overview", "Cases", "Timeline", "Entropy", "Ontology", "Provenance", "Roadmap"].map((item) => (
           <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>
         ))}
-        <div className="niq-public-label">Public synthetic demo. No PHI, diagnosis, treatment recommendation, or clinical deployment claim.</div>
+        <div className="niq-public-label">Public preview. No PHI, diagnosis, treatment recommendation, or clinical deployment claim.</div>
       </aside>
 
       <section className="niq-public-lab-workspace">
         <header className="niq-public-lab-header" id="overview">
           <div>
-            <p className="niq-eyebrow">Public product preview using synthetic data</p>
+            <p className="niq-eyebrow">Public Preview</p>
             <h1>Healthcare Cognition Lab</h1>
             <p>
-              A limited NarrativeIQ product preview for longitudinal healthcare workflow intelligence: synthetic cases,
+              A limited NarrativeIQ product preview for longitudinal healthcare workflow intelligence: sample journeys,
               representative ontology categories, example workflow signals, provenance, interoperability, and investor narrative.
             </p>
           </div>
           <div className="niq-public-boundary-note">
-            This public preview uses synthetic data only. Proprietary ontology rules, scoring logic, prompts, routing policies, and implementation internals are intentionally omitted.
+            <strong>This public preview uses demo data only.</strong>
+            <span> It does not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.</span>
+            <span> Proprietary ontology rules, scoring logic, prompts, routing policies, and implementation internals are intentionally omitted.</span>
           </div>
         </header>
 
         <div className="niq-public-lab-metrics">
           <div><strong>8</strong><span>representative pillars</span></div>
-          <div><strong>3</strong><span>synthetic cases</span></div>
+          <div><strong>3</strong><span>sample journeys</span></div>
           <div><strong>4</strong><span>system touchpoints</span></div>
           <div><strong>0</strong><span>clinical claims</span></div>
         </div>
@@ -497,7 +499,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
         <div className="niq-public-app-grid" id="cases">
           <section className="niq-public-app-panel niq-public-case-selector">
             <div className="niq-panel-title">
-              <p className="niq-eyebrow">Synthetic case selector</p>
+              <p className="niq-eyebrow">Case Preview</p>
               <h2>Representative previews</h2>
             </div>
             {publicCases.map((item, index) => (
@@ -513,7 +515,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
           <section className="niq-public-app-panel" id="timeline">
             <div className="niq-panel-title">
               <p className="niq-eyebrow">Longitudinal timeline preview</p>
-              <h2>Synthetic patient/story timeline</h2>
+              <h2>Sample Care Journey</h2>
             </div>
             {timelinePreview.map(([time, event, value]) => (
               <div className="niq-public-timeline-row" key={time}>
@@ -536,13 +538,13 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
                 <i><b style={{ width: `${value}%` }} /></i>
               </div>
             ))}
-            <p className="niq-muted-note">Synthetic preview metrics, not scoring formulas.</p>
+            <p className="niq-muted-note">Representative preview metrics, not scoring formulas.</p>
           </section>
 
           <section className="niq-public-app-panel niq-public-ontology-panel" id="ontology">
             <div className="niq-panel-title">
               <p className="niq-eyebrow">Ontology graph preview</p>
-              <h2>Representative synthetic ontology categories</h2>
+              <h2>Representative ontology categories</h2>
             </div>
             <div className="niq-public-lab-graph">
               {["care continuity", "workflow state", "role handoff", "review readiness", "provenance", "specialty context", "timeline", "system boundary"].map((node) => (
@@ -599,7 +601,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
 
         <section className="niq-public-app-panel niq-public-roadmap-drawer" id="roadmap">
           <div className="niq-panel-title">
-            <p className="niq-eyebrow">Roadmap drawer</p>
+            <p className="niq-eyebrow">Roadmap</p>
             <h2>From healthcare proof environment to cognition infrastructure</h2>
             <p>The roadmap is intentionally public-level: category movement, compounding value, and market narrative without proprietary build details.</p>
           </div>
@@ -619,7 +621,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
           <h2>Healthcare as proof, not the boundary</h2>
           <p>
             The public Healthcare Cognition Lab shows how a domain-specific module can preserve context across complex
-            workflows while staying synthetic, review-oriented, and non-clinical. The same architecture extends to
+            workflows while staying public-safe, review-oriented, and non-clinical. The same architecture extends to
             organizational memory, relationship intelligence, workflow intelligence, research continuity, semantic
             coordination, and agent-orchestrated operations.
           </p>

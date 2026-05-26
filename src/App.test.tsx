@@ -52,7 +52,7 @@ describe("App navigation", () => {
     render(<App />);
 
     expect(screen.getByRole("heading", { name: "Healthcare Cognition Lab" })).toBeInTheDocument();
-    expect(screen.getByText("Public synthetic demo. No PHI, diagnosis, treatment recommendation, or clinical deployment claim.")).toBeInTheDocument();
+    expect(screen.getByText("Public preview. No PHI, diagnosis, treatment recommendation, or clinical deployment claim.")).toBeInTheDocument();
     expect(screen.queryByText("Internal Ideation Board — not for public publishing.")).not.toBeInTheDocument();
   });
 
