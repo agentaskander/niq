@@ -151,7 +151,7 @@ export function PublicDemoPage({ path, onNavigate }: PublicDemoPageProps) {
 function SiteHeader({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps, "onNavigate"> & { isLabPage?: boolean }) {
   return (
     <header className={`niq-topbar${isLabPage ? " niq-topbar-light" : ""}`}>
-      <button className="niq-brand" onClick={() => onNavigate("/")} type="button" aria-label="NiQ public demo home">
+       <button className="niq-brand" onClick={() => onNavigate("/")} type="button" aria-label="NiQ public demo home">
         <span className="niq-brand-mark">NiQ</span>
         <span>Narrative Intelligence</span>
       </button>
@@ -214,13 +214,13 @@ function HomePage({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
             Instead of stopping at notes, it models continuity, context, coordination, and operational meaning.
           </p>
           <div className="niq-hero-actions">
-            <button className="niq-button" onClick={() => onNavigate("/#public-module-previews")} type="button">
+             <button className="niq-button" onClick={() => onNavigate("/#public-module-previews")} type="button">
               Public Module Previews <Icon name="arrow" />
             </button>
-            <button className="niq-button niq-ghost" onClick={() => onNavigate("/healthcare-cognition")} type="button">
+             <button className="niq-button niq-ghost" onClick={() => onNavigate("/healthcare-cognition")} type="button">
               Explore Healthcare Cognition Lab
             </button>
-            <button className="niq-button niq-ghost" onClick={() => onNavigate("/request-demo")} type="button">
+             <button className="niq-button niq-ghost" onClick={() => onNavigate("/request-demo")} type="button">
               Request Demo
             </button>
           </div>
@@ -293,7 +293,7 @@ function ModuleArchitectureSection({ onNavigate }: Pick<PublicDemoPageProps, "on
             memory, workflow intelligence, trust and provenance, cross-system coordination, and agent orchestration.
           </p>
         </div>
-        <button className="niq-text-link" onClick={() => onNavigate("/healthcare-cognition")} type="button">
+         <button className="niq-text-link" onClick={() => onNavigate("/healthcare-cognition")} type="button">
           Open public healthcare preview <Icon name="chevron" />
         </button>
       </div>
@@ -376,7 +376,7 @@ function HealthcareCognitionPreview({ onNavigate }: Pick<PublicDemoPageProps, "o
             a broader module architecture.
           </p>
           <p className="niq-safety-note">This public preview uses demo data only and does not provide medical advice.</p>
-          <button className="niq-button" onClick={() => onNavigate("/healthcare-cognition")} type="button">
+           <button className="niq-button" onClick={() => onNavigate("/healthcare-cognition")} type="button">
             Explore Healthcare Cognition Lab <Icon name="arrow" />
           </button>
         </div>
@@ -470,7 +470,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
   return (
     <main className="niq-public-lab-shell">
       <aside className="niq-public-lab-sidebar">
-        <button className="niq-public-lab-brand" onClick={() => onNavigate("/")} type="button">
+         <button className="niq-public-lab-brand" onClick={() => onNavigate("/")} type="button">
           <span>NiQ</span>
           <strong>Healthcare Cognition</strong>
         </button>
@@ -480,7 +480,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
         <div className="niq-public-label">
           NarrativeIQ public demos are conceptual and investor-oriented. They do not contain sensitive clinical data, clinical decisions, care recommendations, or deployment claims.
         </div>
-        <button className="niq-public-beta-cta" onClick={() => onNavigate("/beta")} type="button">
+         <button className="niq-public-beta-cta" onClick={() => onNavigate("/beta")} type="button">
           Request Private Beta Access
         </button>
       </aside>
@@ -500,7 +500,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
               NarrativeIQ public demos are conceptual and investor-oriented. They do not contain sensitive clinical data, clinical decisions, care recommendations, or deployment claims.
             </strong>
             <span> Proprietary ontology rules, scoring logic, generation instructions, routing methods, and implementation details are intentionally omitted.</span>
-            <button className="niq-public-beta-cta" onClick={() => onNavigate("/beta")} type="button">
+             <button className="niq-public-beta-cta" onClick={() => onNavigate("/beta")} type="button">
               Join Private Beta
             </button>
           </div>
@@ -968,7 +968,7 @@ function ArticlePreview({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">)
           <p className="niq-eyebrow">NarrativeIQ Research & Intelligence Library</p>
           <h2>Structured thinking for continuity</h2>
         </div>
-        <button className="niq-text-link" onClick={() => onNavigate("/articles")} type="button">
+         <button className="niq-text-link" onClick={() => onNavigate("/articles")} type="button">
           Open Research Library <Icon name="chevron" />
         </button>
       </div>
@@ -1001,7 +1001,7 @@ function GlossaryPreview({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">
           <p className="niq-eyebrow">Semantic glossary</p>
           <h2>Language for context-aware systems</h2>
         </div>
-        <button className="niq-text-link" onClick={() => onNavigate("/glossary")} type="button">
+         <button className="niq-text-link" onClick={() => onNavigate("/glossary")} type="button">
           Browse glossary <Icon name="chevron" />
         </button>
       </div>
@@ -1023,7 +1023,7 @@ function FinalCta({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
       <Icon name="spark" />
       <h2>Build AI systems that remember the human story.</h2>
       <p>For partnerships, pilots, or investor conversations, contact the NiQ team.</p>
-      <button className="niq-button" onClick={() => onNavigate("/request-demo")} type="button">Request Demo</button>
+       <button className="niq-button" onClick={() => onNavigate("/request-demo")} type="button">Request Demo</button>
       <p className="niq-fallback-email">Prefer email? <a href={fallbackMailto}>{fallbackEmail}</a></p>
     </section>
   );
@@ -1057,7 +1057,7 @@ function ArticlePage({ slug, onNavigate }: { slug: string; onNavigate: (path: st
 
   return (
     <main className="niq-article-page">
-      <button className="niq-back-link" onClick={() => onNavigate("/articles")} type="button">Articles</button>
+       <button className="niq-back-link" onClick={() => onNavigate("/articles")} type="button">Articles</button>
       <article>
         <p className="niq-eyebrow">{article.readTime}</p>
         <h1>{article.title}</h1>
@@ -1123,7 +1123,7 @@ function GlossaryPage({ slug, onNavigate }: { slug: string; onNavigate: (path: s
   });
   return (
     <main className="niq-subpage niq-term-page">
-      <button className="niq-back-link" onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
+       <button className="niq-back-link" onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
       <PageHero eyebrow="Glossary term" title={term.term} body={term.definition} />
       <section className="niq-related-terms">
         <h2>Related terms</h2>
