@@ -14,3 +14,6 @@ tsconfig*.tsbuildinfo
 
 # Vite cache
 .vite/
+
+# Build cache
+*.tsbuildinfo
