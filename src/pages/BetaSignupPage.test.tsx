@@ -80,7 +80,7 @@ describe("lead capture pages", () => {
   it("submits metadata without localStorage or cookies", async () => {
     const setItem = vi.fn();
     const fetchMock = vi.fn().mockResolvedValue({ ok: true });
-    (globalThis as { __NIQ_LEAD_ENDPOINT__?: string }).__NIQ_LEAD_ENDPOINT__ = "/api/leads";
+    vi.stubEnv(["VITE", "LEAD_ENDPOINT"].join("_"), "/api/leads");
     vi.stubGlobal("fetch", fetchMock);
     window.history.pushState({}, "", "/beta?utm_source=linkedin&utm_medium=social&utm_campaign=beta");
     Object.defineProperty(document, "referrer", { configurable: true, value: "https://example.com/ref" });

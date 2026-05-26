@@ -15,6 +15,7 @@ export function LeadSuccessState({ sourceApp, fallbackEmail, fallbackMailto, lin
         <CheckCircle2 size={18} /> Request received.
       </p>
       <p>{sourceApp} reviews beta, design-partner, demo, and research interest manually.</p>
+      <p>Qualified requests are reviewed by the team before any private follow-up or gated preview access.</p>
       {links.length > 0 && (
         <div className="lead-success-links">
           {links.map((link) => (

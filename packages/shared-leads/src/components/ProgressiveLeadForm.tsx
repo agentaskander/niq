@@ -39,7 +39,7 @@ function fallbackMailto(email: string, subject: string) {
 }
 
 function leadEndpoint() {
-  return (globalThis as { __NIQ_LEAD_ENDPOINT__?: string }).__NIQ_LEAD_ENDPOINT__;
+  return import.meta.env.VITE_LEAD_ENDPOINT || (globalThis as { __NIQ_LEAD_ENDPOINT__?: string }).__NIQ_LEAD_ENDPOINT__;
 }
 
 function draftKey(sourceApp: string, sourceRoute: string) {
@@ -166,7 +166,13 @@ export function ProgressiveLeadForm({
     lastSubmissionAt = now;
 
     const endpoint = leadEndpoint();
-    if (endpoint) {
+    if (!endpoint) {
+      setStatus("idle");
+      setError("Submission endpoint is not configured. Prefer email for now.");
+      return;
+    }
+
+    try {
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -177,6 +183,10 @@ export function ProgressiveLeadForm({
         setError("Submission endpoint did not accept the request. Prefer email for now.");
         return;
       }
+    } catch {
+      setStatus("idle");
+      setError("Submission endpoint is unavailable. Prefer email for now.");
+      return;
     }
 
     clearSessionDraft(storageKey);
