@@ -310,7 +310,7 @@ function ModuleArchitectureSection({ onNavigate }: Pick<PublicDemoPageProps, "on
                 <Icon name="arrow" />
               </button>
             ) : (
-              <span className="niq-preview-pill">Preview shown here</span>
+              <span className="niq-preview-pill">Preview included below</span>
             )}
           </article>
         ))}

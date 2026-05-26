@@ -2035,3 +2035,9 @@
   font-size: 0.82rem;
   font-weight: 700;
 }
+
+.niq-preview-pill {
+  opacity: 0.9;
+  cursor: default;
+  text-decoration: none;
+}
