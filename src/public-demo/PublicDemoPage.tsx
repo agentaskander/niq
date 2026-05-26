@@ -19,35 +19,35 @@ const cognitionModules = [
     domain: "Healthcare workflow intelligence preview",
     layer: "Ontology, provenance, longitudinal workflow memory, and review gates",
     compound: "Shows how NarrativeIQ extends beyond notes into coordination, trust, and cross-system context.",
-    path: "/demo/healthcare-cognition"
+    path: "/healthcare-cognition"
   },
   {
     title: "Organizational Memory",
     domain: "Teams, decisions, operating cadence",
     layer: "Longitudinal memory and decision continuity",
     compound: "Preserves operational context across decisions, teams, handoffs, and time.",
-    path: "/demo#public-module-previews"
+    path: "/#public-module-previews"
   },
   {
     title: "Relationship Intelligence",
     domain: "Human relationships and commitments",
     layer: "Trust, continuity, commitments, and evolving human context",
     compound: "Models relationship state as durable context instead of isolated messages.",
-    path: "/demo#public-module-previews"
+    path: "/#public-module-previews"
   },
   {
     title: "Workflow Intelligence",
     domain: "Operations, support, delivery, and coordination",
     layer: "Friction, latency, ownership, and repeated operational loops",
     compound: "Turns recurring workflow patterns into reusable operational intelligence.",
-    path: "/demo#public-module-previews"
+    path: "/#public-module-previews"
   },
   {
     title: "Semantic Coordination",
     domain: "Cross-team and cross-system meaning",
     layer: "Entities, events, relationships, and shared narrative state",
     compound: "Connects meaning across tools where handoffs usually lose context.",
-    path: "/demo#public-module-previews"
+    path: "/#public-module-previews"
   },
   {
     title: "Research Continuity",
@@ -61,7 +61,7 @@ const cognitionModules = [
     domain: "Multi-agent workflows and operational systems",
     layer: "Agent boundaries, provenance, review, and context preservation",
     compound: "Gives agent ecosystems a durable cognition layer around tasks and tools.",
-    path: "/demo#public-module-previews"
+    path: "/#public-module-previews"
   }
 ];
 
@@ -130,7 +130,7 @@ export function PublicDemoPage({ path, onNavigate }: PublicDemoPageProps) {
   const slug = path.split("/").pop();
   let content = <HomePage onNavigate={onNavigate} />;
 
-  if (path === "/demo/healthcare-cognition") content = <PublicHealthcareCognitionPage onNavigate={onNavigate} />;
+  if (path === "/healthcare-cognition") content = <PublicHealthcareCognitionPage onNavigate={onNavigate} />;
   if (path === "/beta") content = <BetaSignupPage onNavigate={onNavigate} />;
   if (path === "/contact") content = <ContactPage kind="contact" />;
   if (path === "/request-demo") content = <ContactPage kind="request-demo" />;
@@ -141,9 +141,9 @@ export function PublicDemoPage({ path, onNavigate }: PublicDemoPageProps) {
 
   return (
     <>
-      <SiteHeader onNavigate={onNavigate} isLabPage={path === "/demo/healthcare-cognition"} />
+      <SiteHeader onNavigate={onNavigate} isLabPage={path === "/healthcare-cognition"} />
       {content}
-      <SiteFooter onNavigate={onNavigate} isLabPage={path === "/demo/healthcare-cognition"} />
+      <SiteFooter onNavigate={onNavigate} isLabPage={path === "/healthcare-cognition"} />
     </>
   );
 }
@@ -151,14 +151,14 @@ export function PublicDemoPage({ path, onNavigate }: PublicDemoPageProps) {
 function SiteHeader({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps, "onNavigate"> & { isLabPage?: boolean }) {
   return (
     <header className={`niq-topbar${isLabPage ? " niq-topbar-light" : ""}`}>
-      <button className="niq-brand" onClick={() => onNavigate("/demo")} type="button" aria-label="NiQ public demo home">
+      <button className="niq-brand" onClick={() => onNavigate("/healthcare-cognition")} type="button" aria-label="NiQ public demo home">
         <span className="niq-brand-mark">NiQ</span>
         <span>Narrative Intelligence</span>
       </button>
       <nav aria-label="Public demo navigation">
-        <button onClick={() => onNavigate("/demo#demo")} type="button">Demo</button>
-        <button onClick={() => onNavigate("/demo#public-module-previews")} type="button">Public Module Previews</button>
-        <button onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">Healthcare Lab</button>
+        <button onClick={() => onNavigate("/#demo")} type="button">Workflow Demo</button>
+        <button onClick={() => onNavigate("/#public-module-previews")} type="button">Module Previews</button>
+        <button onClick={() => onNavigate("/healthcare-cognition")} type="button">Healthcare Lab</button>
         <button onClick={() => onNavigate("/articles")} type="button">Articles</button>
         <button onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
         <button onClick={() => onNavigate("/contact")} type="button">Contact</button>
@@ -178,8 +178,8 @@ function SiteFooter({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps,
         </p>
       </div>
       <div className="niq-footer-links">
-        <button onClick={() => onNavigate("/demo#public-module-previews")} type="button">Public Module Previews</button>
-        <button onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">Healthcare Lab</button>
+        <button onClick={() => onNavigate("/#public-module-previews")} type="button">Module Previews</button>
+        <button onClick={() => onNavigate("/healthcare-cognition")} type="button">Healthcare Lab</button>
         <button onClick={() => onNavigate("/articles")} type="button">Articles</button>
         <button onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
         <button onClick={() => onNavigate("/contact")} type="button">Contact</button>
@@ -194,7 +194,7 @@ function HomePage({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
     title: "NarrativeIQ Demo - Longitudinal Cognition Infrastructure",
     description:
       "Explore NarrativeIQ's longitudinal cognition infrastructure for preserving context, workflow meaning, semantic relationships, and narrative continuity across complex human systems.",
-    path: "/demo"
+    path: "/healthcare-cognition"
   });
 
   return (
@@ -214,10 +214,10 @@ function HomePage({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
             Instead of stopping at notes, it models continuity, context, coordination, and operational meaning.
           </p>
           <div className="niq-hero-actions">
-            <button className="niq-button" onClick={() => onNavigate("/demo#public-module-previews")} type="button">
+            <button className="niq-button" onClick={() => onNavigate("/#public-module-previews")} type="button">
               Public Module Previews <Icon name="arrow" />
             </button>
-            <button className="niq-button niq-ghost" onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">
+            <button className="niq-button niq-ghost" onClick={() => onNavigate("/healthcare-cognition")} type="button">
               Explore Healthcare Cognition Lab
             </button>
             <button className="niq-button niq-ghost" onClick={() => onNavigate("/request-demo")} type="button">
@@ -293,7 +293,7 @@ function ModuleArchitectureSection({ onNavigate }: Pick<PublicDemoPageProps, "on
             memory, workflow intelligence, trust and provenance, cross-system coordination, and agent orchestration.
           </p>
         </div>
-        <button className="niq-text-link" onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">
+        <button className="niq-text-link" onClick={() => onNavigate("/healthcare-cognition")} type="button">
           Open public healthcare preview <Icon name="chevron" />
         </button>
       </div>
@@ -376,7 +376,7 @@ function HealthcareCognitionPreview({ onNavigate }: Pick<PublicDemoPageProps, "o
             a broader module architecture.
           </p>
           <p className="niq-safety-note">This public preview uses demo data only and does not provide medical advice.</p>
-          <button className="niq-button" onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">
+          <button className="niq-button" onClick={() => onNavigate("/healthcare-cognition")} type="button">
             Explore Healthcare Cognition Lab <Icon name="arrow" />
           </button>
         </div>
@@ -393,7 +393,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
     title: "NarrativeIQ Healthcare Cognition Lab - Synthetic Workflow Intelligence Demo",
     description:
       "A synthetic investor demo showing how NarrativeIQ extends beyond AI scribing into healthcare workflow cognition, ontology, trust, and cross-system coordination.",
-    path: "/demo/healthcare-cognition"
+    path: "/healthcare-cognition"
   });
 
   const publicPillars = [
@@ -470,7 +470,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
   return (
     <main className="niq-public-lab-shell">
       <aside className="niq-public-lab-sidebar">
-        <button className="niq-public-lab-brand" onClick={() => onNavigate("/demo")} type="button">
+        <button className="niq-public-lab-brand" onClick={() => onNavigate("/healthcare-cognition")} type="button">
           <span>NiQ</span>
           <strong>Healthcare Cognition</strong>
         </button>
