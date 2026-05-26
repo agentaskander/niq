@@ -1,0 +1,69 @@
+{
+  "zone": "public",
+  "dist": "dist-public",
+  "generatedAt": "2026-05-26T03:58:37.809Z",
+  "deployZoneEnv": "public",
+  "allowedRoutes": [
+    "/demo",
+    "/demo/healthcare-cognition",
+    "/beta",
+    "/contact",
+    "/request-demo"
+  ],
+  "rootBehavior": "redirect:/demo",
+  "routePolicy": "restricted",
+  "forbiddenRouteCount": 5,
+  "artifactHash": "75418fe30571f5f0bd5a2de6502f3bc45c193ef9f7de1051db140999638ed3bf",
+  "files": [
+    {
+      "path": "dist-public/assets/PublicDeploymentApp-BfmYmkXj.css",
+      "bytes": 39255,
+      "sha256": "852b0ebce44f4e98ae808812025bb0c85872ed37692f3dcc71a5b5d0e2e91f94"
+    },
+    {
+      "path": "dist-public/assets/PublicDeploymentApp-DjOR8qUc.js",
+      "bytes": 74456,
+      "sha256": "4faee00cb616c98ca936279c47ffd666c9f1c7156e49673f687776d12432fc5b"
+    },
+    {
+      "path": "dist-public/assets/index-BxbYZ13h.js",
+      "bytes": 145268,
+      "sha256": "5d2056e2db38c52299ae8b3eb43d78b16f6b80549ba9bc594ec8c690242bd6ab"
+    },
+    {
+      "path": "dist-public/assets/index-D38wcycd.css",
+      "bytes": 35350,
+      "sha256": "cffce5c6a11294754cf930baf30ac89defe0074561a3a42a741b8df7bdb4387f"
+    },
+    {
+      "path": "dist-public/deployment-manifest.json",
+      "bytes": 1910,
+      "sha256": "9c80ab77c37603677926c2687c5b245e5eeec4f7b3398c0ca0d9780bc0b8385a"
+    },
+    {
+      "path": "dist-public/favicon.svg",
+      "bytes": 376,
+      "sha256": "6f0d1ce8b5b9b761b694dfca3b3dfb0ee9c07e5a34d37311e8691cc69c956afe"
+    },
+    {
+      "path": "dist-public/index.html",
+      "bytes": 625,
+      "sha256": "1576f4d705abf6e4f112f3e202d90c33b2f1360a046ea984db5949f4ba83324d"
+    },
+    {
+      "path": "dist-public/robots.txt",
+      "bytes": 202,
+      "sha256": "fd59b3598c16acff7b933e0b92f521885f973947c4df2a17019b54963ad17504"
+    },
+    {
+      "path": "dist-public/sitemap.xml",
+      "bytes": 448,
+      "sha256": "0c6686c177de0311a988382265202ee625324dcb237e17ccb16dd0afc593022b"
+    }
+  ],
+  "policy": "three-zone-deployment-governance",
+  "validation": {
+    "boundaryScan": "passed",
+    "filesScanned": 9
+  }
+}
