@@ -347,9 +347,886 @@
 .niq-demo-grid,
 .niq-arch-grid,
 .niq-article-grid,
-.niq-glossary-grid {
+.niq-glossary-grid,
+.niq-module-grid,
+.niq-applied-grid,
+.niq-roadmap-grid {
   display: grid;
   gap: 18px;
+}
+
+.niq-module-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.niq-module-card,
+.niq-applied-grid article,
+.niq-roadmap-grid article {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
+  padding: 22px;
+  box-shadow: var(--niq-shadow);
+}
+
+.niq-module-card p,
+.niq-roadmap-grid span {
+  margin-bottom: 14px;
+  color: var(--niq-gold);
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.niq-module-card span,
+.niq-module-card strong,
+.niq-applied-grid p,
+.niq-roadmap-grid p,
+.niq-ontology-copy p,
+.niq-seo-copy p {
+  display: block;
+  color: var(--niq-muted);
+  line-height: 1.65;
+}
+
+.niq-module-card strong {
+  margin-top: 14px;
+  color: #d7f4ee;
+  font-weight: 700;
+}
+
+.niq-module-card button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  color: var(--niq-aqua);
+  margin-top: 22px;
+  padding: 0;
+  font-weight: 850;
+}
+
+.niq-applied-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.niq-compound-board,
+.niq-healthcare-board,
+.niq-ontology-layout,
+.niq-seo-copy {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(117, 208, 194, 0.12), transparent 22rem),
+    rgba(255, 255, 255, 0.045);
+  box-shadow: var(--niq-shadow);
+}
+
+.niq-compound-board {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 30px;
+  align-items: center;
+  padding: clamp(24px, 5vw, 54px);
+}
+
+.niq-compound-board > div:first-child p {
+  color: #d7f4ee;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.niq-compound-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.niq-compound-columns div {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 18px;
+}
+
+.niq-compound-columns span {
+  display: block;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--niq-muted);
+  padding: 10px 0;
+  text-transform: capitalize;
+}
+
+.niq-healthcare-board {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1fr);
+  gap: 28px;
+  padding: clamp(24px, 5vw, 54px);
+}
+
+.niq-healthcare-board p {
+  color: var(--niq-muted);
+  line-height: 1.7;
+}
+
+.niq-healthcare-subtitle {
+  color: #d7f4ee !important;
+  font-size: 1.12rem;
+}
+
+.niq-safety-note,
+.niq-footer-note {
+  border: 1px solid rgba(117, 208, 194, 0.22);
+  border-radius: 8px;
+  background: rgba(117, 208, 194, 0.08);
+  color: #d7f4ee !important;
+  padding: 12px;
+}
+
+.niq-advantage-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-self: center;
+}
+
+.niq-advantage-chip-grid span,
+.niq-system-strip span {
+  border: 1px solid rgba(244, 199, 107, 0.22);
+  border-radius: 8px;
+  background: rgba(244, 199, 107, 0.08);
+  color: #f8dfaa;
+  padding: 14px;
+  font-weight: 800;
+}
+
+.niq-ontology-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.65fr);
+  gap: 24px;
+  align-items: center;
+  padding: clamp(18px, 4vw, 42px);
+}
+
+.niq-ontology-graph {
+  width: 100%;
+  min-height: 460px;
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    rgba(255, 255, 255, 0.035);
+  background-size: 18px 18px;
+}
+
+.niq-ontology-line {
+  stroke: rgba(117, 208, 194, 0.34);
+  stroke-width: 0.5;
+}
+
+.niq-ontology-node circle {
+  fill: rgba(244, 199, 107, 0.92);
+  stroke: rgba(255, 255, 255, 0.78);
+  stroke-width: 0.45;
+}
+
+.niq-ontology-node text {
+  fill: #eef5f0;
+  font-size: 3.2px;
+  font-weight: 850;
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+.niq-system-strip {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.niq-roadmap-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.niq-roadmap-grid article {
+  min-height: 300px;
+}
+
+.niq-roadmap-grid strong {
+  color: #d7f4ee;
+}
+
+.niq-seo-copy {
+  max-width: 980px;
+  padding: clamp(24px, 5vw, 54px);
+}
+
+.niq-public-healthcare-hero {
+  display: grid;
+  min-height: 92vh;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
+  gap: clamp(28px, 5vw, 70px);
+  align-items: center;
+  padding: 124px clamp(22px, 6vw, 92px) 70px;
+}
+
+.niq-public-healthcare-hero h1 {
+  max-width: 980px;
+  margin-bottom: 24px;
+  font-size: clamp(3rem, 6.2vw, 5.8rem);
+  line-height: 0.94;
+  letter-spacing: 0;
+}
+
+.niq-public-healthcare-hero p,
+.niq-public-healthcare-panel p,
+.niq-public-pillar-grid p {
+  color: var(--niq-muted);
+  line-height: 1.7;
+}
+
+.niq-public-label {
+  display: inline-flex;
+  max-width: 720px;
+  border: 1px solid rgba(117, 208, 194, 0.28);
+  border-radius: 8px;
+  background: rgba(117, 208, 194, 0.1);
+  color: #d7f4ee;
+  margin-top: 20px;
+  padding: 12px 14px;
+  font-weight: 800;
+}
+
+.niq-public-boundary-note {
+  max-width: 760px;
+  border: 1px solid rgba(244, 199, 107, 0.28);
+  border-radius: 8px;
+  background: rgba(244, 199, 107, 0.08);
+  color: #f8dfaa;
+  margin-top: 12px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.niq-public-healthcare-panel,
+.niq-public-pillar-grid article,
+.niq-public-case-grid article,
+.niq-public-preview-card,
+.niq-public-map-grid article,
+.niq-public-roadmap-grid article,
+.niq-public-flow,
+.niq-public-flow div {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: var(--niq-shadow);
+}
+
+.niq-public-healthcare-panel {
+  padding: 26px;
+}
+
+.niq-public-healthcare-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.niq-public-healthcare-metrics div {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 14px;
+}
+
+.niq-public-healthcare-metrics strong {
+  display: block;
+  color: var(--niq-gold);
+  font-size: 1.7rem;
+}
+
+.niq-public-healthcare-metrics span {
+  color: var(--niq-muted);
+  font-size: 0.8rem;
+}
+
+.niq-public-pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.niq-public-pillar-grid article,
+.niq-public-case-grid article,
+.niq-public-roadmap-grid article {
+  padding: 22px;
+}
+
+.niq-public-case-grid,
+.niq-public-preview-grid,
+.niq-public-roadmap-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.niq-public-case-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.niq-public-case-grid article > p,
+.niq-public-roadmap-grid article > span {
+  color: var(--niq-gold);
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.niq-public-case-grid article div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.niq-public-case-grid article div span {
+  border: 1px solid rgba(117, 208, 194, 0.22);
+  border-radius: 999px;
+  background: rgba(117, 208, 194, 0.08);
+  color: #d7f4ee;
+  padding: 7px 10px;
+  font-size: 0.84rem;
+}
+
+.niq-public-case-grid article strong,
+.niq-muted-note {
+  color: var(--niq-muted);
+  line-height: 1.6;
+}
+
+.niq-public-lab-graph {
+  display: grid;
+  min-height: 430px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  align-items: center;
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(117, 208, 194, 0.16), transparent 22rem),
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    rgba(255, 255, 255, 0.035);
+  background-size: auto, 22px 22px, 22px 22px, auto;
+  padding: clamp(18px, 4vw, 42px);
+}
+
+.niq-public-lab-graph span {
+  display: grid;
+  min-height: 92px;
+  place-items: center;
+  border: 1px solid rgba(117, 208, 194, 0.26);
+  border-radius: 999px;
+  background: rgba(117, 208, 194, 0.09);
+  color: #d7f4ee;
+  font-weight: 850;
+  text-align: center;
+}
+
+.niq-public-preview-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.niq-public-preview-card {
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.niq-public-timeline-row,
+.niq-public-signal-row {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: 8px 14px;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 0;
+}
+
+.niq-public-signal-row {
+  grid-template-columns: minmax(0, 1fr) 96px;
+}
+
+.niq-public-timeline-row span,
+.niq-public-signal-row strong {
+  color: var(--niq-gold);
+  font-weight: 850;
+}
+
+.niq-public-timeline-row strong,
+.niq-public-signal-row span {
+  color: #d7f4ee;
+}
+
+.niq-public-timeline-row i,
+.niq-public-signal-row i {
+  display: block;
+  grid-column: 2;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.niq-public-timeline-row b,
+.niq-public-signal-row b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--niq-aqua), var(--niq-gold));
+}
+
+.niq-public-map-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.niq-public-map-grid article {
+  padding: 16px;
+}
+
+.niq-public-map-grid p,
+.niq-public-roadmap-grid p {
+  color: var(--niq-muted);
+  line-height: 1.55;
+}
+
+.niq-public-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  padding: clamp(18px, 4vw, 36px);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    rgba(255, 255, 255, 0.035);
+  background-size: 20px 20px;
+}
+
+.niq-public-flow div {
+  min-height: 140px;
+  padding: 18px;
+}
+
+.niq-public-flow span {
+  display: block;
+  color: var(--niq-gold);
+  font-weight: 900;
+  margin-bottom: 26px;
+}
+
+.niq-public-flow strong {
+  color: var(--niq-text);
+}
+
+.niq-public-roadmap-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.niq-public-lab-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+  padding-top: 74px;
+}
+
+.niq-public-lab-sidebar {
+  position: sticky;
+  top: 74px;
+  height: calc(100vh - 74px);
+  border-right: 1px solid var(--niq-line);
+  background: rgba(7, 16, 17, 0.82);
+  padding: 18px;
+}
+
+.niq-public-lab-brand {
+  display: grid;
+  width: 100%;
+  gap: 8px;
+  border: 1px solid rgba(244, 199, 107, 0.28);
+  border-radius: 8px;
+  background: rgba(244, 199, 107, 0.08);
+  color: var(--niq-text);
+  padding: 14px;
+  text-align: left;
+}
+
+.niq-public-lab-brand span {
+  color: var(--niq-gold);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.niq-public-lab-sidebar a {
+  display: block;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--niq-muted);
+  margin-top: 8px;
+  padding: 11px 12px;
+  text-decoration: none;
+}
+
+.niq-public-lab-sidebar a:hover {
+  border-color: var(--niq-line);
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--niq-text);
+}
+
+.niq-public-lab-sidebar .niq-public-label {
+  display: block;
+  margin-top: 18px;
+  font-size: 0.78rem;
+}
+
+.niq-public-lab-workspace {
+  display: grid;
+  gap: 18px;
+  padding: clamp(18px, 3vw, 34px);
+}
+
+.niq-public-lab-header,
+.niq-public-app-panel {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(117, 208, 194, 0.11), transparent 24rem),
+    rgba(255, 255, 255, 0.045);
+  box-shadow: var(--niq-shadow);
+}
+
+.niq-public-lab-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.52fr);
+  gap: 22px;
+  align-items: end;
+  padding: clamp(22px, 4vw, 42px);
+}
+
+.niq-public-lab-header h1 {
+  max-width: 900px;
+  font-size: clamp(2.6rem, 5vw, 5.3rem);
+  line-height: 0.94;
+}
+
+.niq-public-lab-header p {
+  color: var(--niq-muted);
+  line-height: 1.7;
+}
+
+.niq-public-lab-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.niq-public-lab-metrics div {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 18px;
+}
+
+.niq-public-lab-metrics strong {
+  display: block;
+  color: var(--niq-gold);
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.niq-public-lab-metrics span {
+  color: var(--niq-muted);
+}
+
+.niq-public-app-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr 1fr;
+  gap: 18px;
+}
+
+.niq-public-app-panel {
+  min-width: 0;
+  padding: 20px;
+}
+
+.niq-public-ontology-panel {
+  grid-column: span 2;
+}
+
+.niq-public-pillars-panel,
+.niq-public-roadmap-drawer {
+  margin-top: 4px;
+}
+
+.niq-panel-title {
+  margin-bottom: 16px;
+}
+
+.niq-panel-title h2 {
+  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+  line-height: 1.05;
+}
+
+.niq-panel-title p:not(.niq-eyebrow) {
+  color: var(--niq-muted);
+  line-height: 1.6;
+}
+
+.niq-public-case-selector article {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  margin-top: 12px;
+  padding: 16px;
+}
+
+.niq-public-case-selector article.active {
+  border-color: rgba(117, 208, 194, 0.46);
+  background: rgba(117, 208, 194, 0.08);
+}
+
+.niq-public-case-selector article > span {
+  color: var(--niq-gold);
+  font-size: 0.74rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.niq-public-case-selector article div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 12px 0;
+}
+
+.niq-public-case-selector article b {
+  border: 1px solid rgba(117, 208, 194, 0.22);
+  border-radius: 999px;
+  color: #d7f4ee;
+  padding: 6px 9px;
+  font-size: 0.78rem;
+}
+
+.niq-public-case-selector article p {
+  color: var(--niq-muted);
+  line-height: 1.55;
+}
+
+.niq-topbar-light {
+  border-bottom-color: rgba(203, 213, 225, 0.78);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+.niq-topbar-light .niq-brand {
+  color: #0f172a;
+}
+
+.niq-topbar-light .niq-brand-mark {
+  border-color: rgba(37, 99, 235, 0.26);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(13, 148, 136, 0.1));
+  color: #1d4ed8;
+}
+
+.niq-topbar-light nav button,
+.niq-topbar-light nav a {
+  color: #64748b;
+}
+
+.niq-topbar-light nav button:hover,
+.niq-topbar-light nav a:hover {
+  color: #0f172a;
+}
+
+.niq-footer-light {
+  border-top-color: #dde5ef;
+  background: #ffffff;
+  color: #64748b;
+}
+
+.niq-footer-light strong {
+  color: #0f172a;
+}
+
+.niq-footer-light button,
+.niq-footer-light a {
+  color: #475569;
+}
+
+.niq-footer-light button:hover,
+.niq-footer-light a:hover {
+  color: #1d4ed8;
+}
+
+.niq-public-lab-shell {
+  --niq-lab-bg: #f6f8fb;
+  --niq-lab-card: #ffffff;
+  --niq-lab-subtle: #f8fafc;
+  --niq-lab-ink: #0f172a;
+  --niq-lab-muted: #64748b;
+  --niq-lab-line: #dde5ef;
+  --niq-lab-blue: #2563eb;
+  --niq-lab-teal: #0d9488;
+  --niq-lab-amber: #b45309;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(37, 99, 235, 0.1), transparent 28rem),
+    radial-gradient(circle at 88% 10%, rgba(13, 148, 136, 0.1), transparent 24rem),
+    var(--niq-lab-bg);
+  color: var(--niq-lab-ink);
+}
+
+.niq-public-lab-shell .niq-eyebrow {
+  color: var(--niq-lab-blue);
+}
+
+.niq-public-lab-sidebar {
+  border-right-color: var(--niq-lab-line);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 16px 0 40px rgba(15, 23, 42, 0.05);
+}
+
+.niq-public-lab-brand {
+  border-color: rgba(37, 99, 235, 0.18);
+  background: linear-gradient(135deg, #ffffff, #f1f7ff);
+  color: var(--niq-lab-ink);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+.niq-public-lab-brand span {
+  color: var(--niq-lab-blue);
+}
+
+.niq-public-lab-sidebar a {
+  color: var(--niq-lab-muted);
+}
+
+.niq-public-lab-sidebar a:hover {
+  border-color: rgba(37, 99, 235, 0.18);
+  background: #f8fbff;
+  color: var(--niq-lab-ink);
+}
+
+.niq-public-lab-sidebar .niq-public-label,
+.niq-public-lab-shell .niq-public-label {
+  border-color: #bbf7d0;
+  background: #ecfdf5;
+  color: #166534;
+}
+
+.niq-public-lab-header,
+.niq-public-lab-shell .niq-public-app-panel,
+.niq-public-lab-shell .niq-public-lab-metrics div,
+.niq-public-lab-shell .niq-public-case-selector article,
+.niq-public-lab-shell .niq-public-map-grid article,
+.niq-public-lab-shell .niq-public-roadmap-grid article,
+.niq-public-lab-shell .niq-public-pillar-grid article,
+.niq-public-lab-shell .niq-seo-copy {
+  border-color: var(--niq-lab-line);
+  background: var(--niq-lab-card);
+  box-shadow: 0 18px 46px rgba(15, 23, 42, 0.08);
+}
+
+.niq-public-lab-header {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(37, 99, 235, 0.1), transparent 22rem),
+    linear-gradient(180deg, #ffffff, #fbfdff);
+}
+
+.niq-public-lab-header h1,
+.niq-public-lab-shell h2,
+.niq-public-lab-shell h3,
+.niq-public-lab-shell .niq-panel-title h2,
+.niq-public-lab-shell .niq-public-timeline-row strong,
+.niq-public-lab-shell .niq-public-signal-row span,
+.niq-public-lab-shell .niq-public-case-selector article h3 {
+  color: var(--niq-lab-ink);
+}
+
+.niq-public-lab-header p,
+.niq-public-lab-shell .niq-panel-title p:not(.niq-eyebrow),
+.niq-public-lab-shell .niq-public-case-selector article p,
+.niq-public-lab-shell .niq-public-map-grid p,
+.niq-public-lab-shell .niq-public-roadmap-grid p,
+.niq-public-lab-shell .niq-public-pillar-grid p,
+.niq-public-lab-shell .niq-seo-copy p,
+.niq-public-lab-shell .niq-muted-note,
+.niq-public-lab-shell .niq-public-lab-metrics span {
+  color: var(--niq-lab-muted);
+}
+
+.niq-public-lab-shell .niq-public-boundary-note {
+  border-color: #fed7aa;
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.niq-public-lab-shell .niq-public-lab-metrics strong,
+.niq-public-lab-shell .niq-public-timeline-row span,
+.niq-public-lab-shell .niq-public-signal-row strong,
+.niq-public-lab-shell .niq-public-case-selector article > span,
+.niq-public-lab-shell .niq-public-roadmap-grid article > span {
+  color: var(--niq-lab-blue);
+}
+
+.niq-public-lab-shell .niq-public-case-selector article.active {
+  border-color: rgba(37, 99, 235, 0.3);
+  background: #eff6ff;
+}
+
+.niq-public-lab-shell .niq-public-case-selector article b {
+  border-color: rgba(13, 148, 136, 0.2);
+  background: #f0fdfa;
+  color: #0f766e;
+}
+
+.niq-public-lab-shell .niq-public-lab-graph {
+  border-color: var(--niq-lab-line);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.12), transparent 20rem),
+    linear-gradient(rgba(148, 163, 184, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.18) 1px, transparent 1px),
+    #f8fafc;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+}
+
+.niq-public-lab-shell .niq-public-lab-graph span {
+  border-color: rgba(37, 99, 235, 0.2);
+  background: #ffffff;
+  color: #1e40af;
+  box-shadow: 0 10px 26px rgba(37, 99, 235, 0.08);
+}
+
+.niq-public-lab-shell .niq-public-timeline-row,
+.niq-public-lab-shell .niq-public-signal-row {
+  border-top-color: #e5eaf2;
+}
+
+.niq-public-lab-shell .niq-public-timeline-row i,
+.niq-public-lab-shell .niq-public-signal-row i {
+  background: #e5eaf2;
+}
+
+.niq-public-lab-shell .niq-public-timeline-row b,
+.niq-public-lab-shell .niq-public-signal-row b {
+  background: linear-gradient(90deg, var(--niq-lab-blue), var(--niq-lab-teal));
+}
+
+.niq-public-lab-shell .niq-public-map-grid article,
+.niq-public-lab-shell .niq-public-roadmap-grid article,
+.niq-public-lab-shell .niq-public-pillar-grid article {
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
 }
 
 .niq-graph-layout {
@@ -802,8 +1679,47 @@
   .niq-article-grid.niq-wide,
   .niq-glossary-strip,
   .niq-investor-board,
-  .niq-glossary-grid {
+  .niq-glossary-grid,
+  .niq-module-grid,
+  .niq-applied-grid,
+  .niq-compound-board,
+  .niq-compound-columns,
+  .niq-healthcare-board,
+  .niq-ontology-layout,
+  .niq-system-strip,
+  .niq-roadmap-grid {
     grid-template-columns: 1fr;
+  }
+
+  .niq-public-healthcare-hero,
+  .niq-public-lab-shell,
+  .niq-public-lab-header,
+  .niq-public-lab-metrics,
+  .niq-public-app-grid,
+  .niq-public-pillar-grid,
+  .niq-public-case-grid,
+  .niq-public-preview-grid,
+  .niq-public-map-grid,
+  .niq-public-flow,
+  .niq-public-roadmap-grid,
+  .niq-public-lab-graph {
+    grid-template-columns: 1fr;
+  }
+
+  .niq-public-lab-shell {
+    padding-top: 64px;
+  }
+
+  .niq-public-lab-sidebar {
+    position: relative;
+    top: auto;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--niq-line);
+  }
+
+  .niq-public-ontology-panel {
+    grid-column: auto;
   }
 
   .niq-narrative-card {

@@ -1,0 +1,1 @@
+export { HealthcareCognitionHome } from "./HealthcareCognitionHome";

@@ -11,10 +11,122 @@ type PublicDemoPageProps = {
   onNavigate: (path: string) => void;
 };
 
+const cognitionModules = [
+  {
+    title: "Healthcare Cognition",
+    domain: "Synthetic healthcare workflow intelligence",
+    layer: "Ontology, provenance, longitudinal workflow memory, and review gates",
+    compound: "Shows how NarrativeIQ extends beyond notes into coordination, trust, and cross-system context.",
+    path: "/demo/healthcare-cognition"
+  },
+  {
+    title: "Organizational Memory",
+    domain: "Teams, decisions, operating cadence",
+    layer: "Longitudinal memory and decision continuity",
+    compound: "Preserves operational context across decisions, teams, handoffs, and time.",
+    path: "/demo#public-module-previews"
+  },
+  {
+    title: "Relationship Intelligence",
+    domain: "Human relationships and commitments",
+    layer: "Trust, continuity, commitments, and evolving human context",
+    compound: "Models relationship state as durable context instead of isolated messages.",
+    path: "/demo#public-module-previews"
+  },
+  {
+    title: "Workflow Intelligence",
+    domain: "Operations, support, delivery, and coordination",
+    layer: "Friction, latency, ownership, and repeated operational loops",
+    compound: "Turns recurring workflow patterns into reusable operational intelligence.",
+    path: "/demo#public-module-previews"
+  },
+  {
+    title: "Semantic Coordination",
+    domain: "Cross-team and cross-system meaning",
+    layer: "Entities, events, relationships, and shared narrative state",
+    compound: "Connects meaning across tools where handoffs usually lose context.",
+    path: "/demo#public-module-previews"
+  },
+  {
+    title: "Research Continuity",
+    domain: "Research, synthesis, and institutional knowledge",
+    layer: "Evidence threads, open questions, and reusable knowledge graphs",
+    compound: "Carries inquiry forward across people, artifacts, and time.",
+    path: "/articles"
+  },
+  {
+    title: "Agent-Orchestrated Operations",
+    domain: "Multi-agent workflows and operational systems",
+    layer: "Agent boundaries, provenance, review, and context preservation",
+    compound: "Gives agent ecosystems a durable cognition layer around tasks and tools.",
+    path: "/demo#public-module-previews"
+  }
+];
+
+const appliedSystems = [
+  {
+    title: "Healthcare Cognition",
+    body:
+      "Healthcare Cognition Lab uses synthetic care journeys to demonstrate how NarrativeIQ extends beyond notes into longitudinal workflow intelligence."
+  },
+  {
+    title: "Organizational Memory",
+    body: "Preserves operational context across decisions, teams, handoffs, and time."
+  },
+  {
+    title: "Relationship Intelligence",
+    body: "Models trust, continuity, commitments, and evolving human context."
+  },
+  {
+    title: "Workflow Intelligence",
+    body: "Surfaces friction, latency, coordination gaps, and recurring operational loops."
+  },
+  {
+    title: "Semantic Coordination",
+    body: "Connects entities, events, relationships, and narratives across systems."
+  }
+];
+
+const compoundingRows = [
+  ["transcription", "longitudinal memory"],
+  ["summarization", "ontology"],
+  ["generic note generation", "workflow intelligence"],
+  ["basic chatbot assistance", "trust and provenance"],
+  ["one-off workflow automation", "operational coordination"],
+  ["isolated dashboards", "narrative continuity"],
+  ["static task queues", "agent orchestration"],
+  ["single-system records", "cross-system context"]
+];
+
+const healthcareAdvantages = [
+  "Workflow Intelligence",
+  "Ontology / Context Intelligence",
+  "Longitudinal Understanding",
+  "Interoperability Intelligence",
+  "Operational Leverage",
+  "Specialty-Specific Cognition",
+  "Human Factors / Trust",
+  "Cross-System Orchestration"
+];
+
+const intelligenceSystems = ["notes", "workflows", "teams", "handoffs", "portals", "research", "operations", "agents"];
+
+const roadmapStages = [
+  ["Documentation Automation", "raw capture", "reviewable source context", "keeps capture bounded by human review"],
+  ["Structured Note Intelligence", "template output", "structured narrative state", "turns fragments into inspectable story surfaces"],
+  ["Narrative Continuity Layer", "single-session summaries", "continuity across time", "preserves what changed and what carried forward"],
+  ["Workflow Cognition Layer", "basic workflow automation", "friction and coordination intelligence", "surfaces recurring operational loops"],
+  ["Specialty / Domain Ontology Layer", "generic domain templates", "reusable ontology-driven intelligence", "adapts cognition modules to vertical workflows"],
+  ["Cross-System Semantic Layer", "isolated dashboards", "cross-system cognition", "connects meaning across tools and teams"],
+  ["Agent-Orchestrated Operations", "single agent tasks", "agent boundaries and provenance", "coordinates agents through reviewable context"],
+  ["Cognition Operating System", "point solutions", "longitudinal cognition infrastructure", "compounds memory, ontology, trust, and coordination"]
+];
+
 export function PublicDemoPage({ path, onNavigate }: PublicDemoPageProps) {
   const slug = path.split("/").pop();
   let content = <HomePage onNavigate={onNavigate} />;
 
+  if (path === "/demo/healthcare-cognition") content = <PublicHealthcareCognitionPage onNavigate={onNavigate} />;
   if (path === "/articles") content = <ArticlesIndex onNavigate={onNavigate} />;
   if (path.startsWith("/articles/")) content = <ArticlePage slug={slug ?? ""} onNavigate={onNavigate} />;
   if (path === "/glossary") content = <GlossaryIndex onNavigate={onNavigate} />;
@@ -22,22 +134,24 @@ export function PublicDemoPage({ path, onNavigate }: PublicDemoPageProps) {
 
   return (
     <>
-      <SiteHeader onNavigate={onNavigate} />
+      <SiteHeader onNavigate={onNavigate} isLabPage={path === "/demo/healthcare-cognition"} />
       {content}
-      <SiteFooter onNavigate={onNavigate} />
+      <SiteFooter onNavigate={onNavigate} isLabPage={path === "/demo/healthcare-cognition"} />
     </>
   );
 }
 
-function SiteHeader({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
+function SiteHeader({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps, "onNavigate"> & { isLabPage?: boolean }) {
   return (
-    <header className="niq-topbar">
+    <header className={`niq-topbar${isLabPage ? " niq-topbar-light" : ""}`}>
       <button className="niq-brand" onClick={() => onNavigate("/demo")} type="button" aria-label="NiQ public demo home">
         <span className="niq-brand-mark">NiQ</span>
         <span>Narrative Intelligence</span>
       </button>
       <nav aria-label="Public demo navigation">
         <button onClick={() => onNavigate("/demo#demo")} type="button">Demo</button>
+        <button onClick={() => onNavigate("/demo#public-module-previews")} type="button">Public Module Previews</button>
+        <button onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">Healthcare Lab</button>
         <button onClick={() => onNavigate("/articles")} type="button">Articles</button>
         <button onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
         <a href="mailto:hello@agentaskander.com">Contact</a>
@@ -46,14 +160,19 @@ function SiteHeader({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
   );
 }
 
-function SiteFooter({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
+function SiteFooter({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps, "onNavigate"> & { isLabPage?: boolean }) {
   return (
-    <footer className="niq-footer">
+    <footer className={`niq-footer${isLabPage ? " niq-footer-light" : ""}`}>
       <div>
         <strong>NiQ</strong>
-        <p>Narrative intelligence infrastructure for human-centered AI systems.</p>
+        <p>Longitudinal cognition infrastructure for complex human systems.</p>
+        <p className="niq-footer-note">
+          NarrativeIQ public demos are conceptual and investor-oriented. They do not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.
+        </p>
       </div>
       <div className="niq-footer-links">
+        <button onClick={() => onNavigate("/demo#public-module-previews")} type="button">Public Module Previews</button>
+        <button onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">Healthcare Lab</button>
         <button onClick={() => onNavigate("/articles")} type="button">Articles</button>
         <button onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
         <a href="mailto:hello@agentaskander.com">hello@agentaskander.com</a>
@@ -64,9 +183,9 @@ function SiteFooter({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
 
 function HomePage({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
   usePublicMeta({
-    title: "NiQ Demo | Narrative Intelligence Infrastructure",
+    title: "NarrativeIQ Demo - Longitudinal Cognition Infrastructure",
     description:
-      "NiQ is a public-safe interactive demo for narrative intelligence infrastructure built around continuity, context, and human review.",
+      "Explore NarrativeIQ's longitudinal cognition infrastructure for preserving context, workflow meaning, semantic relationships, and narrative continuity across complex human systems.",
     path: "/demo"
   });
 
@@ -77,21 +196,24 @@ function HomePage({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
         <div className="niq-hero-copy">
           <p className="niq-eyebrow">Enterprise-safe public demo</p>
           <h1 className="niq-hero-title">
-            <span>Narrative intelligence</span>
+            <span>Longitudinal cognition</span>
             <span>infrastructure</span>
-            <span>for human-centered</span>
-            <span>AI systems.</span>
+            <span>for complex human</span>
+            <span>systems.</span>
           </h1>
           <p className="niq-lede">
-            NiQ shows how fragmented conversations, workflow signals, and continuity can become structured intelligence
-            surfaces for review. This demo is deterministic, synthetic, and frontend-only.
+            NarrativeIQ preserves meaning across notes, workflows, relationships, handoffs, research, operations, and time.
+            Instead of stopping at notes, it models continuity, context, coordination, and operational meaning.
           </p>
           <div className="niq-hero-actions">
-            <button className="niq-button" onClick={() => onNavigate("/demo#demo")} type="button">
-              Explore demo <Icon name="arrow" />
+            <button className="niq-button" onClick={() => onNavigate("/demo#public-module-previews")} type="button">
+              Public Module Previews <Icon name="arrow" />
             </button>
-            <button className="niq-button niq-ghost" onClick={() => onNavigate("/articles/what-is-narrative-intelligence")} type="button">
-              Read the thesis
+            <button className="niq-button niq-ghost" onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">
+              Explore Healthcare Cognition Lab
+            </button>
+            <button className="niq-button niq-ghost" onClick={() => onNavigate("/demo#investor-roadmap")} type="button">
+              View Investor Roadmap
             </button>
           </div>
         </div>
@@ -103,9 +225,9 @@ function HomePage({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
             <strong>continuity preview</strong>
           </div>
           <div className="niq-signal-stack">
-            <SignalCard icon="network" title="Context graph" body="Relationships between synthetic events, people, and open questions." />
-            <SignalCard icon="workflow" title="Workflow state" body="A reviewable surface showing readiness, gaps, and next actions." />
-            <SignalCard icon="shield" title="Human review" body="Every generated summary is positioned as a draft for inspection." />
+            <SignalCard icon="network" title="Ontology layer" body="Entities, events, roles, commitments, and context states become reusable semantic structure." />
+            <SignalCard icon="workflow" title="Workflow cognition" body="Friction, handoffs, open loops, and coordination gaps become visible across time." />
+            <SignalCard icon="shield" title="Trust and provenance" body="Every cognition surface is positioned as a draft with source visibility and human review." />
           </div>
         </div>
       </section>
@@ -132,15 +254,491 @@ function HomeSections({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
 
   return (
     <>
+      <ModuleArchitectureSection onNavigate={onNavigate} />
+      <AppliedCognitionSystems />
+      <CommoditizesVsCompounds />
+      <HealthcareCognitionPreview onNavigate={onNavigate} />
+      <OntologyVisualizationTeaser />
+      <IntelligenceBetweenSystems />
+      <InvestorRoadmapPreview />
+      <SeoContentBlock />
       <GraphSection />
       <WorkflowDemo scenario={scenario} setScenarioId={setScenarioId} />
       <ContinuitySection />
       <ArchitectureSection />
       <ArticlePreview onNavigate={onNavigate} />
       <GlossaryPreview onNavigate={onNavigate} />
-      <InvestorSection />
       <FinalCta />
     </>
+  );
+}
+
+function ModuleArchitectureSection({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
+  return (
+    <section className="niq-section niq-module-section" id="public-module-previews" data-niq-reveal>
+      <div className="niq-section-kicker niq-row">
+        <div>
+          <p className="niq-eyebrow">Module architecture</p>
+          <h2>Reusable Cognition Modules</h2>
+          <p>
+            NarrativeIQ modules turn domain-specific workflows into reusable cognition layers: ontology, longitudinal
+            memory, workflow intelligence, trust and provenance, cross-system coordination, and agent orchestration.
+          </p>
+        </div>
+        <button className="niq-text-link" onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">
+          Open public healthcare preview <Icon name="chevron" />
+        </button>
+      </div>
+      <div className="niq-module-grid">
+        {cognitionModules.map((module) => (
+          <article className="niq-module-card" key={module.title}>
+            <p>{module.domain}</p>
+            <h3>{module.title}</h3>
+            <span>{module.layer}</span>
+            <strong>{module.compound}</strong>
+            <button onClick={() => onNavigate(module.path)} type="button">
+              Explore layer <Icon name="arrow" />
+            </button>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function AppliedCognitionSystems() {
+  return (
+    <section className="niq-section niq-applied-section" data-niq-reveal>
+      <div className="niq-section-kicker">
+        <p className="niq-eyebrow">Applied cognition systems</p>
+        <h2>Portable intelligence beyond one vertical</h2>
+        <p>
+          The same module architecture applies beyond healthcare to organizations, relationships, research, education,
+          operations, and agent ecosystems.
+        </p>
+      </div>
+      <div className="niq-applied-grid">
+        {appliedSystems.map((system) => (
+          <article key={system.title}>
+            <h3>{system.title}</h3>
+            <p>{system.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CommoditizesVsCompounds() {
+  return (
+    <section className="niq-section niq-compounds-section" data-niq-reveal>
+      <div className="niq-compound-board">
+        <div>
+          <p className="niq-eyebrow">Investor thesis</p>
+          <h2>What Commoditizes vs What Compounds</h2>
+          <p>AI transcription captures words. NarrativeIQ preserves meaning.</p>
+          <p>AI scribing commoditizes; cognition infrastructure compounds.</p>
+        </div>
+        <div className="niq-compound-columns">
+          <div>
+            <h3>Commoditizing</h3>
+            {compoundingRows.map(([left]) => <span key={left}>{left}</span>)}
+          </div>
+          <div>
+            <h3>Compounding</h3>
+            {compoundingRows.map(([, right]) => <span key={right}>{right}</span>)}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HealthcareCognitionPreview({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
+  return (
+    <section className="niq-section niq-healthcare-preview" data-niq-reveal>
+      <div className="niq-healthcare-board">
+        <div>
+          <p className="niq-eyebrow">One vertical proof environment</p>
+          <h2>Healthcare Cognition Lab</h2>
+          <p className="niq-healthcare-subtitle">A synthetic proof environment for longitudinal healthcare workflow intelligence.</p>
+          <p>
+            Healthcare Cognition Lab is a synthetic proof environment showing how NarrativeIQ extends beyond transcription
+            into workflow intelligence, ontology, trust, and cross-system coordination. Healthcare is one proof domain for
+            a broader module architecture.
+          </p>
+          <p className="niq-safety-note">This demo uses synthetic data only and does not provide medical advice.</p>
+          <button className="niq-button" onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">
+            Explore Healthcare Cognition Lab <Icon name="arrow" />
+          </button>
+        </div>
+        <div className="niq-advantage-chip-grid">
+          {healthcareAdvantages.map((advantage) => <span key={advantage}>{advantage}</span>)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
+  usePublicMeta({
+    title: "NarrativeIQ Healthcare Cognition Lab - Synthetic Workflow Intelligence Demo",
+    description:
+      "A synthetic investor demo showing how NarrativeIQ extends beyond AI scribing into healthcare workflow cognition, ontology, trust, and cross-system coordination.",
+    path: "/demo/healthcare-cognition"
+  });
+
+  const publicPillars = [
+    ["Workflow Intelligence", "Surfaces handoffs, coordination friction, and operational context without clinical claims."],
+    ["Ontology / Context Intelligence", "Uses representative synthetic ontology categories instead of exposing a full schema."],
+    ["Longitudinal Understanding", "Shows how meaning changes across time, roles, and workflows."],
+    ["Interoperability Intelligence", "Frames how context can move between teams and tools without backend architecture details."],
+    ["Operational Leverage", "Turns example workflow signals into investor-readable operational context."],
+    ["Specialty-Specific Cognition", "Shows how a vertical module adapts public-safe language to a domain environment."],
+    ["Human Factors / Trust", "Keeps source visibility, review posture, and provenance in the public narrative."],
+    ["Cross-System Orchestration", "Uses conceptual agent roles while keeping proprietary orchestration details private."]
+  ];
+
+  const publicCases = [
+    {
+      title: "Shift continuity preview",
+      setting: "Synthetic inpatient operations",
+      fragments: ["family update request", "transport timing changed", "ownership question pending"],
+      outcome: "A reviewer sees what changed, what remains open, and which context should carry forward."
+    },
+    {
+      title: "Ambulatory follow-up preview",
+      setting: "Synthetic outpatient workflow",
+      fragments: ["forms readiness", "callback summary", "scheduling friction"],
+      outcome: "A team can separate confirmed context from unresolved administrative questions."
+    },
+    {
+      title: "Specialty packet preview",
+      setting: "Synthetic specialty coordination",
+      fragments: ["packet readiness", "prior context", "source trace"],
+      outcome: "A reviewer sees source-supported narrative continuity before downstream coordination."
+    }
+  ];
+
+  const timelinePreview = [
+    ["08:10", "Synthetic intake question captured", 35],
+    ["11:25", "Coordination blocker added", 58],
+    ["15:40", "Continuity summary requested", 82],
+    ["17:05", "Source visibility reviewed", 74]
+  ] as const;
+
+  const entropyPreview = [
+    ["Ownership clarity", "watch", 62],
+    ["Fragment alignment", "improving", 78],
+    ["Review readiness", "stable", 84],
+    ["Handoff density", "watch", 55]
+  ] as const;
+
+  const interoperabilityPreview = [
+    ["EHR-adjacent note surface", "reviewed narrative summary"],
+    ["Team inbox", "open question digest"],
+    ["Handoff board", "continuity timeline"],
+    ["Operations analytics", "workflow burden signal"]
+  ];
+
+  const provenancePreview = [
+    ["Synthetic nurse note", "source visible"],
+    ["Synthetic coordinator update", "needs review"],
+    ["Synthetic operations note", "review ready"],
+    ["Synthetic team handoff", "human gate"]
+  ];
+
+  const publicRoadmap = [
+    ["Documentation Automation", "captures structured fragments"],
+    ["Structured Note Intelligence", "organizes review-ready surfaces"],
+    ["Narrative Continuity Layer", "preserves meaning across time"],
+    ["Workflow Cognition Layer", "surfaces coordination gaps"],
+    ["Domain Ontology Layer", "uses representative categories"],
+    ["Cross-System Semantic Layer", "preserves context between tools"],
+    ["Agent-Orchestrated Operations", "coordinates conceptual roles"],
+    ["Cognition Operating System", "compounds memory, trust, and workflow meaning"]
+  ];
+
+  return (
+    <main className="niq-public-lab-shell">
+      <aside className="niq-public-lab-sidebar">
+        <button className="niq-public-lab-brand" onClick={() => onNavigate("/demo")} type="button">
+          <span>NiQ</span>
+          <strong>Healthcare Cognition</strong>
+        </button>
+        {["Overview", "Cases", "Timeline", "Entropy", "Ontology", "Provenance", "Roadmap"].map((item) => (
+          <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>
+        ))}
+        <div className="niq-public-label">Public synthetic demo. No PHI, diagnosis, treatment recommendation, or clinical deployment claim.</div>
+      </aside>
+
+      <section className="niq-public-lab-workspace">
+        <header className="niq-public-lab-header" id="overview">
+          <div>
+            <p className="niq-eyebrow">Public product preview using synthetic data</p>
+            <h1>Healthcare Cognition Lab</h1>
+            <p>
+              A limited NarrativeIQ product preview for longitudinal healthcare workflow intelligence: synthetic cases,
+              representative ontology categories, example workflow signals, provenance, interoperability, and investor narrative.
+            </p>
+          </div>
+          <div className="niq-public-boundary-note">
+            This public preview uses synthetic data only. Proprietary ontology rules, scoring logic, prompts, routing policies, and implementation internals are intentionally omitted.
+          </div>
+        </header>
+
+        <div className="niq-public-lab-metrics">
+          <div><strong>8</strong><span>representative pillars</span></div>
+          <div><strong>3</strong><span>synthetic cases</span></div>
+          <div><strong>4</strong><span>system touchpoints</span></div>
+          <div><strong>0</strong><span>clinical claims</span></div>
+        </div>
+
+        <div className="niq-public-app-grid" id="cases">
+          <section className="niq-public-app-panel niq-public-case-selector">
+            <div className="niq-panel-title">
+              <p className="niq-eyebrow">Synthetic case selector</p>
+              <h2>Representative previews</h2>
+            </div>
+            {publicCases.map((item, index) => (
+              <article className={index === 0 ? "active" : ""} key={item.title}>
+                <span>{item.setting}</span>
+                <h3>{item.title}</h3>
+                <div>{item.fragments.map((fragment) => <b key={fragment}>{fragment}</b>)}</div>
+                <p>{item.outcome}</p>
+              </article>
+            ))}
+          </section>
+
+          <section className="niq-public-app-panel" id="timeline">
+            <div className="niq-panel-title">
+              <p className="niq-eyebrow">Longitudinal timeline preview</p>
+              <h2>Synthetic patient/story timeline</h2>
+            </div>
+            {timelinePreview.map(([time, event, value]) => (
+              <div className="niq-public-timeline-row" key={time}>
+                <span>{time}</span>
+                <strong>{event}</strong>
+                <i><b style={{ width: `${value}%` }} /></i>
+              </div>
+            ))}
+          </section>
+
+          <section className="niq-public-app-panel" id="entropy">
+            <div className="niq-panel-title">
+              <p className="niq-eyebrow">Workflow entropy panel</p>
+              <h2>Example workflow signals</h2>
+            </div>
+            {entropyPreview.map(([label, trend, value]) => (
+              <div className="niq-public-signal-row" key={label}>
+                <span>{label}</span>
+                <strong>{trend}</strong>
+                <i><b style={{ width: `${value}%` }} /></i>
+              </div>
+            ))}
+            <p className="niq-muted-note">Synthetic preview metrics, not scoring formulas.</p>
+          </section>
+
+          <section className="niq-public-app-panel niq-public-ontology-panel" id="ontology">
+            <div className="niq-panel-title">
+              <p className="niq-eyebrow">Ontology graph preview</p>
+              <h2>Representative synthetic ontology categories</h2>
+            </div>
+            <div className="niq-public-lab-graph">
+              {["care continuity", "workflow state", "role handoff", "review readiness", "provenance", "specialty context", "timeline", "system boundary"].map((node) => (
+                <span key={node}>{node}</span>
+              ))}
+            </div>
+          </section>
+
+          <section className="niq-public-app-panel" id="provenance">
+            <div className="niq-panel-title">
+              <p className="niq-eyebrow">Trust/provenance panel</p>
+              <h2>Reviewable source posture</h2>
+            </div>
+            <div className="niq-public-map-grid">
+              {provenancePreview.map(([source, status]) => (
+                <article key={source}>
+                  <h3>{source}</h3>
+                  <p>{status}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="niq-public-app-panel">
+            <div className="niq-panel-title">
+              <p className="niq-eyebrow">Interoperability map</p>
+              <h2>Context between systems</h2>
+            </div>
+            <div className="niq-public-map-grid">
+              {interoperabilityPreview.map(([system, payload]) => (
+                <article key={system}>
+                  <h3>{system}</h3>
+                  <p>{payload}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <section className="niq-public-app-panel niq-public-pillars-panel">
+          <div className="niq-panel-title">
+            <p className="niq-eyebrow">Representative preview badges</p>
+            <h2>Eight public advantage pillars</h2>
+          </div>
+          <div className="niq-public-pillar-grid">
+            {publicPillars.map(([title, body]) => (
+              <article key={title}>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="niq-public-app-panel niq-public-roadmap-drawer" id="roadmap">
+          <div className="niq-panel-title">
+            <p className="niq-eyebrow">Roadmap drawer</p>
+            <h2>From healthcare proof environment to cognition infrastructure</h2>
+            <p>The roadmap is intentionally public-level: category movement, compounding value, and market narrative without proprietary build details.</p>
+          </div>
+          <div className="niq-public-roadmap-grid">
+            {publicRoadmap.map(([stage, body], index) => (
+              <article key={stage}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h3>{stage}</h3>
+                <p>{body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="niq-public-app-panel niq-seo-copy">
+          <p className="niq-eyebrow">SEO-rich product explanation</p>
+          <h2>Healthcare as proof, not the boundary</h2>
+          <p>
+            The public Healthcare Cognition Lab shows how a domain-specific module can preserve context across complex
+            workflows while staying synthetic, review-oriented, and non-clinical. The same architecture extends to
+            organizational memory, relationship intelligence, workflow intelligence, research continuity, semantic
+            coordination, and agent-orchestrated operations.
+          </p>
+          <p>
+            Healthcare workflow intelligence is a useful proof environment because context often fragments across notes,
+            handoffs, portals, teams, and time. NarrativeIQ demonstrates how a longitudinal cognition layer can preserve
+            operational meaning, semantic healthcare coordination, trust posture, and cross-system context without
+            making diagnosis, treatment, or deployment claims.
+          </p>
+        </section>
+      </section>
+    </main>
+  );
+}
+
+function OntologyVisualizationTeaser() {
+  const nodes = [
+    ["narrative threads", 50, 16],
+    ["entities", 22, 34],
+    ["workflows", 74, 34],
+    ["handoffs", 18, 64],
+    ["context states", 50, 52],
+    ["trust/provenance", 82, 64],
+    ["timeline", 36, 82],
+    ["module boundaries", 66, 82]
+  ];
+
+  return (
+    <section className="niq-section niq-ontology-teaser" data-niq-reveal>
+      <div className="niq-section-kicker">
+        <p className="niq-eyebrow">Semantic knowledge graph</p>
+        <h2>Notes are documents. Ontology is understanding.</h2>
+        <p>Ontology turns disconnected events into reusable context across domains.</p>
+      </div>
+      <div className="niq-ontology-layout">
+        <svg className="niq-ontology-graph" viewBox="0 0 100 100" role="img" aria-label="NarrativeIQ ontology graph teaser">
+          {nodes.slice(1).map(([, x, y]) => <line key={`${x}-${y}`} x1="50" y1="52" x2={x as number} y2={y as number} className="niq-ontology-line" />)}
+          {nodes.map(([label, x, y]) => (
+            <g key={label as string} className="niq-ontology-node">
+              <circle cx={x as number} cy={y as number} r={label === "context states" ? 8 : 6} />
+              <text x={x as number} y={(y as number) + 12}>{label as string}</text>
+            </g>
+          ))}
+        </svg>
+        <div className="niq-ontology-copy">
+          <h3>From fragmented records to reusable context</h3>
+          <p>
+            NarrativeIQ maps narrative threads, entities, workflows, handoffs, context states, trust signals,
+            longitudinal timelines, and module boundaries into a public-safe cognition layer.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function IntelligenceBetweenSystems() {
+  return (
+    <section className="niq-section niq-between-section" data-niq-reveal>
+      <div className="niq-section-kicker">
+        <p className="niq-eyebrow">Cross-system cognition</p>
+        <h2>The Intelligence Between Systems</h2>
+        <p>The future moat is not the note. It is the cognition layer around the note.</p>
+        <p>The future moat is not the chart. It is the cognition layer between charts.</p>
+        <p>The same architecture applies wherever complex systems lose context across time.</p>
+      </div>
+      <div className="niq-system-strip">
+        {intelligenceSystems.map((system) => <span key={system}>{system}</span>)}
+      </div>
+    </section>
+  );
+}
+
+function InvestorRoadmapPreview() {
+  return (
+    <section className="niq-section niq-roadmap-section" id="investor-roadmap" data-niq-reveal>
+      <div className="niq-section-kicker">
+        <p className="niq-eyebrow">Investor roadmap preview</p>
+        <h2>From automation to a cognition operating system</h2>
+        <p>Each stage clarifies what commoditizes, what compounds, and where NarrativeIQ becomes harder to replace.</p>
+      </div>
+      <div className="niq-roadmap-grid">
+        {roadmapStages.map(([stage, commoditizes, compounds, advantage], index) => (
+          <article key={stage}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{stage}</h3>
+            <p><strong>Commoditizes:</strong> {commoditizes}</p>
+            <p><strong>Compounds:</strong> {compounds}</p>
+            <p><strong>NarrativeIQ advantage:</strong> {advantage}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SeoContentBlock() {
+  return (
+    <section className="niq-section niq-seo-block" data-niq-reveal>
+      <div className="niq-seo-copy">
+        <p className="niq-eyebrow">Why narrative intelligence matters</p>
+        <h2>Why Narrative Intelligence Matters</h2>
+        <p>
+          Organizations lose context across time. Notes preserve facts, but they do not always preserve continuity.
+          Workflows fragment meaning as decisions, relationships, research threads, handoffs, and operational signals move
+          between people and systems.
+        </p>
+        <p>
+          Cognition infrastructure connects narrative, ontology, workflow, and coordination. NarrativeIQ builds a cognition
+          layer for context preservation, semantic coordination, organizational cognition, relationship intelligence,
+          research continuity, operational intelligence, and agent-orchestrated operations.
+        </p>
+        <p>
+          Healthcare Cognition is one proof environment for applied cognition systems. The broader architecture applies to
+          organizations, relationships, research, education, operations, and agent ecosystems wherever complex human systems
+          need cross-system context preservation.
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -348,11 +946,11 @@ function ArticlePreview({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">)
     <section className="niq-section niq-article-preview" data-niq-reveal>
       <div className="niq-section-kicker niq-row">
         <div>
-          <p className="niq-eyebrow">SEO article engine</p>
-          <h2>Structured thinking for discoverability</h2>
+          <p className="niq-eyebrow">NarrativeIQ Research & Intelligence Library</p>
+          <h2>Structured thinking for continuity</h2>
         </div>
         <button className="niq-text-link" onClick={() => onNavigate("/articles")} type="button">
-          View all articles <Icon name="chevron" />
+          Open Research Library <Icon name="chevron" />
         </button>
       </div>
       <div className="niq-article-grid">
@@ -400,28 +998,6 @@ function GlossaryPreview({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">
   );
 }
 
-function InvestorSection() {
-  return (
-    <section className="niq-section niq-investor-section" data-niq-reveal>
-      <div className="niq-investor-board">
-        <div>
-          <p className="niq-eyebrow">Investor-safe positioning</p>
-          <h2>From fragmented work to continuity infrastructure.</h2>
-          <p>
-            NiQ is positioned around durable human context, reviewable narratives, and enterprise workflow continuity.
-            The public demo makes the category legible while keeping the product boundary conservative.
-          </p>
-        </div>
-        <div className="niq-metrics">
-          <div><strong>0</strong><span>External API calls</span></div>
-          <div><strong>100%</strong><span>Synthetic demo data</span></div>
-          <div><strong>4</strong><span>Public concept layers</span></div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function FinalCta() {
   return (
     <section className="niq-final-cta" data-niq-reveal>
@@ -435,13 +1011,13 @@ function FinalCta() {
 
 function ArticlesIndex({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
   usePublicMeta({
-    title: "NiQ Articles | Narrative Intelligence",
-    description: "SEO-ready public articles on narrative intelligence, continuity, and human-centered AI systems.",
+    title: "NarrativeIQ Research & Intelligence Library",
+    description: "Public research notes on narrative intelligence, semantic coordination, continuity, and applied cognition systems.",
     path: "/articles"
   });
   return (
     <main className="niq-subpage">
-      <PageHero eyebrow="Articles" title="Narrative intelligence writing" body="Public-safe essays on context, continuity, and infrastructure for human-centered AI systems." />
+      <PageHero eyebrow="Research Library" title="NarrativeIQ Research & Intelligence Library" body="Public-safe research notes on context preservation, narrative continuity, semantic coordination, and applied cognition systems." />
       <div className="niq-article-grid niq-wide">
         {articles.map((article) => <ArticleCard article={article} key={article.slug} onNavigate={onNavigate} />)}
       </div>

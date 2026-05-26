@@ -9,8 +9,9 @@ type PublicDemoAppProps = {
 
 export function PublicDemoApp({ path, onNavigate }: PublicDemoAppProps) {
   useEffect(() => {
-    if (window.location.hash === "#demo") {
-      window.requestAnimationFrame(() => document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" }));
+    const targetId = window.location.hash.slice(1);
+    if (targetId) {
+      window.requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" }));
       return;
     }
     try {
@@ -35,7 +36,7 @@ export function PublicDemoApp({ path, onNavigate }: PublicDemoAppProps) {
           }
         });
       },
-      { rootMargin: "120px 0px", threshold: 0.08 }
+      { rootMargin: "120px 0px" }
     );
     document.querySelectorAll("[data-niq-reveal]:not(.is-visible)").forEach((target) => observer.observe(target));
     return () => observer.disconnect();

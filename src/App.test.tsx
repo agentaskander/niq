@@ -41,9 +41,50 @@ describe("App navigation", () => {
     window.history.pushState({}, "", "/demo");
     render(<App />);
 
-    expect(screen.getByRole("heading", { name: /Narrative intelligence infrastructure/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Longitudinal cognition infrastructure/i })).toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: "Public demo navigation" })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Explore Healthcare Cognition Lab" }).length).toBeGreaterThan(0);
     expect(screen.queryByRole("button", { name: "New Story" })).not.toBeInTheDocument();
+  });
+
+  it("renders the sanitized public healthcare cognition page", () => {
+    window.history.pushState({}, "", "/demo/healthcare-cognition");
+    render(<App />);
+
+    expect(screen.getByRole("heading", { name: "Healthcare Cognition Lab" })).toBeInTheDocument();
+    expect(screen.getByText("Public synthetic demo. No PHI, diagnosis, treatment recommendation, or clinical deployment claim.")).toBeInTheDocument();
+    expect(screen.queryByText("Internal Ideation Board — not for public publishing.")).not.toBeInTheDocument();
+  });
+
+  it("renders the module index route", () => {
+    window.history.pushState({}, "", "/modules");
+    render(<App />);
+
+    expect(screen.getByRole("heading", { name: "Choose a focused NarrativeIQ lab." })).toBeInTheDocument();
+    expect(screen.getByText("Healthcare Cognition Lab")).toBeInTheDocument();
+    expect(screen.getByText("New Patient Story")).toBeInTheDocument();
+  });
+
+  it("renders the healthcare cognition module and alias", async () => {
+    window.history.pushState({}, "", "/modules/healthcare-cognition");
+    const { unmount } = render(<App />);
+
+    expect(await screen.findByRole("heading", { name: /Healthcare workflow cognition without PHI/i })).toBeInTheDocument();
+    expect(screen.getByText("Eight defensible surfaces for healthcare cognition")).toBeInTheDocument();
+    expect(screen.getByText("Internal Ideation Board — not for public publishing.")).toBeInTheDocument();
+
+    unmount();
+    window.history.pushState({}, "", "/narrativeiq/healthcare-cognition");
+    render(<App />);
+
+    expect(await screen.findByRole("heading", { name: /Healthcare workflow cognition without PHI/i })).toBeInTheDocument();
+  });
+
+  it("keeps the old patient story module route available", () => {
+    window.history.pushState({}, "", "/modules/new-patient-story");
+    render(<App />);
+
+    expect(screen.getAllByText(/Patient Story Timeline/i).length).toBeGreaterThan(0);
   });
 
   it("renders the dark mode concept lab route", () => {
@@ -82,7 +123,7 @@ describe("App navigation", () => {
 
     expect(screen.queryByRole("button", { name: "Join Beta" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Book Enterprise Pilot" })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Read the thesis" })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: /Public Module Previews/i }).length).toBeGreaterThan(0);
   });
 
   it("renders beta route from Join Beta CTA", () => {

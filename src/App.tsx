@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Activity, BarChart3, BookOpen, ClipboardList, HeartHandshake, Home, Network, Settings } from "lucide-react";
+import { lazy, Suspense, useMemo, useState } from "react";
+import { Activity, BarChart3, BookOpen, Boxes, BrainCircuit, ClipboardList, HeartHandshake, Home, Network, Settings } from "lucide-react";
 import { AdminGate } from "./components/AdminGate";
 import { AdminDashboard } from "./pages/AdminDashboard";
 import { AdoptionDashboard } from "./pages/AdoptionDashboard";
@@ -12,11 +12,18 @@ import { DarkModeConceptLab } from "./pages/DarkModeConceptLab";
 import { OntologyStudio } from "./pages/OntologyStudio";
 import { SpecialtyLibrary } from "./pages/SpecialtyLibrary";
 import { SettingsPage } from "./pages/SettingsPage";
+import { ModuleIndexPage } from "./modules/ModuleIndexPage";
 import { PublicDemoApp } from "./public-demo/PublicDemoApp";
+
+const HealthcareCognitionHome = lazy(() =>
+  import("./modules/healthcare-cognition/src").then((module) => ({ default: module.HealthcareCognitionHome }))
+);
 
 const routes = [
   { path: "/", label: "Marketing", icon: Home },
   { path: "/demo", label: "Demo", icon: Activity },
+  { path: "/modules", label: "Modules", icon: Boxes },
+  { path: "/modules/healthcare-cognition", label: "Cognition", icon: BrainCircuit },
   { path: "/app/new-session", label: "New Story", icon: ClipboardList },
   { path: "/app/library", label: "Library", icon: BookOpen },
   { path: "/app/admin", label: "Admin", icon: BarChart3 },
@@ -33,17 +40,39 @@ function currentPath() {
 export default function App() {
   const [path, setPath] = useState(currentPath());
   const activeRoute = useMemo(() => routes.find((route) => route.path === path), [path]);
-  const isPublicDemoRoute = path === "/demo" || path.startsWith("/articles") || path.startsWith("/glossary");
+  const isPublicDemoRoute = path === "/demo" || path.startsWith("/demo/") || path.startsWith("/articles") || path.startsWith("/glossary");
 
   const navigate = (nextPath: string) => {
     window.history.pushState(null, "", nextPath);
     setPath(currentPath());
+    const hash = nextPath.split("#")[1];
+    if (hash) {
+      window.requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" }));
+    }
   };
 
   window.onpopstate = () => setPath(currentPath());
 
   const renderPage = () => {
     if (isPublicDemoRoute) return <PublicDemoApp path={path} onNavigate={navigate} />;
+    if (path === "/modules") return <ModuleIndexPage onNavigate={navigate} />;
+    if (path === "/modules/healthcare-cognition" || path === "/narrativeiq/healthcare-cognition") {
+      return (
+        <Suspense fallback={<div className="min-h-screen bg-canvas p-8 text-ink">Loading Healthcare Cognition Lab...</div>}>
+          <HealthcareCognitionHome onNavigate={navigate} />
+        </Suspense>
+      );
+    }
+    if (path === "/modules/new-patient-story") {
+      return (
+        <>
+          <div className="border-b border-amber-200 bg-amber-50 px-5 py-3 text-center text-sm font-semibold text-amber-900">
+            Internal NarrativeIQ module preview — not intended for public publishing.
+          </div>
+          <AppShell mode="demo" onNavigate={navigate} />
+        </>
+      );
+    }
     if (path === "/lab/dark-mode") return <DarkModeConceptLab onNavigate={navigate} />;
     if (path === "/beta" || path === "/waitlist") return <BetaSignupPage onNavigate={navigate} />;
     if (path === "/app/adoption") return <NurseAdoptionPage />;

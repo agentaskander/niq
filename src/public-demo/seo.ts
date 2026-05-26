@@ -62,10 +62,27 @@ function upsertJsonLd(data: Record<string, unknown>) {
 function websiteJsonLd(url: string) {
   return {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "NiQ",
-    url,
-    description: "Narrative intelligence infrastructure for human-centered AI systems."
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: "NarrativeIQ",
+        url: "https://niq.synkos.net"
+      },
+      {
+        "@type": "WebSite",
+        name: "NarrativeIQ",
+        url,
+        description: "Longitudinal cognition infrastructure for complex human systems."
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "NarrativeIQ",
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        description:
+          "Contextual AI infrastructure for narrative continuity, workflow cognition, semantic coordination, and cross-system context preservation."
+      }
+    ]
   };
 }
 
