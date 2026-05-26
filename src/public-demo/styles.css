@@ -1989,3 +1989,37 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+
+/* Hard fix: article cards compact + read link separation */
+.niq-article-grid,
+.article-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 0.9rem !important;
+}
+
+.niq-article-card,
+.article-card {
+  min-height: unset !important;
+  height: auto !important;
+  padding: 1rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.45rem !important;
+}
+
+.niq-article-card p,
+.niq-article-card span,
+.article-card p,
+.article-card span {
+  margin: 0 !important;
+  line-height: 1.35 !important;
+}
+
+.niq-article-card button,
+.article-card button {
+  display: flex !important;
+  width: max-content !important;
+  margin-top: 0.35rem !important;
+  gap: 0.35rem !important;
+}
