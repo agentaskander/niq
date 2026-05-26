@@ -7,12 +7,11 @@ export const root = process.cwd();
 export const zones = {
   public: {
     dist: "dist-public",
-    allowedRoutes: ["/demo", "/demo/healthcare-cognition"],
+    allowedRoutes: ["/demo", "/demo/healthcare-cognition", "/beta", "/contact", "/request-demo"],
     rootBehavior: "redirect:/demo",
-    forbiddenRoutes: ["/modules", "/beta", "/admin", "/ops", "/app", "/lab"],
+    forbiddenRoutes: ["/modules", "/admin", "/ops", "/app", "/lab"],
     blockedPatterns: [
       { name: "modules route", pattern: /\/modules(?:\/|["'`<\s]|$)/i },
-      { name: "beta route", pattern: /\/beta(?:\/|["'`<\s]|$)/i },
       { name: "new patient story", pattern: /new-patient-story/i },
       { name: "internal marker", pattern: /\binternal\b/i },
       { name: "admin marker", pattern: /\badmin\b/i },
@@ -28,7 +27,7 @@ export const zones = {
   },
   beta: {
     dist: "dist-beta",
-    allowedRoutes: ["/beta", "/beta/healthcare-cognition", "/demo", "/demo/healthcare-cognition"],
+    allowedRoutes: ["/beta", "/beta/healthcare-cognition", "/demo", "/demo/healthcare-cognition", "/contact", "/request-demo"],
     rootBehavior: "redirect:/beta",
     forbiddenRoutes: ["/modules", "/admin", "/ops", "/app/admin", "/app/ontology", "/app/settings", "/lab"],
     blockedPatterns: [

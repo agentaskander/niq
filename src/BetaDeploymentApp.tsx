@@ -3,7 +3,7 @@ import { ArrowRight, LockKeyhole, ShieldCheck } from "lucide-react";
 import { BetaSignupPage } from "./pages/BetaSignupPage";
 import { PublicDemoApp } from "./public-demo/PublicDemoApp";
 
-const betaRoutes = new Set(["/demo", "/demo/healthcare-cognition", "/beta", "/beta/healthcare-cognition"]);
+const betaRoutes = new Set(["/demo", "/demo/healthcare-cognition", "/beta", "/beta/healthcare-cognition", "/contact", "/request-demo"]);
 
 function normalizePath(path: string) {
   return path.replace(/\/$/, "") || "/";

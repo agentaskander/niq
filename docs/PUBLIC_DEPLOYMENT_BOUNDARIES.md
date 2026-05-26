@@ -6,8 +6,12 @@ Allowed:
 
 - `/demo`
 - `/demo/healthcare-cognition`
+- `/beta`
+- `/contact`
+- `/request-demo`
 - Public-safe demo content
 - Sanitized Healthcare Cognition preview
+- lead capture forms without sensitive-data collection
 
 Root behavior:
 

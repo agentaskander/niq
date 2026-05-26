@@ -8,7 +8,10 @@ Allowed:
 - `/beta/healthcare-cognition`
 - `/demo`
 - `/demo/healthcare-cognition`
+- `/contact`
+- `/request-demo`
 - gated preview copy and NDA-oriented product discussion
+- lead capture forms without sensitive-data collection
 
 Root behavior:
 

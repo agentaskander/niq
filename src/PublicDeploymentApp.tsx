@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PublicDemoApp } from "./public-demo/PublicDemoApp";
 
-const publicRoutes = new Set(["/demo", "/demo/healthcare-cognition"]);
+const publicRoutes = new Set(["/demo", "/demo/healthcare-cognition", "/beta", "/contact", "/request-demo"]);
 
 function normalizePath(path: string) {
   const normalized = path.replace(/\/$/, "") || "/";

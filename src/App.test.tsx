@@ -53,8 +53,26 @@ describe("App navigation", () => {
 
     expect(screen.getByRole("heading", { name: "Healthcare Cognition Lab" })).toBeInTheDocument();
     expect(screen.getAllByText(/NarrativeIQ public demos are conceptual and investor-oriented/i).length).toBeGreaterThan(0);
-    expect(screen.getByRole("link", { name: "Join Private Beta" })).toHaveAttribute("href", "https://niq.synkos.net/beta");
+    fireEvent.click(screen.getByRole("button", { name: "Join Private Beta" }));
+    expect(window.location.pathname).toBe("/beta");
+    expect(screen.getByRole("heading", { name: "Join the Narrative Intelligence beta." })).toBeInTheDocument();
     expect(screen.queryByText("Internal Ideation Board — not for public publishing.")).not.toBeInTheDocument();
+  });
+
+  it("renders contact and request demo lead forms", () => {
+    window.history.pushState({}, "", "/contact");
+    const { unmount } = render(<App />);
+
+    expect(screen.getByRole("heading", { name: "Contact the NarrativeIQ team." })).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "niq@synkos.net" })[0]).toHaveAttribute("href", "mailto:niq@synkos.net?subject=NarrativeIQ%20Private%20Beta%20Interest");
+    expect(screen.getByRole("button", { name: /Send request/i }).tagName).toBe("BUTTON");
+
+    unmount();
+    window.history.pushState({}, "", "/request-demo");
+    render(<App />);
+
+    expect(screen.getByRole("heading", { name: "Request a NarrativeIQ demo." })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Demo" }).some((button) => button.className.includes("lead-choice-tile-selected"))).toBe(true);
   });
 
   it("renders the module index route", () => {
@@ -133,7 +151,7 @@ describe("App navigation", () => {
 
     fireEvent.click(screen.getAllByRole("button", { name: /Join Beta/i })[0]);
 
-    expect(screen.getByText("Join the clinical workflow waitlist.")).toBeInTheDocument();
-    expect(screen.getByText("Workflow interest")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Join the Narrative Intelligence beta." })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Private beta" })).toHaveClass("lead-choice-tile-selected");
   });
 });

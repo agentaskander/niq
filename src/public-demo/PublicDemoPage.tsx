@@ -5,13 +5,13 @@ import { articles, type PublicArticle } from "./data/articles";
 import { glossaryTerms, type GlossaryTerm } from "./data/glossary";
 import { continuityMoments, graphClusters, graphEdges, graphNodes, scenarios, type Scenario } from "./data/publicScenarios";
 import { usePublicMeta } from "./seo";
+import { BetaSignupPage } from "../pages/BetaSignupPage";
+import { ContactPage } from "../pages/ContactPage";
 
 type PublicDemoPageProps = {
   path: string;
   onNavigate: (path: string) => void;
 };
-
-const privateBetaHref = new URL("beta", "https://niq.synkos.net/").toString();
 
 const cognitionModules = [
   {
@@ -112,6 +112,8 @@ const healthcareAdvantages = [
 ];
 
 const intelligenceSystems = ["notes", "workflows", "teams", "handoffs", "portals", "research", "operations", "agents"];
+const fallbackEmail = "niq@synkos.net";
+const fallbackMailto = "mailto:niq@synkos.net?subject=NarrativeIQ%20Private%20Beta%20Interest";
 
 const roadmapStages = [
   ["Documentation Automation", "raw capture", "reviewable source context", "keeps capture bounded by human review"],
@@ -129,6 +131,9 @@ export function PublicDemoPage({ path, onNavigate }: PublicDemoPageProps) {
   let content = <HomePage onNavigate={onNavigate} />;
 
   if (path === "/demo/healthcare-cognition") content = <PublicHealthcareCognitionPage onNavigate={onNavigate} />;
+  if (path === "/beta") content = <BetaSignupPage onNavigate={onNavigate} />;
+  if (path === "/contact") content = <ContactPage kind="contact" />;
+  if (path === "/request-demo") content = <ContactPage kind="request-demo" />;
   if (path === "/articles") content = <ArticlesIndex onNavigate={onNavigate} />;
   if (path.startsWith("/articles/")) content = <ArticlePage slug={slug ?? ""} onNavigate={onNavigate} />;
   if (path === "/glossary") content = <GlossaryIndex onNavigate={onNavigate} />;
@@ -156,7 +161,7 @@ function SiteHeader({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps,
         <button onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">Healthcare Lab</button>
         <button onClick={() => onNavigate("/articles")} type="button">Articles</button>
         <button onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
-        <a href="mailto:niq@synkos.net">Contact</a>
+        <button onClick={() => onNavigate("/contact")} type="button">Contact</button>
       </nav>
     </header>
   );
@@ -177,7 +182,8 @@ function SiteFooter({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps,
         <button onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">Healthcare Lab</button>
         <button onClick={() => onNavigate("/articles")} type="button">Articles</button>
         <button onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
-        <a href="mailto:niq@synkos.net">niq@synkos.net</a>
+        <button onClick={() => onNavigate("/contact")} type="button">Contact</button>
+        <span className="niq-fallback-email">Prefer email? <a href={fallbackMailto}>{fallbackEmail}</a></span>
       </div>
     </footer>
   );
@@ -214,8 +220,8 @@ function HomePage({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
             <button className="niq-button niq-ghost" onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">
               Explore Healthcare Cognition Lab
             </button>
-            <button className="niq-button niq-ghost" onClick={() => onNavigate("/demo#investor-roadmap")} type="button">
-              View Investor Roadmap
+            <button className="niq-button niq-ghost" onClick={() => onNavigate("/request-demo")} type="button">
+              Request Demo
             </button>
           </div>
         </div>
@@ -270,7 +276,7 @@ function HomeSections({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
       <ArchitectureSection />
       <ArticlePreview onNavigate={onNavigate} />
       <GlossaryPreview onNavigate={onNavigate} />
-      <FinalCta />
+      <FinalCta onNavigate={onNavigate} />
     </>
   );
 }
@@ -474,9 +480,9 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
         <div className="niq-public-label">
           NarrativeIQ public demos are conceptual and investor-oriented. They do not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.
         </div>
-        <a className="niq-public-beta-cta" href={privateBetaHref}>
+        <button className="niq-public-beta-cta" onClick={() => onNavigate("/beta")} type="button">
           Request Private Beta Access
-        </a>
+        </button>
       </aside>
 
       <section className="niq-public-lab-workspace">
@@ -494,9 +500,9 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
               NarrativeIQ public demos are conceptual and investor-oriented. They do not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.
             </strong>
             <span> Proprietary ontology rules, scoring logic, generation instructions, routing methods, and implementation details are intentionally omitted.</span>
-            <a className="niq-public-beta-cta" href={privateBetaHref}>
+            <button className="niq-public-beta-cta" onClick={() => onNavigate("/beta")} type="button">
               Join Private Beta
-            </a>
+            </button>
           </div>
         </header>
 
@@ -569,7 +575,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
               <p className="niq-eyebrow">Trust/provenance panel</p>
               <h2>Reviewable source posture</h2>
             </div>
-            <div className="niq-public-map-grid">
+            <div className="niq-public-map-grid niq-public-map-grid-compact">
               {provenancePreview.map(([source, status]) => (
                 <article key={source}>
                   <h3>{source}</h3>
@@ -584,7 +590,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
               <p className="niq-eyebrow">Interoperability map</p>
               <h2>Context between systems</h2>
             </div>
-            <div className="niq-public-map-grid">
+            <div className="niq-public-map-grid niq-public-map-grid-compact">
               {interoperabilityPreview.map(([system, payload]) => (
                 <article key={system}>
                   <h3>{system}</h3>
@@ -1011,13 +1017,14 @@ function GlossaryPreview({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">
   );
 }
 
-function FinalCta() {
+function FinalCta({ onNavigate }: Pick<PublicDemoPageProps, "onNavigate">) {
   return (
     <section className="niq-final-cta" data-niq-reveal>
       <Icon name="spark" />
       <h2>Build AI systems that remember the human story.</h2>
       <p>For partnerships, pilots, or investor conversations, contact the NiQ team.</p>
-      <a className="niq-button" href="mailto:niq@synkos.net">niq@synkos.net</a>
+      <button className="niq-button" onClick={() => onNavigate("/request-demo")} type="button">Request Demo</button>
+      <p className="niq-fallback-email">Prefer email? <a href={fallbackMailto}>{fallbackEmail}</a></p>
     </section>
   );
 }

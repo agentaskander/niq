@@ -1,86 +1,147 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
-import { defaultSettings, saveSettings } from "../lib/settings";
-import { listBetaSignups } from "../lib/workflowCapture";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { BetaSignupPage } from "./BetaSignupPage";
+import { ContactPage } from "./ContactPage";
 
-function installStorage() {
-  const store = new Map<string, string>();
-  Object.defineProperty(globalThis, "localStorage", {
-    configurable: true,
-    value: {
-      getItem: (key: string) => store.get(key) ?? null,
-      setItem: (key: string, value: string) => store.set(key, value),
-      removeItem: (key: string) => store.delete(key),
-      clear: () => store.clear()
-    }
-  });
-  Object.defineProperty(globalThis, "crypto", {
-    configurable: true,
-    value: { randomUUID: () => `test-${Math.random().toString(16).slice(2)}` }
-  });
-  saveSettings(defaultSettings);
-}
-
-describe("BetaSignupPage", () => {
+describe("lead capture pages", () => {
   beforeEach(() => {
-    installStorage();
     window.history.pushState({}, "", "/beta");
+    window.sessionStorage.clear();
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
   });
 
-  it("renders waitlist fields and workflow selectors", () => {
+  it("renders private beta form with safety controls and fallback email", () => {
     render(<BetaSignupPage onNavigate={() => undefined} />);
 
-    expect(screen.getByText("Join the clinical workflow waitlist.")).toBeInTheDocument();
-    expect(screen.getByText("Selected role")).toBeInTheDocument();
-    expect(screen.getByText("Workflow interest")).toBeInTheDocument();
-    expect(screen.getByLabelText(/Clinical setting/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Scenario interest/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Organization \/ company/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Join the Narrative Intelligence beta." })).toBeInTheDocument();
+    expect(screen.getByLabelText(/Name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Optional notes/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Request enterprise pilot conversation/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Organization/i)).toBeInTheDocument();
+    expect(screen.queryByLabelText(/Interest type/i)).not.toBeInTheDocument();
+    expect(screen.getByText("Start with a few quick details.")).toBeInTheDocument();
+    expect(screen.queryByText("Optional")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Private beta" })).toHaveClass("lead-choice-tile-selected");
+    expect(document.querySelector('input[name="companyFax"]')).toBeInTheDocument();
+    expect(screen.queryByText(/What best describes you/i)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /Add more context/i }));
+    expect(screen.getByText(/What best describes you/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Healthcare operator" })).toBeInTheDocument();
+    expect(screen.queryByLabelText(/Referral/i)).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/business\/demo interest only/i)).toBeInTheDocument();
+    expect(screen.getByText(/Prefer email/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "niq@synkos.net" })).toHaveAttribute("href", "mailto:niq@synkos.net?subject=NarrativeIQ%20Private%20Beta%20Interest");
+    expect(screen.queryByText(/No cook/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(new RegExp(["VITE", "LEAD_ENDPOINT"].join("_")))).not.toBeInTheDocument();
   });
 
-  it("validates required organization and email before submit", () => {
+  it("personalizes copy and adapts CTA from profile and interest", () => {
     render(<BetaSignupPage onNavigate={() => undefined} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Join Beta/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Add more context/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Healthcare operator" }));
+    expect(screen.getByText("Explore workflow-aware narrative cognition.")).toBeInTheDocument();
 
-    expect(screen.getByText("Enter an organization and valid email to join the beta.")).toBeInTheDocument();
-    expect(listBetaSignups()).toHaveLength(0);
+    fireEvent.click(screen.getByRole("button", { name: "Investor conversation" }));
+    expect(screen.getByRole("button", { name: /Start investor conversation/i })).toBeInTheDocument();
   });
 
-  it("saves workflow-aware beta signup data", () => {
+  it("validates required fields, accepts personal email, and keeps organization optional", () => {
     render(<BetaSignupPage onNavigate={() => undefined} />);
 
-    fireEvent.click(within(screen.getByTestId("beta-role-options")).getByRole("button", { name: "Provider" }));
-    fireEvent.click(within(screen.getByTestId("beta-workflow-options")).getByRole("button", { name: "Telehealth" }));
-    fireEvent.change(screen.getByLabelText(/Clinical setting/i), { target: { value: "telehealth" } });
-    fireEvent.change(screen.getByLabelText(/Organization \/ company/i), { target: { value: "Demo Health" } });
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: "pilot@example.com" } });
-    fireEvent.click(screen.getByLabelText(/Request enterprise pilot conversation/i));
-    fireEvent.click(screen.getByRole("button", { name: /Join Beta/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Request beta access/i }));
+    expect(screen.getByText("Enter your name and a valid email to continue.")).toBeInTheDocument();
 
-    expect(screen.getByText("Beta request saved.")).toBeInTheDocument();
-    expect(listBetaSignups()).toHaveLength(1);
-    expect(listBetaSignups()[0]).toMatchObject({
-      selectedRole: "Provider",
-      workflowInterest: "Telehealth",
-      clinicalSetting: "telehealth",
-      organization: "Demo Health",
-      email: "pilot@example.com",
-      requestEnterprisePilot: true
+    fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: "Alex Demo" } });
+    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: "alex@gmail.com" } });
+    fireEvent.click(screen.getByRole("button", { name: /Request beta access/i }));
+    expect(screen.getByText(/Confirm that this form will not include PHI/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /Add more context/i }));
+    fireEvent.change(screen.getByLabelText(/Anything useful to know/i), { target: { value: "short" } });
+    fireEvent.click(screen.getByRole("button", { name: /Request beta access/i }));
+    expect(screen.getByText("Add a little more context or leave the optional section blank.")).toBeInTheDocument();
+  });
+
+  it("preserves draft in sessionStorage only", () => {
+    const { unmount } = render(<BetaSignupPage onNavigate={() => undefined} />);
+
+    fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: "Alex Session" } });
+    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: "alex.session@gmail.com" } });
+    unmount();
+    render(<BetaSignupPage onNavigate={() => undefined} />);
+
+    expect(screen.getByLabelText(/Name/i)).toHaveValue("Alex Session");
+    expect(screen.getByLabelText(/Email/i)).toHaveValue("alex.session@gmail.com");
+    expect(window.sessionStorage.length).toBeGreaterThan(0);
+  });
+
+  it("submits metadata without localStorage or cookies", async () => {
+    const setItem = vi.fn();
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubEnv(["VITE", "LEAD_ENDPOINT"].join("_"), "/api/leads");
+    vi.stubGlobal("fetch", fetchMock);
+    window.history.pushState({}, "", "/beta?utm_source=linkedin&utm_medium=social&utm_campaign=beta");
+    Object.defineProperty(document, "referrer", { configurable: true, value: "https://example.com/ref" });
+    document.title = "NarrativeIQ Beta";
+    Object.defineProperty(globalThis, "localStorage", {
+      configurable: true,
+      value: { getItem: vi.fn(), setItem, removeItem: vi.fn(), clear: vi.fn() }
     });
-  });
-
-  it("prefills scenario and workflow from demo query params", () => {
-    window.history.pushState({}, "", "/beta?scenario=chest-pain&workflow=provider&pilot=enterprise");
 
     render(<BetaSignupPage onNavigate={() => undefined} />);
+    fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: "Alex Demo" } });
+    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: "alex@gmail.com" } });
+    fireEvent.click(screen.getByRole("button", { name: /Add more context/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Investor" }));
+    fireEvent.click(screen.getByRole("button", { name: "Healthcare cognition" }));
+    fireEvent.click(screen.getByRole("button", { name: "This month" }));
+    fireEvent.change(screen.getByLabelText(/Anything useful to know/i), { target: { value: "Private beta workflow review" } });
+    fireEvent.click(screen.getByLabelText(/business\/demo interest only/i));
+    fireEvent.click(screen.getByRole("button", { name: /Preview healthcare cognition/i }));
 
-    expect(screen.getByLabelText(/Scenario interest/i)).toHaveValue("Chest pain");
-    expect(within(screen.getByTestId("beta-workflow-options")).getByRole("button", { name: "Provider" })).toHaveClass("bg-blue-50", "text-blue-900");
-    expect(screen.getByLabelText(/Request enterprise pilot conversation/i)).toBeChecked();
+    expect(await screen.findByText(/Request received/i)).toBeInTheDocument();
+    const payload = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(payload.sourceApp).toBe("NarrativeIQ");
+    expect(payload.leadId).toMatch(/^narrativeiq-/);
+    expect(payload.organization).toBe("");
+    expect(payload.profileType).toBe("Investor");
+    expect(payload.interestType).toBe("Healthcare cognition");
+    expect(payload.contextInterest).toBeUndefined();
+    expect(payload.timeline).toBe("This month");
+    expect(payload.lifecycleStage).toBe("beta_waitlist");
+    expect(payload.investorLikelihood).toBeGreaterThan(50);
+    expect(payload.metadata).toMatchObject({
+      sourceApp: "NarrativeIQ",
+      sourceDomain: "localhost",
+      sourcePath: "/beta",
+      sourceRoute: "/beta?utm_source=linkedin&utm_medium=social&utm_campaign=beta",
+      referrer: "https://example.com/ref",
+      utmSource: "linkedin",
+      utmMedium: "social",
+      utmCampaign: "beta",
+      ctaSource: "beta-page-primary",
+      pageTitle: "NarrativeIQ Beta"
+    });
+    expect(payload.metadata.submittedAt).toEqual(expect.any(String));
+    expect(payload.metadata.deviceType).toEqual(expect.any(String));
+    expect(payload.metadata.viewportClass).toEqual(expect.any(String));
+    expect(window.sessionStorage.length).toBe(0);
+    expect(setItem).not.toHaveBeenCalled();
+    expect(document.cookie).toBe("");
+  });
+
+  it("renders contact and request demo forms", () => {
+    window.history.pushState({}, "", "/contact");
+    const { unmount } = render(<ContactPage kind="contact" />);
+    expect(screen.getByRole("heading", { name: "Contact the NarrativeIQ team." })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Other" })).toBeInTheDocument();
+
+    unmount();
+    window.sessionStorage.clear();
+    window.history.pushState({}, "", "/request-demo");
+    render(<ContactPage kind="request-demo" />);
+    expect(screen.getByRole("heading", { name: "Request a NarrativeIQ demo." })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Demo" })).toHaveClass("lead-choice-tile-selected");
   });
 });

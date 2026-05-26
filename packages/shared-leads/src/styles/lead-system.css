@@ -1,98 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  color-scheme: light;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f6f8fb;
-  color: #0f172a;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(59, 130, 246, 0.08), transparent 30%),
-    linear-gradient(180deg, #ffffff 0%, #f6f8fb 34%, #f6f8fb 100%);
-  color: #0f172a;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-button {
-  font: inherit;
-}
-
-pre {
-  overflow-wrap: anywhere;
-}
-
-::selection {
-  background: #dbeafe;
-  color: #1e3a8a;
-}
-
-.clinical-card {
-  border: 1px solid #dde5ef;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
-  backdrop-filter: blur(16px);
-}
-
-.section-kicker {
-  color: #2563eb;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.selectable-chip--selected,
-.selectable-chip--selected .selectable-chip__label {
-  color: #0f172a !important;
-  opacity: 1 !important;
-}
-
-.selectable-chip--selected {
-  background: #eaf1f8 !important;
-  border-color: #cbd5e1 !important;
-}
-
-.chip-float {
-  animation: chipFloat 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-@keyframes chipFloat {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.timeline-event {
-  animation: timelineIn 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-@keyframes timelineIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .lead-capture-shell {
   min-height: calc(100vh - 44px);
   overflow-x: hidden;
@@ -121,13 +26,24 @@ pre {
   letter-spacing: 0;
 }
 
-.lead-capture-lede {
+.lead-capture-lede,
+.lead-personalized-copy {
   max-width: 610px;
-  margin-top: 20px;
   color: #475569;
+  overflow-wrap: anywhere;
+}
+
+.lead-capture-lede {
+  margin-top: 20px;
   font-size: clamp(1rem, 1.6vw, 1.16rem);
   line-height: 1.75;
-  overflow-wrap: anywhere;
+}
+
+.lead-personalized-copy {
+  margin-top: 10px;
+  font-size: 0.98rem;
+  font-weight: 750;
+  line-height: 1.6;
 }
 
 .lead-badge,
@@ -246,12 +162,6 @@ pre {
   font-weight: 800;
 }
 
-.lead-field-hint {
-  color: #64748b;
-  font-size: 0.76rem;
-  font-weight: 700;
-}
-
 .lead-form-card label.hidden {
   display: none !important;
 }
@@ -268,7 +178,7 @@ pre {
   font-size: 0.94rem;
   outline: none;
   padding: 13px 14px;
-  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .lead-form-card textarea {
@@ -327,7 +237,7 @@ pre {
 }
 
 .lead-optional-fields-open {
-  max-height: 720px;
+  max-height: 860px;
   opacity: 1;
   transform: translateY(0);
 }
@@ -349,20 +259,23 @@ pre {
 .lead-tile-group div {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7px;
+  align-items: center;
 }
 
 .lead-choice-tile {
-  min-height: 36px;
+  flex: 0 1 auto;
+  min-height: 34px;
   border: 1px solid #dce5f1;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.86);
   color: #334155;
   cursor: pointer;
-  padding: 0 11px;
+  padding: 0 10px;
   font: inherit;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 800;
+  white-space: nowrap;
   transition: border-color 180ms ease, background 180ms ease, color 180ms ease, transform 180ms ease;
 }
 
@@ -379,7 +292,6 @@ pre {
 
 .lead-safety-check {
   display: flex !important;
-  grid-template-columns: none;
   align-items: flex-start;
   gap: 10px !important;
   border-radius: 16px;
@@ -448,7 +360,8 @@ pre {
 .lead-ops-note,
 .lead-muted-note,
 .lead-error,
-.lead-success {
+.lead-success,
+.lead-success-state {
   border-radius: 16px;
   padding: 11px 12px;
   font-size: 0.78rem;
@@ -477,6 +390,32 @@ pre {
   background: #f0fdf4;
   color: #14532d;
   animation: leadSuccessIn 260ms ease both;
+}
+
+.lead-success-state {
+  display: grid;
+  gap: 13px;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.lead-success-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lead-success-links button {
+  min-height: 36px;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #1d4ed8;
+  cursor: pointer;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
 }
 
 @keyframes leadSuccessIn {

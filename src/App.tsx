@@ -12,6 +12,7 @@ import { DarkModeConceptLab } from "./pages/DarkModeConceptLab";
 import { OntologyStudio } from "./pages/OntologyStudio";
 import { SpecialtyLibrary } from "./pages/SpecialtyLibrary";
 import { SettingsPage } from "./pages/SettingsPage";
+import { ContactPage } from "./pages/ContactPage";
 import { ModuleIndexPage } from "./modules/ModuleIndexPage";
 import { PublicDemoApp } from "./public-demo/PublicDemoApp";
 
@@ -40,7 +41,7 @@ function currentPath() {
 export default function App() {
   const [path, setPath] = useState(currentPath());
   const activeRoute = useMemo(() => routes.find((route) => route.path === path), [path]);
-  const isPublicDemoRoute = path === "/demo" || path.startsWith("/demo/") || path.startsWith("/articles") || path.startsWith("/glossary");
+  const isPublicDemoRoute = path === "/demo" || path.startsWith("/demo/") || path.startsWith("/articles") || path.startsWith("/glossary") || path === "/beta" || path === "/contact" || path === "/request-demo";
 
   const navigate = (nextPath: string) => {
     window.history.pushState(null, "", nextPath);
@@ -75,6 +76,8 @@ export default function App() {
     }
     if (path === "/lab/dark-mode") return <DarkModeConceptLab onNavigate={navigate} />;
     if (path === "/beta" || path === "/waitlist") return <BetaSignupPage onNavigate={navigate} />;
+    if (path === "/contact") return <ContactPage kind="contact" />;
+    if (path === "/request-demo") return <ContactPage kind="request-demo" />;
     if (path === "/app/adoption") return <NurseAdoptionPage />;
     if (activeRoute?.path === "/") return <LandingPage onNavigate={navigate} />;
     if (activeRoute?.path === "/app/library") return <SpecialtyLibrary />;

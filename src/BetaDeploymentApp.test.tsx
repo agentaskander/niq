@@ -20,7 +20,7 @@ describe("BetaDeploymentApp", () => {
     render(<BetaDeploymentApp />);
 
     expect(window.location.pathname).toBe("/beta");
-    expect(screen.getByText("Join the clinical workflow waitlist.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Join the Narrative Intelligence beta." })).toBeInTheDocument();
     expect(screen.queryByText("Structured clinical narratives at the speed of care.")).not.toBeInTheDocument();
   });
 
@@ -28,7 +28,7 @@ describe("BetaDeploymentApp", () => {
     window.history.pushState({}, "", "/beta");
     render(<BetaDeploymentApp />);
 
-    expect(screen.getByText("Join the clinical workflow waitlist.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Join the Narrative Intelligence beta." })).toBeInTheDocument();
   });
 
   it("serves the private healthcare beta preview", () => {
