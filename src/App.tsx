@@ -40,7 +40,7 @@ function currentPath() {
 export default function App() {
   const [path, setPath] = useState(currentPath());
   const activeRoute = useMemo(() => routes.find((route) => route.path === path), [path]);
-  const isPublicDemoRoute = path === "/demo" || path.startsWith("/demo/") || path.startsWith("/articles") || path.startsWith("/glossary");
+  const isPublicDemoRoute = path.startsWith("/demo/") || path.startsWith("/articles") || path.startsWith("/glossary");
 
   const navigate = (nextPath: string) => {
     window.history.pushState(null, "", nextPath);
