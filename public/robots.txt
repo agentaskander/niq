@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
+Disallow: /modules
+Disallow: /modules/
+Disallow: /beta
+Disallow: /beta/
+Disallow: /app
+Disallow: /app/
+Disallow: /lab
+Disallow: /lab/
 
 Sitemap: https://niq.synkos.net/sitemap.xml

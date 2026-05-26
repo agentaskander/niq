@@ -1,10 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import "./styles.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const root = ReactDOM.createRoot(document.getElementById("root")!);
+
+if (import.meta.env.VITE_PUBLIC_DEPLOYMENT === "true") {
+  import("./PublicDeploymentApp").then(({ PublicDeploymentApp }) => {
+    root.render(
+      <React.StrictMode>
+        <PublicDeploymentApp />
+      </React.StrictMode>
+    );
+  });
+} else {
+  import("./App").then(({ default: App }) => {
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  });
+}

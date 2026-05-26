@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://niq.synkos.net/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://niq.synkos.net/demo</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://niq.synkos.net/demo/healthcare-cognition</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://niq.synkos.net/articles</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://niq.synkos.net/articles/what-is-narrative-intelligence</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://niq.synkos.net/articles/why-ai-systems-lose-human-context</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://niq.synkos.net/articles/continuity-vs-stateless-ai</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://niq.synkos.net/articles/human-centered-intelligence-infrastructure</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://niq.synkos.net/articles/narrative-memory-in-intelligent-systems</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://niq.synkos.net/articles/structured-context-for-ai-workflows</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://niq.synkos.net/glossary</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/narrative-intelligence</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/context-continuity</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/narrative-memory</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/signal-drift</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/semantic-continuity</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/human-centered-ai</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/context-graph</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/relational-intelligence</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/narrative-state</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/behavioral-context</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://niq.synkos.net/glossary/structured-context</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
