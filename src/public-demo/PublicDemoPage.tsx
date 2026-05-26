@@ -470,7 +470,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
   return (
     <main className="niq-public-lab-shell">
       <aside className="niq-public-lab-sidebar">
-        <button className="niq-public-lab-brand" onClick={() => onNavigate("/healthcare-cognition")} type="button">
+        <button className="niq-public-lab-brand" onClick={() => onNavigate("/")} type="button">
           <span>NiQ</span>
           <strong>Healthcare Cognition</strong>
         </button>
