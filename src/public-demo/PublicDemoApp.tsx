@@ -44,7 +44,7 @@ export function PublicDemoApp({ path, onNavigate }: PublicDemoAppProps) {
 
   return (
     <div className="niq-public-demo">
-      <PublicDemoPage path={path.replace(/\/$/, "") || "/demo"} onNavigate={onNavigate} />
+      <PublicDemoPage path={path.replace(/\/$/, "") || "/demo/healthcare-cognition"} onNavigate={onNavigate} />
     </div>
   );
 }
