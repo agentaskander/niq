@@ -7,6 +7,7 @@ describe("lead capture pages", () => {
   beforeEach(() => {
     window.history.pushState({}, "", "/beta");
     window.sessionStorage.clear();
+    delete (globalThis as { __NIQ_LEAD_ENDPOINT__?: string }).__NIQ_LEAD_ENDPOINT__;
     vi.unstubAllEnvs();
     vi.restoreAllMocks();
   });
@@ -55,7 +56,7 @@ describe("lead capture pages", () => {
     fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: "Alex Demo" } });
     fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: "alex@gmail.com" } });
     fireEvent.click(screen.getByRole("button", { name: /Request beta access/i }));
-    expect(screen.getByText(/Confirm that this form will not include PHI/i)).toBeInTheDocument();
+    expect(screen.getByText(/Confirm that this form will not include sensitive clinical data/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Add more context/i }));
     fireEvent.change(screen.getByLabelText(/Anything useful to know/i), { target: { value: "short" } });
@@ -79,7 +80,7 @@ describe("lead capture pages", () => {
   it("submits metadata without localStorage or cookies", async () => {
     const setItem = vi.fn();
     const fetchMock = vi.fn().mockResolvedValue({ ok: true });
-    vi.stubEnv(["VITE", "LEAD_ENDPOINT"].join("_"), "/api/leads");
+    (globalThis as { __NIQ_LEAD_ENDPOINT__?: string }).__NIQ_LEAD_ENDPOINT__ = "/api/leads";
     vi.stubGlobal("fetch", fetchMock);
     window.history.pushState({}, "", "/beta?utm_source=linkedin&utm_medium=social&utm_campaign=beta");
     Object.defineProperty(document, "referrer", { configurable: true, value: "https://example.com/ref" });

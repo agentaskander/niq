@@ -18,7 +18,7 @@ export const defaultSharedLeadConfig: LeadAppConfig = {
   fallbackSubject: "NarrativeIQ Private Beta Interest",
   defaultInterest: "Private beta",
   trustChips: ["Narrative cognition", "Workflow intelligence", "Governance-aware AI", "Public-safe preview"],
-  proofPoints: ["Investor and design-partner interest", "No PHI or clinical deployment claims"],
+  proofPoints: ["Investor and design-partner interest", "No clinical deployment claims"],
   successLinks: [
     { label: "Explore Healthcare Cognition", path: "/demo/healthcare-cognition" },
     { label: "View Public Modules", path: "/demo#public-module-previews" },

@@ -39,8 +39,7 @@ function fallbackMailto(email: string, subject: string) {
 }
 
 function leadEndpoint() {
-  const meta = import.meta as unknown as { env?: Record<string, string | undefined> };
-  return meta.env?.[["VITE", "LEAD_ENDPOINT"].join("_")];
+  return (globalThis as { __NIQ_LEAD_ENDPOINT__?: string }).__NIQ_LEAD_ENDPOINT__;
 }
 
 function draftKey(sourceApp: string, sourceRoute: string) {
@@ -126,7 +125,7 @@ export function ProgressiveLeadForm({
       return;
     }
     if (!safetyAccepted) {
-      setError("Confirm that this form will not include PHI, clinical data, secrets, passwords, or confidential customer data.");
+      setError("Confirm that this form will not include sensitive clinical data, passwords, or confidential customer data.");
       return;
     }
 
@@ -243,7 +242,7 @@ export function ProgressiveLeadForm({
 
               <label className="lead-safety-check">
                 <input checked={safetyAccepted} onChange={(event) => setSafetyAccepted(event.target.checked)} type="checkbox" />
-                <span>Business/demo interest only. Do not submit PHI, passwords, or confidential customer data.</span>
+                <span>Business/demo interest only. Do not submit sensitive clinical data, passwords, or confidential customer data.</span>
               </label>
 
               {error && <p className="lead-error">{error}</p>}

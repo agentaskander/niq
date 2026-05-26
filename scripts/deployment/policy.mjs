@@ -114,7 +114,8 @@ export function writeManifest(zone, extra = {}) {
     deployZoneEnv: process.env.VITE_DEPLOY_ZONE ?? zone,
     allowedRoutes: policy.allowedRoutes,
     rootBehavior: policy.rootBehavior ?? "zone-owned",
-    forbiddenRoutes: policy.forbiddenRoutes,
+    routePolicy: policy.forbiddenRoutes.length > 0 ? "restricted" : "unrestricted",
+    forbiddenRouteCount: policy.forbiddenRoutes.length,
     artifactHash: hashDirectory(distRoot),
     files: files.map((file) => ({
       path: relative(root, file),

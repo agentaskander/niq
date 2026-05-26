@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1 --port 5184 --strictPort",
     "dev:internal": "VITE_DEPLOY_ZONE=internal VITE_INTERNAL_DEPLOYMENT=true vite --host 127.0.0.1 --port 5184 --strictPort",
     "build": "npm run build:internal",
-    "build:public": "tsc -b && VITE_DEPLOY_ZONE=public VITE_PUBLIC_DEPLOYMENT=true vite build --outDir dist-public",
+    "build:public": "tsc -b && VITE_DEPLOY_ZONE=public VITE_PUBLIC_DEPLOYMENT=true vite build --outDir dist-public && node scripts/sanitize-public-artifact.mjs",
     "build:beta": "tsc -b && VITE_DEPLOY_ZONE=beta VITE_BETA_DEPLOYMENT=true vite build --outDir dist-beta",
     "build:internal": "tsc -b && VITE_DEPLOY_ZONE=internal VITE_INTERNAL_DEPLOYMENT=true vite build --outDir dist-internal",
     "lint": "eslint .",

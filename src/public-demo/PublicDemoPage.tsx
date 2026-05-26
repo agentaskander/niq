@@ -174,7 +174,7 @@ function SiteFooter({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps,
         <strong>NiQ</strong>
         <p>Longitudinal cognition infrastructure for complex human systems.</p>
         <p className="niq-footer-note">
-          NarrativeIQ public demos are conceptual and investor-oriented. They do not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.
+          NarrativeIQ public demos are conceptual and investor-oriented. They do not contain sensitive clinical data, clinical decisions, care recommendations, or deployment claims.
         </p>
       </div>
       <div className="niq-footer-links">
@@ -418,7 +418,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
       title: "Ambulatory follow-up preview",
       setting: "Outpatient workflow sample",
       fragments: ["forms readiness", "callback summary", "scheduling friction"],
-      outcome: "A team can separate confirmed context from unresolved administrative questions."
+      outcome: "A team can separate confirmed context from unresolved operational questions."
     },
     {
       title: "Specialty packet preview",
@@ -478,7 +478,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
           <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>
         ))}
         <div className="niq-public-label">
-          NarrativeIQ public demos are conceptual and investor-oriented. They do not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.
+          NarrativeIQ public demos are conceptual and investor-oriented. They do not contain sensitive clinical data, clinical decisions, care recommendations, or deployment claims.
         </div>
         <button className="niq-public-beta-cta" onClick={() => onNavigate("/beta")} type="button">
           Request Private Beta Access
@@ -497,7 +497,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
           </div>
           <div className="niq-public-boundary-note">
             <strong>
-              NarrativeIQ public demos are conceptual and investor-oriented. They do not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.
+              NarrativeIQ public demos are conceptual and investor-oriented. They do not contain sensitive clinical data, clinical decisions, care recommendations, or deployment claims.
             </strong>
             <span> Proprietary ontology rules, scoring logic, generation instructions, routing methods, and implementation details are intentionally omitted.</span>
             <button className="niq-public-beta-cta" onClick={() => onNavigate("/beta")} type="button">
@@ -646,7 +646,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
             Healthcare workflow intelligence is a useful proof environment because context often fragments across notes,
             handoffs, portals, teams, and time. NarrativeIQ demonstrates how a longitudinal cognition layer can preserve
             operational meaning, semantic healthcare coordination, trust posture, and cross-system context without
-            making diagnosis, treatment, or deployment claims.
+            making clinical decision, care recommendation, or deployment claims.
           </p>
         </section>
       </section>
@@ -701,8 +701,8 @@ function IntelligenceBetweenSystems() {
       <div className="niq-section-kicker">
         <p className="niq-eyebrow">Cross-system cognition</p>
         <h2>The Intelligence Between Systems</h2>
-        <p>The future moat is not the note. It is the cognition layer around the note.</p>
-        <p>The future moat is not the chart. It is the cognition layer between charts.</p>
+        <p>The future advantage is not the note. It is the cognition layer around the note.</p>
+        <p>The future advantage is not the chart. It is the cognition layer between charts.</p>
         <p>The same architecture applies wherever complex systems lose context across time.</p>
       </div>
       <div className="niq-system-strip">
