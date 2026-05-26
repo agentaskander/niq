@@ -1,0 +1,38 @@
+name: Internal Validation
+
+on:
+  push:
+    branches:
+      - main
+      - cicd/three-zone-governance
+  pull_request:
+
+jobs:
+  validate-internal:
+    name: Validate internal build only
+    runs-on: ubuntu-latest
+    env:
+      VITE_DEPLOY_ZONE: internal
+      VITE_INTERNAL_DEPLOYMENT: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build:internal
+      - run: npm run audit:internal
+      - name: Validation summary
+        run: |
+          echo "### Internal validation" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Zone: internal" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Output: dist-internal" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Deployment: blocked by governance" >> "$GITHUB_STEP_SUMMARY"
+          cat dist-internal/deployment-manifest.json >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-internal-validation
+          path: dist-internal

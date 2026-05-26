@@ -1,0 +1,42 @@
+name: Public Deploy Governance
+
+on:
+  push:
+    branches:
+      - main
+      - cicd/three-zone-governance
+  pull_request:
+
+jobs:
+  validate-public:
+    name: Validate public artifact
+    runs-on: ubuntu-latest
+    env:
+      VITE_DEPLOY_ZONE: public
+      VITE_PUBLIC_DEPLOYMENT: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build:public
+      - run: npm run audit:public
+      - run: node scripts/validate-routes.mjs public
+      - run: node scripts/validate-secrets.mjs public
+      - name: Deployment summary
+        run: |
+          echo "### Public deployment governance" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Zone: public" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Output: dist-public" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Allowed routes: /demo, /demo/healthcare-cognition" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Root behavior: / redirects to /demo" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Forbidden routes: /modules/*, /beta/*, /admin/*, /ops/*" >> "$GITHUB_STEP_SUMMARY"
+          cat dist-public/deployment-manifest.json >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-public
+          path: dist-public

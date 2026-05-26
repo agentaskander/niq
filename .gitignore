@@ -2,6 +2,10 @@ node_modules
 .vite
 .next
 dist
+dist-public
+dist-beta
+dist-internal
+.deployment-artifacts
 build
 .env
 .env.local

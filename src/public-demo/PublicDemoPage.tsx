@@ -485,7 +485,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
           <div className="niq-public-boundary-note">
             <strong>This public preview uses demo data only.</strong>
             <span> It does not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.</span>
-            <span> Proprietary ontology rules, scoring logic, prompts, routing policies, and implementation internals are intentionally omitted.</span>
+            <span> Proprietary ontology rules, scoring logic, generation instructions, routing methods, and implementation details are intentionally omitted.</span>
           </div>
         </header>
 
@@ -538,7 +538,7 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
                 <i><b style={{ width: `${value}%` }} /></i>
               </div>
             ))}
-            <p className="niq-muted-note">Representative preview metrics, not scoring formulas.</p>
+            <p className="niq-muted-note">Representative preview metrics, not calculation rules.</p>
           </section>
 
           <section className="niq-public-app-panel niq-public-ontology-panel" id="ontology">
@@ -1051,15 +1051,15 @@ function ArticlePage({ slug, onNavigate }: { slug: string; onNavigate: (path: st
             <p>{section.body}</p>
           </section>
         ))}
-        <InternalLinks current={article.slug} onNavigate={onNavigate} />
+        <RelatedReadingLinks current={article.slug} onNavigate={onNavigate} />
       </article>
     </main>
   );
 }
 
-function InternalLinks({ current, onNavigate }: { current: string; onNavigate: (path: string) => void }) {
+function RelatedReadingLinks({ current, onNavigate }: { current: string; onNavigate: (path: string) => void }) {
   return (
-    <aside className="niq-internal-links">
+    <aside className="niq-related-reading-links">
       <h3>Continue reading</h3>
       {articles.filter((article) => article.slug !== current).slice(0, 3).map((article) => (
         <button key={article.slug} onClick={() => onNavigate(`/articles/${article.slug}`)} type="button">

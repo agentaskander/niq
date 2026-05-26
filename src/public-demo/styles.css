@@ -1622,13 +1622,13 @@
   line-height: 1.85;
 }
 
-.niq-internal-links {
+.niq-related-reading-links {
   margin-top: 54px;
   border-top: 1px solid var(--niq-line);
   padding-top: 26px;
 }
 
-.niq-internal-links button {
+.niq-related-reading-links button {
   display: flex;
   align-items: center;
   gap: 8px;

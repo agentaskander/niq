@@ -1,25 +1,30 @@
 import { useState } from "react";
 import { PublicDemoApp } from "./public-demo/PublicDemoApp";
 
-const publicRoutes = new Set(["/", "/demo", "/demo/healthcare-cognition"]);
+const publicRoutes = new Set(["/demo", "/demo/healthcare-cognition"]);
 
 function normalizePath(path: string) {
   const normalized = path.replace(/\/$/, "") || "/";
   return normalized;
 }
 
-function publicDemoPath(path: string) {
-  return path === "/" ? "/demo" : path;
+function initialPublicPath() {
+  const path = normalizePath(window.location.pathname);
+  if (path === "/") {
+    window.history.replaceState(null, "", "/demo");
+    return "/demo";
+  }
+  return path;
 }
 
 export function PublicDeploymentApp() {
-  const [path, setPath] = useState(normalizePath(window.location.pathname));
+  const [path, setPath] = useState(initialPublicPath);
   const isAllowed = publicRoutes.has(path);
 
   const navigate = (nextPath: string) => {
     const [rawPath] = nextPath.split("#");
     const normalized = normalizePath(rawPath);
-    const target = publicRoutes.has(normalized) ? nextPath : "/demo";
+    const target = normalized === "/" || publicRoutes.has(normalized) ? nextPath.replace(/^\/$/, "/demo") : "/demo";
     window.history.pushState(null, "", target);
     setPath(normalizePath(window.location.pathname));
   };
@@ -47,5 +52,5 @@ export function PublicDeploymentApp() {
     );
   }
 
-  return <PublicDemoApp path={publicDemoPath(path)} onNavigate={navigate} />;
+  return <PublicDemoApp path={path} onNavigate={navigate} />;
 }

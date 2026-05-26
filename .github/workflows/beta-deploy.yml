@@ -1,0 +1,42 @@
+name: Beta Deploy Governance
+
+on:
+  push:
+    branches:
+      - main
+      - cicd/three-zone-governance
+  pull_request:
+
+jobs:
+  validate-beta:
+    name: Validate beta artifact
+    runs-on: ubuntu-latest
+    env:
+      VITE_DEPLOY_ZONE: beta
+      VITE_BETA_DEPLOYMENT: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build:beta
+      - run: npm run audit:beta
+      - run: node scripts/validate-routes.mjs beta
+      - run: node scripts/validate-secrets.mjs beta
+      - name: Deployment summary
+        run: |
+          echo "### Beta deployment governance" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Zone: beta" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Output: dist-beta" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Allowed routes: /beta, /beta/healthcare-cognition, /demo, /demo/healthcare-cognition" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Root behavior: / redirects to /beta" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Forbidden routes: /modules/*, /admin/*, /ops/*, /app/admin/*" >> "$GITHUB_STEP_SUMMARY"
+          cat dist-beta/deployment-manifest.json >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-beta
+          path: dist-beta
