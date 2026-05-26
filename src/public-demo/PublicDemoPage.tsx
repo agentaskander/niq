@@ -151,7 +151,7 @@ export function PublicDemoPage({ path, onNavigate }: PublicDemoPageProps) {
 function SiteHeader({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps, "onNavigate"> & { isLabPage?: boolean }) {
   return (
     <header className={`niq-topbar${isLabPage ? " niq-topbar-light" : ""}`}>
-      <button className="niq-brand" onClick={() => onNavigate("/healthcare-cognition")} type="button" aria-label="NiQ public demo home">
+      <button className="niq-brand" onClick={() => onNavigate("/")} type="button" aria-label="NiQ public demo home">
         <span className="niq-brand-mark">NiQ</span>
         <span>Narrative Intelligence</span>
       </button>
