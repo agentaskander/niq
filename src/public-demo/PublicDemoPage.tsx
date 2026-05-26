@@ -305,7 +305,8 @@ function ModuleArchitectureSection({ onNavigate }: Pick<PublicDemoPageProps, "on
             <span>{module.layer}</span>
             <strong>{module.compound}</strong>
             <button onClick={() => onNavigate(module.path)} type="button">
-              Explore layer <Icon name="arrow" />
+              {module.title === "Healthcare Cognition" ? "Open Healthcare Lab" : module.title === "Research Continuity" ? "Open Articles" : "View Preview"}
+              <Icon name="arrow" />
             </button>
           </article>
         ))}
