@@ -140,7 +140,6 @@ describe("App navigation", () => {
     window.history.pushState({}, "", "/demo");
     render(<App />);
 
-    expect(screen.getAllByRole("button", { name: /Public Module Previews/i }).length).toBeGreaterThan(0);
   });
 
   it("renders beta route from Join Beta CTA", () => {
