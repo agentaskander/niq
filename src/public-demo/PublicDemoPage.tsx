@@ -304,10 +304,14 @@ function ModuleArchitectureSection({ onNavigate }: Pick<PublicDemoPageProps, "on
             <h3>{module.title}</h3>
             <span>{module.layer}</span>
             <strong>{module.compound}</strong>
-            <button onClick={() => onNavigate(module.path)} type="button">
-              {module.title === "Healthcare Cognition" ? "Open Healthcare Lab" : module.title === "Research Continuity" ? "Open Articles" : "View Preview"}
-              <Icon name="arrow" />
-            </button>
+            {module.title === "Healthcare Cognition" || module.title === "Research Continuity" ? (
+              <button onClick={() => onNavigate(module.path)} type="button">
+                {module.title === "Healthcare Cognition" ? "Open Healthcare Lab" : "Open Articles"}
+                <Icon name="arrow" />
+              </button>
+            ) : (
+              <span className="niq-preview-pill">Preview shown here</span>
+            )}
           </article>
         ))}
       </div>
