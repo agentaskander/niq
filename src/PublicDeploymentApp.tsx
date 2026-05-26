@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PublicDemoApp } from "./public-demo/PublicDemoApp";
 
-const publicRoutes = new Set(["/demo", "/demo/healthcare-cognition", "/beta", "/contact", "/request-demo"]);
+const publicRoutes = new Set(["/", "/healthcare-cognition", "/articles", "/glossary", "/beta", "/contact", "/request-demo"]);
 
 function normalizePath(path: string) {
   const normalized = path.replace(/\/$/, "") || "/";
@@ -11,22 +11,28 @@ function normalizePath(path: string) {
 function initialPublicPath() {
   const path = normalizePath(window.location.pathname);
   if (path === "/") {
-    window.history.replaceState(null, "", "/demo");
-    return "/demo";
+    return "/";
   }
   return path;
 }
 
 export function PublicDeploymentApp() {
   const [path, setPath] = useState(initialPublicPath);
-  const isAllowed = publicRoutes.has(path);
+  const isAllowed = publicRoutes.has(path) || path.startsWith("/articles/") || path.startsWith("/glossary/");
 
   const navigate = (nextPath: string) => {
     const [rawPath] = nextPath.split("#");
     const normalized = normalizePath(rawPath);
-    const target = normalized === "/" || publicRoutes.has(normalized) ? nextPath.replace(/^\/$/, "/demo") : "/demo";
+    const target = publicRoutes.has(normalized) || normalized.startsWith("/articles/") || normalized.startsWith("/glossary/") ? nextPath : "/";
     window.history.pushState(null, "", target);
     setPath(normalizePath(window.location.pathname));
+
+    const hash = target.includes("#") ? target.split("#").pop() : "";
+    if (hash) {
+      window.requestAnimationFrame(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+      });
+    }
   };
 
   window.onpopstate = () => setPath(normalizePath(window.location.pathname));
@@ -42,10 +48,10 @@ export function PublicDeploymentApp() {
           </p>
           <button
             className="mt-6 inline-flex items-center justify-center rounded-2xl bg-blue px-5 py-3 text-sm font-semibold text-white shadow-lift hover:bg-blue/90"
-            onClick={() => navigate("/demo")}
+            onClick={() => navigate("/")}
             type="button"
           >
-            Open public demo
+            Open NiQ
           </button>
         </section>
       </main>
