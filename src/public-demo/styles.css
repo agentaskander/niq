@@ -599,6 +599,23 @@
   font-weight: 800;
 }
 
+.niq-public-beta-cta {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: 999px;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  padding: 0 16px;
+  text-decoration: none;
+}
+
 .niq-public-boundary-note {
   max-width: 760px;
   border: 1px solid rgba(244, 199, 107, 0.28);
@@ -1129,11 +1146,33 @@
 
 .niq-public-lab-sidebar .niq-public-label,
 .niq-public-lab-shell .niq-public-label {
-  border-color: #bbf7d0;
+  border-color: #bfdbfe;
   border-radius: 1.25rem;
-  background: #ecfdf5;
-  color: #166534;
+  background: #eff6ff;
+  color: #1f2937;
   line-height: 1.45;
+}
+
+.niq-public-lab-sidebar .niq-public-beta-cta {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.niq-public-boundary-note {
+  display: grid;
+  gap: 10px;
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #1f2937;
+}
+
+.niq-public-boundary-note strong,
+.niq-public-boundary-note span {
+  color: #1f2937;
+}
+
+.niq-public-boundary-note .niq-public-beta-cta {
+  width: fit-content;
 }
 
 .niq-public-lab-header,
@@ -1180,10 +1219,10 @@
 }
 
 .niq-public-lab-shell .niq-public-boundary-note {
-  border-color: #fed7aa;
+  border-color: #bfdbfe;
   border-radius: 1.5rem;
-  background: #fff7ed;
-  color: #9a3412;
+  background: #eff6ff;
+  color: #1f2937;
 }
 
 .niq-public-lab-shell .niq-public-lab-metrics strong,

@@ -11,6 +11,8 @@ type PublicDemoPageProps = {
   onNavigate: (path: string) => void;
 };
 
+const privateBetaHref = new URL("beta", "https://niq.synkos.net/").toString();
+
 const cognitionModules = [
   {
     title: "Healthcare Cognition",
@@ -154,7 +156,7 @@ function SiteHeader({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps,
         <button onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">Healthcare Lab</button>
         <button onClick={() => onNavigate("/articles")} type="button">Articles</button>
         <button onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
-        <a href="mailto:hello@agentaskander.com">Contact</a>
+        <a href="mailto:niq@synkos.net">Contact</a>
       </nav>
     </header>
   );
@@ -175,7 +177,7 @@ function SiteFooter({ onNavigate, isLabPage = false }: Pick<PublicDemoPageProps,
         <button onClick={() => onNavigate("/demo/healthcare-cognition")} type="button">Healthcare Lab</button>
         <button onClick={() => onNavigate("/articles")} type="button">Articles</button>
         <button onClick={() => onNavigate("/glossary")} type="button">Glossary</button>
-        <a href="mailto:hello@agentaskander.com">hello@agentaskander.com</a>
+        <a href="mailto:niq@synkos.net">niq@synkos.net</a>
       </div>
     </footer>
   );
@@ -469,7 +471,12 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
         {["Overview", "Cases", "Timeline", "Entropy", "Ontology", "Provenance", "Roadmap"].map((item) => (
           <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>
         ))}
-        <div className="niq-public-label">Public preview. No PHI, diagnosis, treatment recommendation, or clinical deployment claim.</div>
+        <div className="niq-public-label">
+          NarrativeIQ public demos are conceptual and investor-oriented. They do not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.
+        </div>
+        <a className="niq-public-beta-cta" href={privateBetaHref}>
+          Request Private Beta Access
+        </a>
       </aside>
 
       <section className="niq-public-lab-workspace">
@@ -483,9 +490,13 @@ function PublicHealthcareCognitionPage({ onNavigate }: Pick<PublicDemoPageProps,
             </p>
           </div>
           <div className="niq-public-boundary-note">
-            <strong>This public preview uses demo data only.</strong>
-            <span> It does not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.</span>
+            <strong>
+              NarrativeIQ public demos are conceptual and investor-oriented. They do not contain PHI, diagnosis, treatment recommendations, or clinical deployment claims.
+            </strong>
             <span> Proprietary ontology rules, scoring logic, generation instructions, routing methods, and implementation details are intentionally omitted.</span>
+            <a className="niq-public-beta-cta" href={privateBetaHref}>
+              Join Private Beta
+            </a>
           </div>
         </header>
 
@@ -1006,7 +1017,7 @@ function FinalCta() {
       <Icon name="spark" />
       <h2>Build AI systems that remember the human story.</h2>
       <p>For partnerships, pilots, or investor conversations, contact the NiQ team.</p>
-      <a className="niq-button" href="mailto:hello@agentaskander.com">hello@agentaskander.com</a>
+      <a className="niq-button" href="mailto:niq@synkos.net">niq@synkos.net</a>
     </section>
   );
 }

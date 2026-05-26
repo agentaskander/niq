@@ -30,7 +30,8 @@ describe("PublicDeploymentApp", () => {
     render(<PublicDeploymentApp />);
 
     expect(screen.getByRole("heading", { name: "Healthcare Cognition Lab" })).toBeInTheDocument();
-    expect(screen.getByText("Public preview. No PHI, diagnosis, treatment recommendation, or clinical deployment claim.")).toBeInTheDocument();
+    expect(screen.getAllByText(/NarrativeIQ public demos are conceptual and investor-oriented/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole("link", { name: "Join Private Beta" })).toHaveAttribute("href", "https://niq.synkos.net/beta");
   });
 
   it("blocks internal module routes from the public deployment registry", () => {
