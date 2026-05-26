@@ -1,30 +1,30 @@
 import { useState } from "react";
 import { PublicDemoApp } from "./public-demo/PublicDemoApp";
 
-const PUBLIC_HOME_PATH = "/demo/healthcare-cognition";
-const publicRoutes = new Set(["/", PUBLIC_HOME_PATH, "/articles", "/glossary", "/contact", "/request-demo"]);
+const publicRoutes = new Set(["/demo", "/demo/healthcare-cognition", "/beta", "/contact", "/request-demo"]);
 
 function normalizePath(path: string) {
   const normalized = path.replace(/\/$/, "") || "/";
   return normalized;
 }
 
-function publicDemoPath(path: string) {
-  return path === "/" ? PUBLIC_HOME_PATH : path;
-}
-
-function isPublicRoute(path: string) {
-  return publicRoutes.has(path) || path.startsWith("/articles/") || path.startsWith("/glossary/");
+function initialPublicPath() {
+  const path = normalizePath(window.location.pathname);
+  if (path === "/") {
+    window.history.replaceState(null, "", "/demo");
+    return "/demo";
+  }
+  return path;
 }
 
 export function PublicDeploymentApp() {
-  const [path, setPath] = useState(normalizePath(window.location.pathname));
-  const isAllowed = isPublicRoute(path);
+  const [path, setPath] = useState(initialPublicPath);
+  const isAllowed = publicRoutes.has(path);
 
   const navigate = (nextPath: string) => {
     const [rawPath] = nextPath.split("#");
     const normalized = normalizePath(rawPath);
-    const target = isPublicRoute(normalized) ? nextPath : PUBLIC_HOME_PATH;
+    const target = normalized === "/" || publicRoutes.has(normalized) ? nextPath.replace(/^\/$/, "/demo") : "/demo";
     window.history.pushState(null, "", target);
     setPath(normalizePath(window.location.pathname));
   };
@@ -42,7 +42,7 @@ export function PublicDeploymentApp() {
           </p>
           <button
             className="mt-6 inline-flex items-center justify-center rounded-2xl bg-blue px-5 py-3 text-sm font-semibold text-white shadow-lift hover:bg-blue/90"
-            onClick={() => navigate(PUBLIC_HOME_PATH)}
+            onClick={() => navigate("/demo")}
             type="button"
           >
             Open public demo
@@ -52,5 +52,5 @@ export function PublicDeploymentApp() {
     );
   }
 
-  return <PublicDemoApp path={publicDemoPath(path)} onNavigate={navigate} />;
+  return <PublicDemoApp path={path} onNavigate={navigate} />;
 }

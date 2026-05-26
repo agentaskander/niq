@@ -3,8 +3,7 @@ import { ArrowRight, LockKeyhole, ShieldCheck } from "lucide-react";
 import { BetaSignupPage } from "./pages/BetaSignupPage";
 import { PublicDemoApp } from "./public-demo/PublicDemoApp";
 
-const PUBLIC_HOME_PATH = "/demo/healthcare-cognition";
-const betaRoutes = new Set([PUBLIC_HOME_PATH, "/beta", "/beta/healthcare-cognition", "/contact", "/request-demo"]);
+const betaRoutes = new Set(["/demo", "/demo/healthcare-cognition", "/beta", "/beta/healthcare-cognition", "/contact", "/request-demo"]);
 
 function normalizePath(path: string) {
   return path.replace(/\/$/, "") || "/";
@@ -26,7 +25,7 @@ export function BetaDeploymentApp() {
   const navigate = (nextPath: string) => {
     const [rawPath] = nextPath.split("#");
     const normalized = normalizePath(rawPath);
-    const target = normalized === "/" ? "/beta" : betaRoutes.has(normalized) ? nextPath : PUBLIC_HOME_PATH;
+    const target = normalized === "/" ? "/beta" : betaRoutes.has(normalized) ? nextPath : "/demo";
     window.history.pushState(null, "", target);
     setPath(normalizePath(window.location.pathname));
   };
