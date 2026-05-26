@@ -28,11 +28,13 @@ export function PublicDeploymentApp() {
     setPath(normalizePath(window.location.pathname));
 
     const hash = target.includes("#") ? target.split("#").pop() : "";
-    if (hash) {
-      window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      if (hash) {
         document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
-      });
-    }
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
   };
 
   window.onpopstate = () => setPath(normalizePath(window.location.pathname));
