@@ -12,6 +12,7 @@ import { DarkModeConceptLab } from "./pages/DarkModeConceptLab";
 import { OntologyStudio } from "./pages/OntologyStudio";
 import { SpecialtyLibrary } from "./pages/SpecialtyLibrary";
 import { SettingsPage } from "./pages/SettingsPage";
+import { PublicDemoApp } from "./public-demo/PublicDemoApp";
 
 const routes = [
   { path: "/", label: "Marketing", icon: Home },
@@ -32,6 +33,7 @@ function currentPath() {
 export default function App() {
   const [path, setPath] = useState(currentPath());
   const activeRoute = useMemo(() => routes.find((route) => route.path === path), [path]);
+  const isPublicDemoRoute = path === "/demo" || path.startsWith("/articles") || path.startsWith("/glossary");
 
   const navigate = (nextPath: string) => {
     window.history.pushState(null, "", nextPath);
@@ -41,6 +43,7 @@ export default function App() {
   window.onpopstate = () => setPath(currentPath());
 
   const renderPage = () => {
+    if (isPublicDemoRoute) return <PublicDemoApp path={path} onNavigate={navigate} />;
     if (path === "/lab/dark-mode") return <DarkModeConceptLab onNavigate={navigate} />;
     if (path === "/beta" || path === "/waitlist") return <BetaSignupPage onNavigate={navigate} />;
     if (path === "/app/adoption") return <NurseAdoptionPage />;
@@ -57,7 +60,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-canvas text-ink">
       {renderPage()}
-      <nav className="fixed bottom-3 left-1/2 z-50 w-[calc(100%-28px)] max-w-3xl -translate-x-1/2 overflow-x-auto rounded-[1.35rem] border border-white/70 bg-white/[0.78] px-1.5 py-1.5 shadow-[0_14px_38px_rgba(15,23,42,0.14)] backdrop-blur-[18px]">
+      {!isPublicDemoRoute && <nav className="fixed bottom-3 left-1/2 z-50 w-[calc(100%-28px)] max-w-3xl -translate-x-1/2 overflow-x-auto rounded-[1.35rem] border border-white/70 bg-white/[0.78] px-1.5 py-1.5 shadow-[0_14px_38px_rgba(15,23,42,0.14)] backdrop-blur-[18px]">
         <div className="flex min-w-max items-center justify-between gap-0.5">
           {routes.map((route) => {
             const Icon = route.icon;
@@ -81,7 +84,7 @@ export default function App() {
             );
           })}
         </div>
-      </nav>
+      </nav>}
     </div>
   );
 }

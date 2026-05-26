@@ -1,0 +1,878 @@
+.niq-public-demo {
+  --niq-bg: #071011;
+  --niq-panel: rgba(14, 28, 30, 0.72);
+  --niq-line: rgba(210, 232, 224, 0.16);
+  --niq-text: #eef5f0;
+  --niq-muted: #9fb2ad;
+  --niq-gold: #f4c76b;
+  --niq-aqua: #75d0c2;
+  --niq-coral: #ef9f88;
+  --niq-shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(117, 208, 194, 0.22), transparent 32rem),
+    radial-gradient(circle at 85% 12%, rgba(244, 199, 107, 0.14), transparent 28rem),
+    linear-gradient(180deg, #071011 0%, #0b171a 42%, #071011 100%);
+  color: var(--niq-text);
+}
+
+.niq-public-demo button,
+.niq-public-demo a {
+  font: inherit;
+}
+
+.niq-public-demo button {
+  cursor: pointer;
+}
+
+.niq-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px clamp(20px, 4vw, 64px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(7, 16, 17, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.niq-brand,
+.niq-topbar nav,
+.niq-footer-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.niq-brand {
+  border: 0;
+  background: transparent;
+  color: var(--niq-text);
+  font-weight: 800;
+}
+
+.niq-brand-mark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(244, 199, 107, 0.52);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(244, 199, 107, 0.22), rgba(117, 208, 194, 0.12));
+  color: var(--niq-gold);
+}
+
+.niq-topbar nav button,
+.niq-topbar nav a,
+.niq-footer button,
+.niq-footer a {
+  border: 0;
+  background: transparent;
+  color: var(--niq-muted);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.niq-topbar nav button:hover,
+.niq-topbar nav a:hover,
+.niq-footer button:hover,
+.niq-footer a:hover {
+  color: var(--niq-text);
+}
+
+.niq-public-demo h1,
+.niq-public-demo h2,
+.niq-public-demo h3,
+.niq-public-demo h4,
+.niq-public-demo p {
+  margin-top: 0;
+  overflow-wrap: break-word;
+}
+
+.niq-hero {
+  position: relative;
+  display: grid;
+  width: 100%;
+  max-width: 100vw;
+  min-height: 96vh;
+  grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.76fr);
+  gap: clamp(28px, 5vw, 70px);
+  align-items: center;
+  overflow: hidden;
+  padding: 120px clamp(22px, 6vw, 92px) 72px;
+}
+
+.niq-hero::before,
+.niq-hero-bg {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.niq-hero::before {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 50% 28%, black, transparent 75%);
+}
+
+.niq-hero-bg {
+  background:
+    radial-gradient(circle at 48% 42%, rgba(117, 208, 194, 0.22), transparent 24rem),
+    conic-gradient(from 120deg at 62% 42%, rgba(244, 199, 107, 0.18), rgba(117, 208, 194, 0.2), rgba(159, 183, 255, 0.14), rgba(244, 199, 107, 0.18));
+  filter: blur(26px);
+  opacity: 0.74;
+}
+
+.niq-hero-copy,
+.niq-hero-panel,
+.niq-section,
+.niq-final-cta,
+.niq-subpage,
+.niq-article-page {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.niq-eyebrow {
+  margin: 0 0 14px;
+  color: var(--niq-gold);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.niq-hero h1,
+.niq-page-hero h1,
+.niq-article-page h1 {
+  max-width: 1050px;
+  margin-bottom: 24px;
+  font-size: clamp(3.15rem, 7vw, 6.35rem);
+  line-height: 0.9;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.niq-hero-title span {
+  display: block;
+}
+
+.niq-section h2,
+.niq-final-cta h2,
+.niq-related-terms h2 {
+  margin-bottom: 18px;
+  font-size: clamp(2rem, 4.6vw, 4.6rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.niq-public-demo h3 {
+  margin-bottom: 9px;
+  font-size: 1.04rem;
+}
+
+.niq-lede,
+.niq-section-kicker p,
+.niq-page-hero p,
+.niq-final-cta p {
+  color: var(--niq-muted);
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.niq-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.niq-button {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid rgba(244, 199, 107, 0.35);
+  border-radius: 8px;
+  background: var(--niq-gold);
+  color: #081315;
+  padding: 0 18px;
+  font-weight: 850;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.niq-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(244, 199, 107, 0.18);
+}
+
+.niq-button.niq-ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--niq-text);
+}
+
+.niq-icon {
+  display: inline-grid;
+  width: 1.35em;
+  height: 1.35em;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  color: currentColor;
+  font-size: 0.72em;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.niq-signal-card .niq-icon,
+.niq-arch-grid .niq-icon,
+.niq-article-card .niq-icon,
+.niq-glossary-grid .niq-icon,
+.niq-final-cta .niq-icon {
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(117, 208, 194, 0.25);
+  background: rgba(117, 208, 194, 0.08);
+  color: var(--niq-aqua);
+  font-size: 0.72rem;
+}
+
+.niq-hero-panel,
+.niq-conversation-card,
+.niq-extraction-card,
+.niq-timeline-card,
+.niq-narrative-card,
+.niq-article-card,
+.niq-investor-board {
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background: var(--niq-panel);
+  box-shadow: var(--niq-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.niq-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid var(--niq-line);
+  padding: 13px 16px;
+  color: var(--niq-muted);
+}
+
+.niq-panel-header span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--niq-aqua);
+}
+
+.niq-panel-header span:nth-child(2) {
+  background: var(--niq-gold);
+}
+
+.niq-panel-header span:nth-child(3) {
+  background: var(--niq-coral);
+}
+
+.niq-panel-header strong {
+  margin-left: auto;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.niq-signal-stack,
+.niq-metrics {
+  display: grid;
+  gap: 12px;
+}
+
+.niq-signal-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.niq-signal-stack {
+  padding: 18px;
+}
+
+.niq-signal-card p,
+.niq-article-card span,
+.niq-timeline-row strong,
+.niq-narrative-card p,
+.niq-continuity-track p,
+.niq-arch-grid p,
+.niq-glossary-grid p {
+  color: var(--niq-muted);
+  line-height: 1.55;
+}
+
+.niq-section {
+  padding: 90px clamp(22px, 6vw, 92px);
+}
+
+.niq-section-kicker {
+  max-width: 820px;
+  margin-bottom: 34px;
+}
+
+.niq-section-kicker.niq-row {
+  display: flex;
+  max-width: none;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.niq-graph-layout,
+.niq-demo-grid,
+.niq-arch-grid,
+.niq-article-grid,
+.niq-glossary-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.niq-graph-layout {
+  grid-template-columns: 260px minmax(0, 1fr);
+}
+
+.niq-cluster-controls,
+.niq-scenario-list {
+  display: grid;
+  gap: 10px;
+  align-self: start;
+}
+
+.niq-cluster-controls button,
+.niq-scenario-list button,
+.niq-glossary-strip button,
+.niq-glossary-grid button,
+.niq-related-terms button {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--niq-text);
+  padding: 14px;
+  text-align: left;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.niq-cluster-controls button:hover,
+.niq-cluster-controls button.active,
+.niq-scenario-list button:hover,
+.niq-scenario-list button.active {
+  border-color: var(--cluster, var(--niq-aqua));
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.niq-scenario-list small {
+  display: block;
+  margin-top: 4px;
+  color: var(--niq-muted);
+}
+
+.niq-graph-canvas {
+  width: 100%;
+  min-height: 560px;
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(117, 208, 194, 0.14), transparent 24rem),
+    rgba(255, 255, 255, 0.035);
+}
+
+.niq-edge {
+  stroke: rgba(230, 245, 238, 0.12);
+  stroke-width: 0.45;
+  transition: stroke 240ms ease, opacity 240ms ease;
+}
+
+.niq-edge.is-active {
+  stroke: rgba(117, 208, 194, 0.62);
+  animation: niq-pulse-edge 3.8s ease-in-out infinite;
+}
+
+.niq-node {
+  opacity: 0.28;
+  transition: opacity 220ms ease, transform 220ms ease;
+  transform-origin: center;
+}
+
+.niq-node.is-active {
+  opacity: 1;
+  animation: niq-float-node 5.8s ease-in-out infinite alternate;
+}
+
+.niq-node circle {
+  fill: var(--node);
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 0.35;
+}
+
+.niq-node text {
+  fill: #081315;
+  font-size: 3px;
+  font-weight: 850;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.niq-demo-grid {
+  grid-template-columns: 260px minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.niq-conversation-card,
+.niq-extraction-card,
+.niq-timeline-card,
+.niq-narrative-card {
+  padding: 22px;
+}
+
+.niq-conversation-card p {
+  border-left: 3px solid rgba(117, 208, 194, 0.58);
+  margin-bottom: 14px;
+  padding-left: 13px;
+  color: #dce7e1;
+  line-height: 1.6;
+}
+
+.niq-preview-list {
+  margin-top: 18px;
+}
+
+.niq-preview-list h4 {
+  margin-bottom: 9px;
+  color: var(--niq-gold);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.niq-preview-list div,
+.niq-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.niq-preview-list span,
+.niq-tag-row span {
+  border: 1px solid rgba(117, 208, 194, 0.24);
+  border-radius: 999px;
+  background: rgba(117, 208, 194, 0.08);
+  color: #d7f4ee;
+  padding: 7px 10px;
+  font-size: 0.86rem;
+}
+
+.niq-timeline-row {
+  display: grid;
+  grid-template-columns: 82px minmax(80px, 1fr);
+  gap: 10px 14px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.niq-timeline-row span {
+  color: var(--niq-gold);
+  font-weight: 850;
+}
+
+.niq-timeline-row div {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.niq-timeline-row i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--niq-aqua), var(--niq-gold));
+}
+
+.niq-timeline-row strong {
+  grid-column: 2;
+  font-size: 0.92rem;
+}
+
+.niq-narrative-card {
+  grid-column: span 2;
+}
+
+.niq-narrative-line {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 12px;
+  color: #dbe8e3;
+}
+
+.niq-continuity-track,
+.niq-arch-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.niq-continuity-track article,
+.niq-arch-grid article {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 22px;
+}
+
+.niq-moment-index {
+  margin-bottom: 38px;
+  color: var(--niq-gold);
+  font-weight: 900;
+}
+
+.niq-meter {
+  height: 7px;
+  margin-top: 22px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.niq-meter span {
+  display: block;
+  width: var(--strength);
+  height: 100%;
+  background: linear-gradient(90deg, var(--niq-coral), var(--niq-gold), var(--niq-aqua));
+}
+
+.niq-arch-grid article {
+  min-height: 260px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035));
+}
+
+.niq-arch-grid span {
+  display: block;
+  margin: 46px 0 14px;
+  color: var(--niq-gold);
+  font-weight: 900;
+}
+
+.niq-article-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.niq-article-grid.niq-wide {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.niq-article-card {
+  min-height: 310px;
+  padding: 24px;
+}
+
+.niq-article-card .niq-icon {
+  color: var(--niq-gold);
+}
+
+.niq-article-card button,
+.niq-text-link,
+.niq-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  color: var(--niq-aqua);
+  padding: 0;
+  font-weight: 850;
+}
+
+.niq-article-card button {
+  margin-top: 24px;
+}
+
+.niq-glossary-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.niq-glossary-strip span,
+.niq-glossary-grid h3 {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--niq-text);
+  font-weight: 850;
+}
+
+.niq-glossary-strip small {
+  color: var(--niq-muted);
+  line-height: 1.45;
+}
+
+.niq-investor-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 34px;
+  align-items: center;
+  padding: clamp(24px, 5vw, 54px);
+  background:
+    linear-gradient(135deg, rgba(117, 208, 194, 0.12), rgba(244, 199, 107, 0.08)),
+    var(--niq-panel);
+}
+
+.niq-investor-board p {
+  color: var(--niq-muted);
+  line-height: 1.7;
+}
+
+.niq-metrics div {
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.niq-metrics strong {
+  display: block;
+  color: var(--niq-gold);
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.niq-metrics span {
+  color: var(--niq-muted);
+}
+
+.niq-final-cta {
+  margin: 30px clamp(22px, 6vw, 92px) 90px;
+  border: 1px solid var(--niq-line);
+  border-radius: 8px;
+  padding: clamp(28px, 6vw, 72px);
+  background:
+    radial-gradient(circle at 10% 20%, rgba(244, 199, 107, 0.16), transparent 22rem),
+    radial-gradient(circle at 80% 70%, rgba(117, 208, 194, 0.16), transparent 20rem),
+    rgba(255, 255, 255, 0.045);
+  text-align: center;
+}
+
+.niq-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px clamp(22px, 6vw, 92px);
+  border-top: 1px solid var(--niq-line);
+  color: var(--niq-muted);
+}
+
+.niq-subpage,
+.niq-article-page {
+  padding: 118px clamp(22px, 6vw, 92px) 88px;
+}
+
+.niq-page-hero {
+  max-width: 900px;
+  margin-bottom: 44px;
+}
+
+.niq-page-hero h1,
+.niq-article-page h1 {
+  font-size: clamp(3rem, 7vw, 6rem);
+}
+
+.niq-article-page article {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.niq-article-description {
+  color: var(--niq-muted);
+  font-size: 1.22rem;
+  line-height: 1.65;
+}
+
+.niq-article-page section {
+  margin-top: 42px;
+}
+
+.niq-article-page section h2 {
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+}
+
+.niq-article-page section p {
+  color: #c7d5cf;
+  font-size: 1.08rem;
+  line-height: 1.85;
+}
+
+.niq-internal-links {
+  margin-top: 54px;
+  border-top: 1px solid var(--niq-line);
+  padding-top: 26px;
+}
+
+.niq-internal-links button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  border: 0;
+  background: transparent;
+  color: var(--niq-aqua);
+  padding: 0;
+}
+
+.niq-glossary-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.niq-glossary-grid button {
+  min-height: 190px;
+}
+
+.niq-related-terms {
+  max-width: 900px;
+}
+
+.niq-related-terms h2 {
+  font-size: 2.4rem;
+}
+
+.niq-related-terms div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+[data-niq-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
+[data-niq-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes niq-pulse-edge {
+  50% {
+    stroke: rgba(244, 199, 107, 0.72);
+  }
+}
+
+@keyframes niq-float-node {
+  from {
+    transform: translateY(-0.8px);
+  }
+  to {
+    transform: translateY(1.1px);
+  }
+}
+
+@media (max-width: 980px) {
+  .niq-hero,
+  .niq-graph-layout,
+  .niq-demo-grid,
+  .niq-continuity-track,
+  .niq-arch-grid,
+  .niq-article-grid,
+  .niq-article-grid.niq-wide,
+  .niq-glossary-strip,
+  .niq-investor-board,
+  .niq-glossary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .niq-narrative-card {
+    grid-column: auto;
+  }
+
+  .niq-brand span:last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .niq-topbar {
+    padding: 12px 14px;
+  }
+
+  .niq-topbar nav {
+    display: none;
+  }
+
+  .niq-panel-header strong {
+    display: none;
+  }
+
+  .niq-hero {
+    padding: 104px 18px 56px;
+  }
+
+  .niq-hero-copy,
+  .niq-hero-panel {
+    width: 100%;
+    max-width: calc(100vw - 36px);
+  }
+
+  .niq-section,
+  .niq-subpage,
+  .niq-article-page {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .niq-hero h1 {
+    font-size: 2.08rem;
+    line-height: 0.95;
+  }
+
+  .niq-section-kicker.niq-row,
+  .niq-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .niq-graph-canvas {
+    min-height: 420px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .niq-public-demo *,
+  .niq-public-demo *::before,
+  .niq-public-demo *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  [data-niq-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

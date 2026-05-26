@@ -1,9 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 
 describe("App navigation", () => {
   beforeEach(() => {
+    window.history.pushState({}, "", "/");
+    vi.spyOn(window, "scrollTo").mockImplementation(() => {});
     Object.defineProperty(globalThis, "IntersectionObserver", {
       configurable: true,
       value: class {
@@ -15,11 +17,10 @@ describe("App navigation", () => {
   });
 
   it("shows primary public and internal route labels", () => {
-    window.history.pushState({}, "", "/demo");
     render(<App />);
 
     expect(screen.getByRole("button", { name: "Marketing" })).toBeInTheDocument();
-    expect(screen.getAllByText("Interactive Demo").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Demo").length).toBeGreaterThan(0);
     expect(screen.getAllByText("New Story").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Library").length).toBeGreaterThan(0);
     expect(screen.getByRole("button", { name: "Admin" })).toBeInTheDocument();
@@ -30,11 +31,19 @@ describe("App navigation", () => {
   });
 
   it("renders compact bottom dock styling", () => {
-    window.history.pushState({}, "", "/demo");
     render(<App />);
 
     expect(document.querySelector("nav")?.className).toContain("max-w-3xl");
-    expect(screen.getByRole("button", { name: "Demo" })).toHaveClass("bg-blue-50", "text-blue-800", "ring-blue-200");
+    expect(screen.getByRole("button", { name: "Marketing" })).toHaveClass("bg-blue-50", "text-blue-800", "ring-blue-200");
+  });
+
+  it("renders the isolated public demo without the internal dock", () => {
+    window.history.pushState({}, "", "/demo");
+    render(<App />);
+
+    expect(screen.getByRole("heading", { name: /Narrative intelligence infrastructure/i })).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Public demo navigation" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "New Story" })).not.toBeInTheDocument();
   });
 
   it("renders the dark mode concept lab route", () => {
@@ -60,8 +69,7 @@ describe("App navigation", () => {
     expect(screen.getByText(/Seeded specialty templates/i)).toBeInTheDocument();
   });
 
-  it("shows beta CTAs on marketing and demo pages", () => {
-    window.history.pushState({}, "", "/");
+  it("shows beta CTAs on marketing while keeping the public demo separate", () => {
     const { unmount } = render(<App />);
 
     expect(screen.getAllByRole("button", { name: /Try Demo/i }).length).toBeGreaterThan(0);
@@ -72,8 +80,9 @@ describe("App navigation", () => {
     window.history.pushState({}, "", "/demo");
     render(<App />);
 
-    expect(screen.getByRole("button", { name: "Join Beta" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Book Enterprise Pilot" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Join Beta" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Book Enterprise Pilot" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Read the thesis" })).toBeInTheDocument();
   });
 
   it("renders beta route from Join Beta CTA", () => {
