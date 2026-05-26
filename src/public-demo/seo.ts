@@ -11,7 +11,7 @@ type PublicMeta = {
   article?: PublicArticle;
 };
 
-export function usePublicMeta({ title, description, path = "/demo", type = "website", article }: PublicMeta) {
+export function usePublicMeta({ title, description, path = "/", type = "website", article }: PublicMeta) {
   useEffect(() => {
     const canonical = `${siteUrl}${path}`;
     document.title = title;
