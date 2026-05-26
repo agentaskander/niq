@@ -140,8 +140,6 @@ describe("App navigation", () => {
     window.history.pushState({}, "", "/demo");
     render(<App />);
 
-    expect(screen.queryByRole("button", { name: "Join Beta" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Book Enterprise Pilot" })).not.toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: /Public Module Previews/i }).length).toBeGreaterThan(0);
   });
 

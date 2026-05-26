@@ -19,14 +19,14 @@ describe("PublicDeploymentApp", () => {
   it("redirects the root route to the public demo", () => {
     render(<PublicDeploymentApp />);
 
-    expect(window.location.pathname).toBe("/demo");
+    expect(window.location.pathname).toBe("/");
     expect(screen.getByRole("heading", { name: /Longitudinal cognition infrastructure/i })).toBeInTheDocument();
     expect(screen.queryByText("Internal NarrativeIQ module preview — not intended for public publishing.")).not.toBeInTheDocument();
     expect(screen.queryByText("Structured clinical narratives at the speed of care.")).not.toBeInTheDocument();
   });
 
   it("serves the public healthcare cognition preview", () => {
-    window.history.pushState({}, "", "/demo/healthcare-cognition");
+    window.history.pushState({}, "", "/healthcare-cognition");
     render(<PublicDeploymentApp />);
 
     expect(screen.getByRole("heading", { name: "Healthcare Cognition Lab" })).toBeInTheDocument();
